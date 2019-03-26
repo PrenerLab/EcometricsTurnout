@@ -1,0 +1,46 @@
+---
+title: "mss_project"
+author: "Branson Fox"
+date: '(`r format(Sys.time(), "%B %d, %Y")`)'
+output: 
+  github_document: default
+  html_notebook: default
+---
+
+## Introduction
+This notebook is used for the initial processing of the voter file data for the MSS project.
+
+## Dependencies
+The following code chunk loads the packages needed for this notebook.
+
+```{r dependencies, message=FALSE}
+library()
+```
+
+## Load Data
+The following code chunk loads into the global environment the data used for this project.
+
+```{r load data}
+
+```
+
+
+Here's what I'll need to do....
+
+Get all of the voter data merged and spatial
+Get CSB data for the same periods
+Get Census data for the same periods (ACS 5 year, ending in 14,16,17)
+
+Interpolate to the grid square
+
+Moran's I
+Moran's Bivariate I
+
+FINALLY
+Plot results, make poster
+Print Poster
+
+Manuscritp draft?
+Public code?
+
+

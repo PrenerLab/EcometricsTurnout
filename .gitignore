@@ -1,0 +1,7 @@
+
+.DS_Store
+data/MO-City-St-Louis-VH.csv
+data/MO-City-St-Louis-VF.csv
+._*
+.Rproj.user
+.Rhistory

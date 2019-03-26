@@ -1,0 +1,68 @@
+---
+title: "Processing the Voter File"
+output: html_notebook
+---
+
+Here is what needs to be done with the voter data:
+
+1. Load the voter file and voter history.
+2. Make it more concise so that only variables of interest remain in the data (These data are very large, so this is important)
+3. Calculate participation as number of votes/number eligible.
+4. Geocode as much as possible... (For now, filter those with non-matches)
+
+Here is what needs to be done with the CSB data:
+
+1. Loaded
+2. Filtered for variables of interest
+3. Stratify by categorization for investigation
+
+
+For both sets of data:
+1. Aggregate to 1km grid squares.
+2. Investigate any correlations between the 2 datasets.
+
+
+
+# Dependencies
+```{r dependencies}
+library(readr) # reading tabular data
+library(dplyr) # general data manipulation
+```
+
+# Load Data
+```{r load data}
+voter_file <- read_csv("../data/MO-City-St-Louis-VF.csv")
+voter_hist <- read_csv("../data/MO-City-St-Louis-VH.csv")
+```
+And to make the data more manageable:
+```{r}
+# filter to the extent of the city
+voter_file <- filter(voter_file, registered_fips == 29510)
+voter_hist <- filter(voter_hist, registered_address_county == "St. Louis City")
+
+# select variablese
+voter_file <- select(voter_file, id, state_file_id, registered_address1, registered_city, registered_state, registered_zip, sex, demo, born_at, registered_at)
+
+voter_hist <- select(voter_hist, id, state_file_id, election_at)
+```
+
+
+Now to join the data so that the history of an individual's voting is known.
+```{r}
+master <- voter_file
+```
+
+somethign a bit experimental
+```{r}
+a = tidyr::spread(voter_hist, election_at, id)
+b = apply(a[,2:33], 1:2, function(x){ifelse(is.na(x), FALSE, x)})
+c = cbind(a[,1], b)
+d = rowSums(c[,2:33])
+e = data.frame(c$state_file_id, d)
+```
+
+Voter counts!!!
+
+
+> ggplot() +
++ geom_histogram(aes(x), data =d)

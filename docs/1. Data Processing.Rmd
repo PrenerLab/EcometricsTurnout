@@ -1,0 +1,282 @@
+---
+title: "Data Processing"
+output: html_notebook
+---
+
+## Introduction
+This notebook is part one in a series of notebooks to clean and process voter file data. This notebook achieves the geocoding and projection of the voter data, as well as the acquisition of CSB data and Census Data.
+
+## Dependencies
+These are the packages used for this notebook.
+```{r dependencies}
+# CRAN Packages
+library(dplyr)
+library(sf)
+library(tidycensus)
+library(stlcsb)
+library(mapview)
+
+# Non-CRAN Packages
+library(censusxy)
+library(ggmap)
+```
+
+## Processing the Voter file
+We need to achieve the following:
+1. Join voter data to voting history
+2. Geocode these data using Censusxy and then Google Maps.
+3. Preview the data, then aggregate to grid squares (See notebook 2)
+4. Save as a shapefile.
+
+### Join Voter File and History
+First load the data:
+Note the removal of the `id` column in both, as `state_file_id` is the actual unique identifier between datasets.
+```{r load vf vh}
+VF <- read_csv("../data/voter_raw/VF_small.csv") %>% select(-id)
+VH <- read_csv("../data/voter_raw/VH_small.csv") %>% select(-id)
+```
+
+We need to join the data now, so we'll create an expression to indicate whether someone voter in one of the elections we are interested in.
+```{r add history}
+nov14 <- filter(VH, election_at == "2014-11-04")
+nov16 <- filter(VH, election_at == "2016-11-08")
+apr17 <- filter(VH, election_at == "2017-04-04")
+
+VF_H <- mutate(VF,
+               votedNov14 = ifelse(state_file_id %in% nov14$state_file_id, TRUE, FALSE),
+               votedNov16 = ifelse(state_file_id %in% nov16$state_file_id, TRUE, FALSE),
+               votedApr17 = ifelse(state_file_id %in% apr17$state_file_id, TRUE, FALSE)
+               )
+
+rm(nov14, nov16, apr17, VH, VF)
+```
+
+### Geocode these data
+
+To make geocoding the most efficient, we'll geocode only unique addresses and then join that to our original data.
+```{r}
+# get unique addresses
+uniqueAdd <- filter(VF_H, !duplicated(registered_address1))
+
+# geocoding with the census bureau API first
+response <- censusxy::census_prep(uniqueAdd, address = "registered_address1", city = "registered_city", state = "registered_state", zip = "registered_zip") %>%
+  censusxy::census_geo()
+
+rm(uniqueAdd)
+```
+
+Now, we need to isolate the addresses that didnt have an exact match and query the Google maps API with these.
+```{r}
+non_match <- filter(response, status != "Match")
+non_match <- data.frame(o_address = non_match$o_address, full_address = paste0(non_match$o_address, " St. Louis, MO ", non_match$o_zip), stringsAsFactors = FALSE)
+
+address_table <- mutate_geocode(non_match, full_address, "latlon")
+
+# then to normalize and bind the censusxy response
+response <- mutate(response, 
+                   lat = as.numeric(lat),
+                   lon = as.numeric(long)) %>%
+            select(o_address, lon, lat) %>%
+            filter(!o_address %in% non_match$o_address)
+
+address_table <- select(address_table, -full_address) 
+
+address_table <- rbind(response, address_table)
+
+rm(non_match, response)
+```
+
+Then to join these coordinates with the Voterfile data:
+```{r join coords}
+VF_H <- left_join(VF_H, address_table, by = c("registered_address1" = "o_address"))
+
+rm(address_table)
+```
+
+To make an sf object and preview:
+```{r sf and preview}
+VF_sf <- st_as_sf(VF_H, coords = c("lon", "lat"), crs = 4269)
+
+mapview(VF_sf)
+```
+
+Next, we'll divide these by year and save them as shapes.
+```{r}
+st_write(filter(VF_sf, votedNov14 == TRUE) %>% select(born_at, registered_at), dsn = "../data/Spatial/raw/voter/Voters_Nov_14.shp")
+st_write(filter(VF_sf, votedNov16 == TRUE) %>% select(born_at, registered_at), dsn = "../data/Spatial/raw/voter/Voters_Nov_16.shp")
+st_write(filter(VF_sf, votedApr17 == TRUE) %>% select(born_at, registered_at), dsn = "../data/Spatial/raw/voter/Voters_Apr_17.shp")
+```
+
+
+## Processing CSB Data
+We need to achieve the following:
+1. Acquire data for the appropriate time period
+2. Break out by type of call and preview data
+3. Aggregate to grid squares (See notebook 2)
+4. Save as a shapefile
+
+### Getting CSB Data
+First, we'll load all of the csb data.
+```{r}
+csb <- csb_get_data(years = c(2014, 2016, 2017))
+```
+
+Then, we'll append categories:
+```{r}
+csb <- csb_categorize(csb, problemcode, category)
+```
+
+Then, we will remove data with no spatial data.
+```{r}
+csb <- csb_missingXY(csb, srx, sry, missingxy)
+csb <- filter(csb, missingxy == FALSE)
+```
+
+Then, we'll use the six months surrounding an election (3 months prior, 3 months following) for each period to represent the calls made.
+```{r}
+csb14 <- list()
+csb16 <- list()
+csb17 <- list()
+
+csb14[[1]] <- csb_date_filter(csb, datetimeinit, day = 4:31, month = 8, year = 14)
+csb14[[2]] <- csb_date_filter(csb, datetimeinit, month = 9:12, year = 14)
+csb14[[3]] <- csb_date_filter(csb, datetimeinit, month = 1, year = 15)
+csb14[[4]] <- csb_date_filter(csb, datetimeinit, day = 1:4, month = 2, year = 15)
+
+csb14 <- bind_rows(csb14)
+
+csb16[[1]] <- csb_date_filter(csb, datetimeinit, day = 8:31, month = 8, year = 16)
+csb16[[2]] <- csb_date_filter(csb, datetimeinit, month = 9:12, year = 16)
+csb16[[3]] <- csb_date_filter(csb, datetimeinit, month = 1, year = 17)
+csb16[[4]] <- csb_date_filter(csb, datetimeinit, day = 1:8, month = 2, year = 17)
+
+csb16 <- bind_rows(csb16)
+
+csb17[[1]] <- csb_date_filter(csb, datetimeinit, day = 4:31, month = 1, year = 17)
+csb17[[2]] <- csb_date_filter(csb, datetimeinit, month = 2:6, year = 17)
+csb17[[3]] <- csb_date_filter(csb, datetimeinit, day = 1:4, month = 7, year = 17)
+
+csb17 <- bind_rows(csb17)
+
+rm(csb)
+```
+
+* Note, the overlap between the 16 and 17 election...
+* Is the CSB just getting more popular over time? Another good reserhc q
+
+### Creating Shapes
+```{r}
+st_write(csb_projectXY(csb14, srx, sry), dsn = "../data/Spatial/raw/csb/CSB_calls_14.shp")
+st_write(csb_projectXY(csb16, srx, sry), dsn = "../data/Spatial/raw/csb/CSB_calls_16.shp")
+st_write(csb_projectXY(csb17, srx, sry), dsn = "../data/Spatial/raw/csb/CSB_calls_17.shp")
+
+rm(csb14, csb16, csb17)
+```
+
+
+## Processing Demographic Data
+We need to achieve the following:
+1. Acquire data for the 3 different periods
+2. Normalize and aggregate to grid squares (See notebook 2)
+3. Save as a shapefile.
+
+### Getting Data Using Tidycensus
+We'll use Tidycensus to get Demographic data from the census bureau. We're interested in controlling for Race, Poverty and Education. Empirically, these variables have the closest relationship to voting behavior and knowledge and trust of institutions.
+
+First we'll load the names of variables:
+```{r}
+vars <- load_variables(dataset = "acs5", year = 2014)
+```
+
+Then, we'll select the variables of interest:
+```{r census variables}
+vars <- c("B02001_001", # Total for Calculating Race
+          "B02001_002", # White Only
+          "B02001_003", # Black Only
+          "B17001_001", # Total for Calculating Poverty
+          "B17001_002", # Income Below Poverty Line
+          "B15001_001", # Total for Calculating Educational Attainment/ Also, Population above 18
+          "B15001_006", # Male 18-24 HS
+          "B15001_009", # Male 18-24 BA
+          "B15001_014", # Male 25-34 HS
+          "B15001_017", # Male 25-34 BA
+          "B15001_022", # Male 35-44 HS
+          "B15001_025", # Male 35-44 BA
+          "B15001_030", # Male 45-64 HS
+          "B15001_033", # Male 45-64 BA
+          "B15001_038", # Male 65+   HS
+          "B15001_041", # Male 65+   BA
+          "B15001_047", # Female 18-24 HS
+          "B15001_050", # Female 18-24 BA
+          "B15001_055", # Female 25-34 HS
+          "B15001_058", # Female 25-34 BA
+          "B15001_063", # Female 35-44 HS
+          "B15001_066", # Female 35-44 BA
+          "B15001_071", # Female 45-64 HS
+          "B15001_074", # Female 45-64 BA
+          "B15001_079", # Female 65+   HS
+          "B15001_082", # Female 65+   BA
+          "B01001_001" # Total Population
+          )
+```
+
+And get these vars for every year we're interested in. We'll use different ACS estimates for better accuracy.
+```{r}
+demog14 <- get_acs("tract", state = 29, county = 510, variables = vars, output = "wide", geometry = TRUE, year = 2014)
+
+demog16 <- get_acs("tract", state = 29, county = 510, variables = vars, output = "wide", geometry = TRUE, year = 2016)
+
+demog17 <- get_acs("tract", state = 29, county = 510, variables = vars, output = "wide", geometry = TRUE, year = 2017)
+```
+
+Then we need to calculate rates based on our variables of interest and select only these:
+```{r}
+demog14 <- mutate(demog14,
+                  prp_nonwhite = 1 - B02001_002E/B02001_001E,
+                  prp_poverty = B17001_002E/B17001_001E,
+                  prp_hs = (B15001_006E + B15001_014E + B15001_022E + B15001_030E +
+                               B15001_038E + B15001_047E + B15001_055E + B15001_063E +
+                               B15001_071E + B15001_079E) / B15001_001E,
+                  prp_ba = (B15001_009E + B15001_017E + B15001_025E + B15001_033E +
+                               B15001_041E + B15001_050E + B15001_058E + B15001_066E +
+                               B15001_074E + B15001_082E) / B15001_001E,
+                  vap = B15001_001E,
+                  tot_pop = B01001_001E) %>% 
+           select(prp_nonwhite, prp_poverty, prp_hs, prp_ba, vap, tot_pop)
+
+demog16 <- mutate(demog16,
+                  prp_nonwhite = 1 - B02001_002E/B02001_001E,
+                  prp_poverty = B17001_002E/B17001_001E,
+                  prp_hs = (B15001_006E + B15001_014E + B15001_022E + B15001_030E +
+                               B15001_038E + B15001_047E + B15001_055E + B15001_063E +
+                               B15001_071E + B15001_079E) / B15001_001E,
+                  prp_ba = (B15001_009E + B15001_017E + B15001_025E + B15001_033E +
+                               B15001_041E + B15001_050E + B15001_058E + B15001_066E +
+                               B15001_074E + B15001_082E) / B15001_001E,
+                  vap = B15001_001E,
+                  tot_pop = B01001_001E) %>% 
+           select(prp_nonwhite, prp_poverty, prp_hs, prp_ba, vap, tot_pop)
+
+demog17 <- mutate(demog17,
+                  prp_nonwhite = 1 - B02001_002E/B02001_001E,
+                  prp_poverty = B17001_002E/B17001_001E,
+                  prp_hs = (B15001_006E + B15001_014E + B15001_022E + B15001_030E +
+                               B15001_038E + B15001_047E + B15001_055E + B15001_063E +
+                               B15001_071E + B15001_079E) / B15001_001E,
+                  prp_ba = (B15001_009E + B15001_017E + B15001_025E + B15001_033E +
+                               B15001_041E + B15001_050E + B15001_058E + B15001_066E +
+                               B15001_074E + B15001_082E) / B15001_001E,
+                  vap = B15001_001E,
+                  tot_pop = B01001_001E) %>% 
+           select(prp_nonwhite, prp_poverty, prp_hs, prp_ba, vap, tot_pop)
+```
+
+Now to write these data to shapefiles:
+```{r}
+st_write(demog14, dsn = "../data/Spatial/raw/census/Demographics_14.shp")
+st_write(demog16, dsn = "../data/Spatial/raw/census/Demographics_16.shp")
+st_write(demog17, dsn = "../data/Spatial/raw/census/Demographics_17.shp")
+```
+
+
+

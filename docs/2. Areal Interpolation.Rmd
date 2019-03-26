@@ -1,0 +1,189 @@
+---
+title: "Areal Interpolation"
+output: html_notebook
+---
+
+## Introduction
+This notebook is part two in a series of notebooks to process data for the spatial analysis of CSB data and voter turnout. This notebook handles the areal interpolation of data.
+
+## Dependencies
+These are the packages neccessary for the completion of Areal weighted interpolation of our data to grids.
+```{r dependencies}
+# CRAN Packages
+library(sf)
+library(dplyr)
+
+# Non-CRAN Packages
+library(gateway)
+library(areal) # need the github version to fix extensive/intensive bug
+```
+
+
+## Load Data
+We'll begin by loading all of the data that needs to get agregated to grid squares:
+
+```{r load data}
+# voter data
+voter14 <- st_read("../data/Spatial/raw/voter/Voters_Nov_14.shp")
+voter16 <- st_read("../data/Spatial/raw/voter/Voters_Nov_16.shp")
+voter17 <- st_read("../data/Spatial/raw/voter/Voters_Apr_17.shp")
+
+# csb data
+csb14 <- st_read("../data/Spatial/raw/csb/CSB_calls_14.shp")
+csb16 <- st_read("../data/Spatial/raw/csb/CSB_calls_16.shp")
+csb17 <- st_read("../data/Spatial/raw/csb/CSB_calls_17.shp")
+
+# demographic data
+demog14 <- st_read("../data/Spatial/raw/census/Demographics_14.shp")
+demog16 <- st_read("../data/Spatial/raw/census/Demographics_16.shp")
+demog17 <- st_read("../data/Spatial/raw/census/Demographics_17.shp")
+```
+
+
+### Loading Grid Shape
+We'll also load the grid shape from the `gateway` package.
+```{r get grid}
+grid <- gw_get_data("Grids, Exploded", class = "sf")
+```
+
+### Checking Coordinate Systems
+Next, we'll standardize all of our data to be in the Missouri East StatePlane Fips 2401 Projection (epsg: 102696)
+
+```{r transform}
+grid <- st_transform(grid, crs = 102696)
+
+voter14 <- st_transform(voter14, crs = 102696)
+voter16 <- st_transform(voter16, crs = 102696)
+voter17 <- st_transform(voter17, crs = 102696)
+
+csb14 <- st_transform(csb14, crs = 102696)
+csb16 <- st_transform(csb16, crs = 102696)
+csb17 <- st_transform(csb17, crs = 102696)
+
+demog14 <- st_transform(demog14, crs = 102696)
+demog16 <- st_transform(demog16, crs = 102696)
+demog17 <- st_transform(demog17, crs = 102696)
+```
+## Interpolation
+### Interpolating Points to the Grid
+In order to analyze our data, we need all data to be interpolated to the grid for St. Louis. For point data (voter data and csb data) we can simply merge the points to polygon. We'll write a quick function to do this, and then do it to all of our point data.
+
+```{r points to grid}
+# define function
+points_poly <- function(points, polygon){
+  within <- st_intersects(points, polygon, sparse = FALSE)
+  out <- cbind(polygon, apply(within, 2, sum))
+  return(out)
+}
+
+# points to grid
+voter14_g <- points_poly(voter14, grid)
+voter16_g <- points_poly(voter16, grid)
+voter17_g <- points_poly(voter17, grid)
+
+csb14_g <- points_poly(csb14, grid)
+csb16_g <- points_poly(csb16, grid)
+csb17_g <- points_poly(csb17, grid)
+
+# remove original data from global
+rm(voter14, voter16, voter17, csb14, csb16, csb17)
+```
+
+### Interpolating Demographic Data (Tracts) to the Grid
+Unlike point data, polygon data needs to be interpolated using areal weighted interpolation. We'll use the `areal` package for this.
+
+First, we need to create a unique ID in the demographic data:
+```{r unique ids}
+demog14 <- mutate(demog14, id = row_number())
+demog16 <- mutate(demog16, id = row_number())
+demog17 <- mutate(demog17, id = row_number())
+```
+
+Then, the interpolation process:
+```{r demog to grid}
+# interpolate
+demog14_g <- aw_interpolate(grid, PageID, demog14, id, weight = "sum", intensive = c("prp_nnw", "prp_pvr", "prp_hs", "prp_ba"), extensive = c("vap", "tot_pop"), output = "sf")
+demog16_g <- aw_interpolate(grid, PageID, demog16, id, weight = "sum", intensive = c("prp_nnw", "prp_pvr", "prp_hs", "prp_ba"), extensive = c("vap", "tot_pop"), output = "sf")
+demog17_g <- aw_interpolate(grid, PageID, demog17, id, weight = "sum", intensive = c("prp_nnw", "prp_pvr", "prp_hs", "prp_ba"), extensive = c("vap", "tot_pop"), output = "sf")
+
+# remove original from global
+rm(demog14, demog16, demog17)
+```
+
+## Creating Complete Grid Shapefiles
+
+Before we can do our analysis, we need all of our data in a concise format. We'll join the data and create a unique file for each year of the analysis.
+
+```{r}
+# first, remove geometry
+st_geometry(voter14_g) <- NULL
+st_geometry(voter16_g) <- NULL
+st_geometry(voter17_g) <- NULL
+
+st_geometry(csb14_g) <- NULL
+st_geometry(csb16_g) <- NULL
+st_geometry(csb17_g) <- NULL
+
+# Then, rename and isolate variable of interest
+voter14_g %>% rename(voters = apply.within..2..sum.) %>% select(voters) -> voter14_g
+voter16_g %>% rename(voters = apply.within..2..sum.) %>% select(voters) -> voter16_g
+voter17_g %>% rename(voters = apply.within..2..sum.) %>% select(voters) -> voter17_g
+
+csb14_g %>% rename(csb_calls = apply.within..2..sum.) %>% select(csb_calls) -> csb14_g
+csb16_g %>% rename(csb_calls = apply.within..2..sum.) %>% select(csb_calls) -> csb16_g
+csb17_g %>% rename(csb_calls = apply.within..2..sum.) %>% select(csb_calls) -> csb17_g
+# bind data to shape abd remove page (grid) variables
+
+grid14 <- bind_cols(demog14_g, voter14_g, csb14_g) %>% select(-PageID, - PageName, -PageNumber, -PagePart)
+grid16 <- bind_cols(demog16_g, voter16_g, csb16_g) %>% select(-PageID, - PageName, -PageNumber, -PagePart)
+grid17 <- bind_cols(demog17_g, voter17_g, csb17_g) %>% select(-PageID, - PageName, -PageNumber, -PagePart)
+
+# clean all global vars
+rm(voter14_g, voter16_g, voter17_g, csb14_g, csb16_g, csb17_g, demog14_g, demog16_g, demog17_g)
+```
+
+### Final Calculations
+There are some additional final considerations to make, such as calculating a voter rate.
+```{r}
+grid14 <- mutate(grid14, turnout = voters/vap * 100,
+                         nonwht = 100 * prp_nnw,
+                         pvrty = 100 * prp_pvr,
+                         hs = 100 * prp_hs,
+                         ba = 100 * prp_ba,
+                         id = row_number(),
+                         csb = csb_calls) %>%
+          select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb) %>%
+          mutate(turnout = ifelse(turnout > 100, 100, turnout))
+  
+
+grid16 <- mutate(grid16, turnout = voters/vap * 100,
+                         nonwht = 100 * prp_nnw,
+                         pvrty = 100 * prp_pvr,
+                         hs = 100 * prp_hs,
+                         ba = 100 * prp_ba,
+                         id = row_number(),
+                         csb = csb_calls) %>%
+          select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb) %>%
+          mutate(turnout = ifelse(turnout > 100, 100, turnout))
+
+grid17 <- mutate(grid17, turnout = voters/vap * 100,
+                         nonwht = 100 * prp_nnw,
+                         pvrty = 100 * prp_pvr,
+                         hs = 100 * prp_hs,
+                         ba = 100 * prp_ba,
+                         id = row_number(),
+                         csb = csb_calls) %>%
+          select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb) %>%
+          mutate(turnout = ifelse(turnout > 100, 100, turnout))
+
+```
+
+### Saving Files
+Finally, we can export shapefiles of our data for each period.
+
+```{r}
+st_write(grid14, dsn = "../data/Spatial/grid/full_14.shp")
+st_write(grid16, dsn = "../data/Spatial/grid/full_16.shp")
+st_write(grid17, dsn = "../data/Spatial/grid/full_17.shp")
+```
+
