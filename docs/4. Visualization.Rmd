@@ -1,0 +1,70 @@
+---
+title: "Visualizations"
+output: html_notebook
+---
+
+## Introduction
+This notebook produces maps from the data processed in prior notebooks.
+
+## Dependencies
+These are the packages neccessary for making these maps.
+```{r dependencies}
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(viridis)
+library(gateway)
+```
+
+## Load Data
+These are the data we will be mapping:
+```{r load data}
+m14 <- st_read("../data/Spatial/grid/full_14.shp") %>% mutate(year = 2014)
+m16 <- st_read("../data/Spatial/grid/full_16.shp") %>% mutate(year = 2016)
+m17 <- st_read("../data/Spatial/grid/full_17.shp") %>% mutate(year = 2017)
+
+m_all <- rbind(m14, m16, m17)
+# bg data
+bg = st_union(gateway::gw_get_data("Grids", "sf"))
+```
+
+## Making a Choropleth
+These maps dont have labels because they are used on the poster for this work. Therefore they are saved with intuitive names and in a vector graphics format.
+
+```{r ggplot csb}
+# csb map
+ggplot() +
+  geom_sf(data = bg) +
+  geom_sf(data = m_all, mapping = aes(fill = csb)) +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = NA),
+        panel.background = element_blank(),
+        plot.background = element_rect(fill = "transparent", color = NA),
+        legend.background = element_rect(fill = "transparent", color = NA)
+        ) +
+  scale_fill_viridis(name = "CSB Calls", guide = guide_colorbar(ticks = F), direction = -1) +
+  facet_grid(. ~ year)
+
+ggsave("../results/csb_year.pdf", dpi = 500, bg = "transparent")
+```
+
+```{r ggplot voter}
+# Voter map
+ggplot() +
+  geom_sf(data = bg) +
+  geom_sf(data = m_all, mapping = aes(fill = turnout)) +
+  theme(axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_line(color = NA),
+        panel.background = element_blank(),
+        plot.background = element_rect(fill = "transparent", color = NA),
+        legend.background = element_rect(fill = "transparent", color = NA)) +
+  scale_fill_viridis(option = "plasma", name = "Voter Turnout", guide = guide_colorbar(ticks = F), direction = -1) +
+  facet_grid(. ~ year)
+
+
+ggsave("../results/voter_year.pdf", dpi = 500, bg = "transparent")
+```
+
+

@@ -1,7 +1,0 @@
----
-title: "Spatial Model"
-output: html_notebook
----
-
-## Introduction
-This notebook is one of a multiple part series for analyzing csb and voter data. This notebook accomplishes the building of the Spatial model using the python library `pysal` and the R package `reticulate` to be able to execute python code in an R notebook.

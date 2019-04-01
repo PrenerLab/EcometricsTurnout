@@ -1,4 +1,4 @@
-This folder contains the following directories for `mss_project`
+This folder contains the following directories for `EcometricsTurnout`
 
 * `data/` contains the data used in this project.
 * `docs/` contains the Rnotebook used for this project.
