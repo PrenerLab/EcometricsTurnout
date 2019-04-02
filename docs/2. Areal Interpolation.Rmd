@@ -151,7 +151,7 @@ grid14 <- mutate(grid14, turnout = voters/vap * 100,
                          hs = 100 * prp_hs,
                          ba = 100 * prp_ba,
                          id = row_number(),
-                         csb_dns = csb_calls/tot_pop) %>%
+                         csb_dns = csb_calls/tot_pop * 1000) %>%
           select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %>%
           mutate(turnout = ifelse(turnout > 100, 100, turnout))
   
@@ -162,7 +162,7 @@ grid16 <- mutate(grid16, turnout = voters/vap * 100,
                          hs = 100 * prp_hs,
                          ba = 100 * prp_ba,
                          id = row_number(),
-                         csb_dns = csb_calls/tot_pop) %>%
+                         csb_dns = csb_calls/tot_pop * 1000) %>%
           select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %>%
           mutate(turnout = ifelse(turnout > 100, 100, turnout))
 
@@ -172,7 +172,7 @@ grid17 <- mutate(grid17, turnout = voters/vap * 100,
                          hs = 100 * prp_hs,
                          ba = 100 * prp_ba,
                          id = row_number(),
-                         csb_dns = csb_calls/tot_pop) %>%
+                         csb_dns = csb_calls/tot_pop * 1000) %>%
           select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %>%
           mutate(turnout = ifelse(turnout > 100, 100, turnout))
 

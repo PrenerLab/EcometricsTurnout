@@ -1776,26 +1776,24 @@ $(document).ready(function () {
 <p>These are the packages neccessary for the completion of Areal weighted interpolation of our data to grids.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDUkFOIFBhY2thZ2VzXG5saWJyYXJ5KHNmKVxubGlicmFyeShkcGx5cilcblxuIyBOb24tQ1JBTiBQYWNrYWdlc1xubGlicmFyeShnYXRld2F5KVxubGlicmFyeShhcmVhbCkgIyBuZWVkIHRoZSBnaXRodWIgdmVyc2lvbiB0byBmaXggZXh0ZW5zaXZlL2ludGVuc2l2ZSBidWdcbmBgYCJ9 -->
-<pre class="r"><code># CRAN Packages
-library(sf)
-library(dplyr)
-
-# Non-CRAN Packages
-library(gateway)
-library(areal) # need the github version to fix extensive/intensive bug</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBDUkFOIFBhY2thZ2VzXG5saWJyYXJ5KHNmKVxubGlicmFyeShkcGx5cilcblxuIyBOb24tQ1JBTiBQYWNrYWdlc1xubGlicmFyeShnYXRld2F5KVxubGlicmFyeShhcmVhbCkgIyBuZWVkIHRoZSBnaXRodWIgdmVyc2lvbiB0byBmaXggZXh0ZW5zaXZlL2ludGVuc2l2ZSBidWdcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r # CRAN Packages library(sf) library(dplyr)</p>
+</div>
+<div id="non-cran-packages" class="section level1">
+<h1>Non-CRAN Packages</h1>
+<p>library(gateway) library(areal) # need the github version to fix extensive/intensive bug</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
 <div id="load-data" class="section level2">
 <h2>Load Data</h2>
 <p>We’ll begin by loading all of the data that needs to get agregated to grid squares:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB2b3RlciBkYXRhXG52b3RlcjE0IDwtIHN0X3JlYWQoXCIuLi9kYXRhL1NwYXRpYWwvcmF3L3ZvdGVyL1ZvdGVyc19Ob3ZfMTQuc2hwXCIpXG5gYGAifQ== -->
-<pre class="r"><code># voter data
-voter14 &lt;- st_read(&quot;../data/Spatial/raw/voter/Voters_Nov_14.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyB2b3RlciBkYXRhXG52b3RlcjE0IDwtIHN0X3JlYWQoXFwuLi9kYXRhL1NwYXRpYWwvcmF3L3ZvdGVyL1ZvdGVyc19Ob3ZfMTQuc2hwXFwpXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r # voter data voter14 &lt;- st_read(../data/Spatial/raw/voter/Voters_Nov_14.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgVm90ZXJzX05vdl8xNCcgZnJvbSBkYXRhIHNvdXJjZSBgL1ZvbHVtZXMvTWljcm9TRC9HaXRodWIgUmVwb3MvRWNvbWV0cmljc1R1cm5vdXQvZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfTm92XzE0LnNocCcgdXNpbmcgZHJpdmVyIGBFU1JJIFNoYXBlZmlsZSdcblNpbXBsZSBmZWF0dXJlIGNvbGxlY3Rpb24gd2l0aCA1NzIwMiBmZWF0dXJlcyBhbmQgMiBmaWVsZHNcbmdlb21ldHJ5IHR5cGU6ICBQT0lOVFxuZGltZW5zaW9uOiAgICAgIFhZXG5iYm94OiAgICAgICAgICAgeG1pbjogLTkwLjM5NDEyIHltaW46IDM4LjU0MDIgeG1heDogLTkwLjE4MTg2IHltYXg6IDM4Ljc3MDM0XG5lcHNnIChTUklEKTogICAgTkFcbnByb2o0c3RyaW5nOiAgICArcHJvaj1sb25nbGF0ICtlbGxwcz1HUlM4MCArbm9fZGVmc1xuIn0= -->
 <pre><code>Reading layer `Voters_Nov_14' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/voter/Voters_Nov_14.shp' using driver `ESRI Shapefile'
@@ -1806,8 +1804,9 @@ bbox:           xmin: -90.39412 ymin: 38.5402 xmax: -90.18186 ymax: 38.77034
 epsg (SRID):    NA
 proj4string:    +proj=longlat +ellps=GRS80 +no_defs</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudm90ZXIxNiA8LSBzdF9yZWFkKFwiLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfTm92XzE2LnNocFwiKVxuYGBgIn0= -->
-<pre class="r"><code>voter16 &lt;- st_read(&quot;../data/Spatial/raw/voter/Voters_Nov_16.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudm90ZXIxNiA8LSBzdF9yZWFkKFxcLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfTm92XzE2LnNocFxcKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r voter16 &lt;- st_read(../data/Spatial/raw/voter/Voters_Nov_16.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgVm90ZXJzX05vdl8xNicgZnJvbSBkYXRhIHNvdXJjZSBgL1ZvbHVtZXMvTWljcm9TRC9HaXRodWIgUmVwb3MvRWNvbWV0cmljc1R1cm5vdXQvZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfTm92XzE2LnNocCcgdXNpbmcgZHJpdmVyIGBFU1JJIFNoYXBlZmlsZSdcblNpbXBsZSBmZWF0dXJlIGNvbGxlY3Rpb24gd2l0aCAxMjk3OTUgZmVhdHVyZXMgYW5kIDIgZmllbGRzXG5nZW9tZXRyeSB0eXBlOiAgUE9JTlRcbmRpbWVuc2lvbjogICAgICBYWVxuYmJveDogICAgICAgICAgIHhtaW46IC05MC4zOTQxMiB5bWluOiAzOC41Mzg1OCB4bWF4OiAtOTAuMTgxODYgeW1heDogMzguNzcwMzRcbmVwc2cgKFNSSUQpOiAgICBOQVxucHJvajRzdHJpbmc6ICAgICtwcm9qPWxvbmdsYXQgK2VsbHBzPUdSUzgwICtub19kZWZzXG4ifQ== -->
 <pre><code>Reading layer `Voters_Nov_16' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/voter/Voters_Nov_16.shp' using driver `ESRI Shapefile'
@@ -1818,8 +1817,9 @@ bbox:           xmin: -90.39412 ymin: 38.53858 xmax: -90.18186 ymax: 38.77034
 epsg (SRID):    NA
 proj4string:    +proj=longlat +ellps=GRS80 +no_defs</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudm90ZXIxNyA8LSBzdF9yZWFkKFwiLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfQXByXzE3LnNocFwiKVxuYGBgIn0= -->
-<pre class="r"><code>voter17 &lt;- st_read(&quot;../data/Spatial/raw/voter/Voters_Apr_17.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxudm90ZXIxNyA8LSBzdF9yZWFkKFxcLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfQXByXzE3LnNocFxcKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r voter17 &lt;- st_read(../data/Spatial/raw/voter/Voters_Apr_17.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgVm90ZXJzX0Fwcl8xNycgZnJvbSBkYXRhIHNvdXJjZSBgL1ZvbHVtZXMvTWljcm9TRC9HaXRodWIgUmVwb3MvRWNvbWV0cmljc1R1cm5vdXQvZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfQXByXzE3LnNocCcgdXNpbmcgZHJpdmVyIGBFU1JJIFNoYXBlZmlsZSdcblNpbXBsZSBmZWF0dXJlIGNvbGxlY3Rpb24gd2l0aCAzMjc0MSBmZWF0dXJlcyBhbmQgMiBmaWVsZHNcbmdlb21ldHJ5IHR5cGU6ICBQT0lOVFxuZGltZW5zaW9uOiAgICAgIFhZXG5iYm94OiAgICAgICAgICAgeG1pbjogLTkwLjM5NDEyIHltaW46IDM4LjU0MDIgeG1heDogLTkwLjE4MzA0IHltYXg6IDM4Ljc2NDc3XG5lcHNnIChTUklEKTogICAgTkFcbnByb2o0c3RyaW5nOiAgICArcHJvaj1sb25nbGF0ICtlbGxwcz1HUlM4MCArbm9fZGVmc1xuIn0= -->
 <pre><code>Reading layer `Voters_Apr_17' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/voter/Voters_Apr_17.shp' using driver `ESRI Shapefile'
@@ -1830,9 +1830,9 @@ bbox:           xmin: -90.39412 ymin: 38.5402 xmax: -90.18304 ymax: 38.76477
 epsg (SRID):    NA
 proj4string:    +proj=longlat +ellps=GRS80 +no_defs</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjc2IgZGF0YVxuY3NiMTQgPC0gc3RfcmVhZChcIi4uL2RhdGEvU3BhdGlhbC9yYXcvY3NiL0NTQl9jYWxsc18xNC5zaHBcIilcbmBgYCJ9 -->
-<pre class="r"><code># csb data
-csb14 &lt;- st_read(&quot;../data/Spatial/raw/csb/CSB_calls_14.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBjc2IgZGF0YVxuY3NiMTQgPC0gc3RfcmVhZChcXC4uL2RhdGEvU3BhdGlhbC9yYXcvY3NiL0NTQl9jYWxsc18xNC5zaHBcXClcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r # csb data csb14 &lt;- st_read(../data/Spatial/raw/csb/CSB_calls_14.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgQ1NCX2NhbGxzXzE0JyBmcm9tIGRhdGEgc291cmNlIGAvVm9sdW1lcy9NaWNyb1NEL0dpdGh1YiBSZXBvcy9FY29tZXRyaWNzVHVybm91dC9kYXRhL1NwYXRpYWwvcmF3L2NzYi9DU0JfY2FsbHNfMTQuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuU2ltcGxlIGZlYXR1cmUgY29sbGVjdGlvbiB3aXRoIDQyMTIyIGZlYXR1cmVzIGFuZCAxNyBmaWVsZHNcbmdlb21ldHJ5IHR5cGU6ICBQT0lOVFxuZGltZW5zaW9uOiAgICAgIFhZXG5iYm94OiAgICAgICAgICAgeG1pbjogODcxODg2LjMgeW1pbjogOTg0NzAyLjQgeG1heDogOTExMjUwIHltYXg6IDEwNzAwNjdcbmVwc2cgKFNSSUQpOiAgICBOQVxucHJvajRzdHJpbmc6ICAgICtwcm9qPXRtZXJjICtsYXRfMD0zNS44MzMzMzMzMzMzMzMzNCArbG9uXzA9LTkwLjUgK2s9MC45OTk5MzMzMzMzMzMzMzMzICt4XzA9MjUwMDAwICt5XzA9MCArZWxscHM9R1JTODAgK3VuaXRzPXVzLWZ0ICtub19kZWZzXG4ifQ== -->
 <pre><code>Reading layer `CSB_calls_14' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/csb/CSB_calls_14.shp' using driver `ESRI Shapefile'
@@ -1843,8 +1843,9 @@ bbox:           xmin: 871886.3 ymin: 984702.4 xmax: 911250 ymax: 1070067
 epsg (SRID):    NA
 proj4string:    +proj=tmerc +lat_0=35.83333333333334 +lon_0=-90.5 +k=0.9999333333333333 +x_0=250000 +y_0=0 +ellps=GRS80 +units=us-ft +no_defs</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY3NiMTYgPC0gc3RfcmVhZChcIi4uL2RhdGEvU3BhdGlhbC9yYXcvY3NiL0NTQl9jYWxsc18xNi5zaHBcIilcbmBgYCJ9 -->
-<pre class="r"><code>csb16 &lt;- st_read(&quot;../data/Spatial/raw/csb/CSB_calls_16.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuY3NiMTYgPC0gc3RfcmVhZChcXC4uL2RhdGEvU3BhdGlhbC9yYXcvY3NiL0NTQl9jYWxsc18xNi5zaHBcXClcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r csb16 &lt;- st_read(../data/Spatial/raw/csb/CSB_calls_16.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgQ1NCX2NhbGxzXzE2JyBmcm9tIGRhdGEgc291cmNlIGAvVm9sdW1lcy9NaWNyb1NEL0dpdGh1YiBSZXBvcy9FY29tZXRyaWNzVHVybm91dC9kYXRhL1NwYXRpYWwvcmF3L2NzYi9DU0JfY2FsbHNfMTYuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuU2ltcGxlIGZlYXR1cmUgY29sbGVjdGlvbiB3aXRoIDU1OTE3IGZlYXR1cmVzIGFuZCAxNyBmaWVsZHNcbmdlb21ldHJ5IHR5cGU6ICBQT0lOVFxuZGltZW5zaW9uOiAgICAgIFhZXG5iYm94OiAgICAgICAgICAgeG1pbjogODcxODc3LjUgeW1pbjogOTg1MDY5LjUgeG1heDogOTExMzE4LjMgeW1heDogMTA2ODgzMlxuZXBzZyAoU1JJRCk6ICAgIE5BXG5wcm9qNHN0cmluZzogICAgK3Byb2o9dG1lcmMgK2xhdF8wPTM1LjgzMzMzMzMzMzMzMzM0ICtsb25fMD0tOTAuNSAraz0wLjk5OTkzMzMzMzMzMzMzMzMgK3hfMD0yNTAwMDAgK3lfMD0wICtlbGxwcz1HUlM4MCArdW5pdHM9dXMtZnQgK25vX2RlZnNcbiJ9 -->
 <pre><code>Reading layer `CSB_calls_16' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/csb/CSB_calls_16.shp' using driver `ESRI Shapefile'
@@ -1855,8 +1856,9 @@ bbox:           xmin: 871877.5 ymin: 985069.5 xmax: 911318.3 ymax: 1068832
 epsg (SRID):    NA
 proj4string:    +proj=tmerc +lat_0=35.83333333333334 +lon_0=-90.5 +k=0.9999333333333333 +x_0=250000 +y_0=0 +ellps=GRS80 +units=us-ft +no_defs</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY3NiMTcgPC0gc3RfcmVhZChcIi4uL2RhdGEvU3BhdGlhbC9yYXcvY3NiL0NTQl9jYWxsc18xNy5zaHBcIilcbmBgYCJ9 -->
-<pre class="r"><code>csb17 &lt;- st_read(&quot;../data/Spatial/raw/csb/CSB_calls_17.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuY3NiMTcgPC0gc3RfcmVhZChcXC4uL2RhdGEvU3BhdGlhbC9yYXcvY3NiL0NTQl9jYWxsc18xNy5zaHBcXClcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r csb17 &lt;- st_read(../data/Spatial/raw/csb/CSB_calls_17.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgQ1NCX2NhbGxzXzE3JyBmcm9tIGRhdGEgc291cmNlIGAvVm9sdW1lcy9NaWNyb1NEL0dpdGh1YiBSZXBvcy9FY29tZXRyaWNzVHVybm91dC9kYXRhL1NwYXRpYWwvcmF3L2NzYi9DU0JfY2FsbHNfMTcuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuU2ltcGxlIGZlYXR1cmUgY29sbGVjdGlvbiB3aXRoIDU4MTAwIGZlYXR1cmVzIGFuZCAxNyBmaWVsZHNcbmdlb21ldHJ5IHR5cGU6ICBQT0lOVFxuZGltZW5zaW9uOiAgICAgIFhZXG5iYm94OiAgICAgICAgICAgeG1pbjogODcxODA0LjQgeW1pbjogOTg1MDY5LjUgeG1heDogOTExMzE4LjMgeW1heDogMTA3MDIwOVxuZXBzZyAoU1JJRCk6ICAgIE5BXG5wcm9qNHN0cmluZzogICAgK3Byb2o9dG1lcmMgK2xhdF8wPTM1LjgzMzMzMzMzMzMzMzM0ICtsb25fMD0tOTAuNSAraz0wLjk5OTkzMzMzMzMzMzMzMzMgK3hfMD0yNTAwMDAgK3lfMD0wICtlbGxwcz1HUlM4MCArdW5pdHM9dXMtZnQgK25vX2RlZnNcbiJ9 -->
 <pre><code>Reading layer `CSB_calls_17' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/csb/CSB_calls_17.shp' using driver `ESRI Shapefile'
@@ -1867,9 +1869,9 @@ bbox:           xmin: 871804.4 ymin: 985069.5 xmax: 911318.3 ymax: 1070209
 epsg (SRID):    NA
 proj4string:    +proj=tmerc +lat_0=35.83333333333334 +lon_0=-90.5 +k=0.9999333333333333 +x_0=250000 +y_0=0 +ellps=GRS80 +units=us-ft +no_defs</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBkZW1vZ3JhcGhpYyBkYXRhXG5kZW1vZzE0IDwtIHN0X3JlYWQoXCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTQuc2hwXCIpXG5gYGAifQ== -->
-<pre class="r"><code># demographic data
-demog14 &lt;- st_read(&quot;../data/Spatial/raw/census/Demographics_14.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBkZW1vZ3JhcGhpYyBkYXRhXG5kZW1vZzE0IDwtIHN0X3JlYWQoXFwuLi9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTQuc2hwXFwpXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r # demographic data demog14 &lt;- st_read(../data/Spatial/raw/census/Demographics_14.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgRGVtb2dyYXBoaWNzXzE0JyBmcm9tIGRhdGEgc291cmNlIGAvVm9sdW1lcy9NaWNyb1NEL0dpdGh1YiBSZXBvcy9FY29tZXRyaWNzVHVybm91dC9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTQuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuU2ltcGxlIGZlYXR1cmUgY29sbGVjdGlvbiB3aXRoIDEwNiBmZWF0dXJlcyBhbmQgNiBmaWVsZHNcbmdlb21ldHJ5IHR5cGU6ICBQT0xZR09OXG5kaW1lbnNpb246ICAgICAgWFlcbmJib3g6ICAgICAgICAgICB4bWluOiAtOTAuMzIwNTIgeW1pbjogMzguNTMyMDEgeG1heDogLTkwLjE2NjU3IHltYXg6IDM4Ljc3NDQzXG5lcHNnIChTUklEKTogICAgNDI2OVxucHJvajRzdHJpbmc6ICAgICtwcm9qPWxvbmdsYXQgK2RhdHVtPU5BRDgzICtub19kZWZzXG4ifQ== -->
 <pre><code>Reading layer `Demographics_14' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/census/Demographics_14.shp' using driver `ESRI Shapefile'
@@ -1880,8 +1882,9 @@ bbox:           xmin: -90.32052 ymin: 38.53201 xmax: -90.16657 ymax: 38.77443
 epsg (SRID):    4269
 proj4string:    +proj=longlat +datum=NAD83 +no_defs</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVtb2cxNiA8LSBzdF9yZWFkKFwiLi4vZGF0YS9TcGF0aWFsL3Jhdy9jZW5zdXMvRGVtb2dyYXBoaWNzXzE2LnNocFwiKVxuYGBgIn0= -->
-<pre class="r"><code>demog16 &lt;- st_read(&quot;../data/Spatial/raw/census/Demographics_16.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZGVtb2cxNiA8LSBzdF9yZWFkKFxcLi4vZGF0YS9TcGF0aWFsL3Jhdy9jZW5zdXMvRGVtb2dyYXBoaWNzXzE2LnNocFxcKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r demog16 &lt;- st_read(../data/Spatial/raw/census/Demographics_16.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgRGVtb2dyYXBoaWNzXzE2JyBmcm9tIGRhdGEgc291cmNlIGAvVm9sdW1lcy9NaWNyb1NEL0dpdGh1YiBSZXBvcy9FY29tZXRyaWNzVHVybm91dC9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTYuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuU2ltcGxlIGZlYXR1cmUgY29sbGVjdGlvbiB3aXRoIDEwNiBmZWF0dXJlcyBhbmQgNiBmaWVsZHNcbmdlb21ldHJ5IHR5cGU6ICBQT0xZR09OXG5kaW1lbnNpb246ICAgICAgWFlcbmJib3g6ICAgICAgICAgICB4bWluOiAtOTAuMzIwNTIgeW1pbjogMzguNTMyMDEgeG1heDogLTkwLjE2NjU3IHltYXg6IDM4Ljc3NDQzXG5lcHNnIChTUklEKTogICAgNDI2OVxucHJvajRzdHJpbmc6ICAgICtwcm9qPWxvbmdsYXQgK2RhdHVtPU5BRDgzICtub19kZWZzXG4ifQ== -->
 <pre><code>Reading layer `Demographics_16' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/census/Demographics_16.shp' using driver `ESRI Shapefile'
@@ -1892,8 +1895,9 @@ bbox:           xmin: -90.32052 ymin: 38.53201 xmax: -90.16657 ymax: 38.77443
 epsg (SRID):    4269
 proj4string:    +proj=longlat +datum=NAD83 +no_defs</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVtb2cxNyA8LSBzdF9yZWFkKFwiLi4vZGF0YS9TcGF0aWFsL3Jhdy9jZW5zdXMvRGVtb2dyYXBoaWNzXzE3LnNocFwiKVxuYGBgIn0= -->
-<pre class="r"><code>demog17 &lt;- st_read(&quot;../data/Spatial/raw/census/Demographics_17.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZGVtb2cxNyA8LSBzdF9yZWFkKFxcLi4vZGF0YS9TcGF0aWFsL3Jhdy9jZW5zdXMvRGVtb2dyYXBoaWNzXzE3LnNocFxcKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r demog17 &lt;- st_read(../data/Spatial/raw/census/Demographics_17.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiUmVhZGluZyBsYXllciBgRGVtb2dyYXBoaWNzXzE3JyBmcm9tIGRhdGEgc291cmNlIGAvVm9sdW1lcy9NaWNyb1NEL0dpdGh1YiBSZXBvcy9FY29tZXRyaWNzVHVybm91dC9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTcuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuU2ltcGxlIGZlYXR1cmUgY29sbGVjdGlvbiB3aXRoIDEwNiBmZWF0dXJlcyBhbmQgNiBmaWVsZHNcbmdlb21ldHJ5IHR5cGU6ICBQT0xZR09OXG5kaW1lbnNpb246ICAgICAgWFlcbmJib3g6ICAgICAgICAgICB4bWluOiAtOTAuMzIwNTIgeW1pbjogMzguNTMyMDEgeG1heDogLTkwLjE2NjU3IHltYXg6IDM4Ljc3NDQzXG5lcHNnIChTUklEKTogICAgNDI2OVxucHJvajRzdHJpbmc6ICAgICtwcm9qPWxvbmdsYXQgK2RhdHVtPU5BRDgzICtub19kZWZzXG4ifQ== -->
 <pre><code>Reading layer `Demographics_17' from data source `/Volumes/MicroSD/Github Repos/EcometricsTurnout/data/Spatial/raw/census/Demographics_17.shp' using driver `ESRI Shapefile'
@@ -1911,12 +1915,14 @@ proj4string:    +proj=longlat +datum=NAD83 +no_defs</code></pre>
 <p>We’ll also load the grid shape from the <code>gateway</code> package.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3JpZCA8LSBnd19nZXRfZGF0YShcIkdyaWRzLCBFeHBsb2RlZFwiLCBjbGFzcyA9IFwic2ZcIilcbmBgYCJ9 -->
-<pre class="r"><code>grid &lt;- gw_get_data(&quot;Grids, Exploded&quot;, class = &quot;sf&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoidHJ5aW5nIFVSTCAnaHR0cHM6Ly9naXRodWIuY29tL3NsdS1vcGVuR0lTL1NUTF9CT1VOREFSWV9Hcmlkcy9hcmNoaXZlL21hc3Rlci56aXAnXG5kb3dubG9hZGVkIDM5MSBLQlxuIn0= -->
-<pre><code>trying URL 'https://github.com/slu-openGIS/STL_BOUNDARY_Grids/archive/master.zip'
-downloaded 391 KB</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ3JpZCA8LSBnd19nZXRfZGF0YShcXEdyaWRzXG5gYGAifQ== -->
+<p><code>r</code>r grid &lt;- gw_get_data(</p>
+<pre><code>
+&lt;!-- rnb-source-end --&gt;
+
+&lt;!-- rnb-output-begin eyJkYXRhIjoidHJ5aW5nIFVSTCAnaHR0cHM6Ly9naXRodWIuY29tL3NsdS1vcGVuR0lTL1NUTF9CT1VOREFSWV9Hcmlkcy9hcmNoaXZlL21hc3Rlci56aXAnXG5kb3dubG9hZGVkIDM5MSBLQlxuIn0= --&gt;
+</code></pre>
+<p>trying URL ‘<a href="https://github.com/slu-openGIS/STL_BOUNDARY_Grids/archive/master.zip" class="uri">https://github.com/slu-openGIS/STL_BOUNDARY_Grids/archive/master.zip</a>’ downloaded 391 KB ```</p>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1926,20 +1932,12 @@ downloaded 391 KB</code></pre>
 <p>Next, we’ll standardize all of our data to be in the Missouri East StatePlane Fips 2401 Projection (epsg: 102696)</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3JpZCA8LSBzdF90cmFuc2Zvcm0oZ3JpZCwgY3JzID0gMTAyNjk2KVxuXG52b3RlcjE0IDwtIHN0X3RyYW5zZm9ybSh2b3RlcjE0LCBjcnMgPSAxMDI2OTYpXG52b3RlcjE2IDwtIHN0X3RyYW5zZm9ybSh2b3RlcjE2LCBjcnMgPSAxMDI2OTYpXG52b3RlcjE3IDwtIHN0X3RyYW5zZm9ybSh2b3RlcjE3LCBjcnMgPSAxMDI2OTYpXG5cbmNzYjE0IDwtIHN0X3RyYW5zZm9ybShjc2IxNCwgY3JzID0gMTAyNjk2KVxuY3NiMTYgPC0gc3RfdHJhbnNmb3JtKGNzYjE2LCBjcnMgPSAxMDI2OTYpXG5jc2IxNyA8LSBzdF90cmFuc2Zvcm0oY3NiMTcsIGNycyA9IDEwMjY5NilcblxuZGVtb2cxNCA8LSBzdF90cmFuc2Zvcm0oZGVtb2cxNCwgY3JzID0gMTAyNjk2KVxuZGVtb2cxNiA8LSBzdF90cmFuc2Zvcm0oZGVtb2cxNiwgY3JzID0gMTAyNjk2KVxuZGVtb2cxNyA8LSBzdF90cmFuc2Zvcm0oZGVtb2cxNywgY3JzID0gMTAyNjk2KVxuYGBgIn0= -->
-<pre class="r"><code>grid &lt;- st_transform(grid, crs = 102696)
-
-voter14 &lt;- st_transform(voter14, crs = 102696)
-voter16 &lt;- st_transform(voter16, crs = 102696)
-voter17 &lt;- st_transform(voter17, crs = 102696)
-
-csb14 &lt;- st_transform(csb14, crs = 102696)
-csb16 &lt;- st_transform(csb16, crs = 102696)
-csb17 &lt;- st_transform(csb17, crs = 102696)
-
-demog14 &lt;- st_transform(demog14, crs = 102696)
-demog16 &lt;- st_transform(demog16, crs = 102696)
-demog17 &lt;- st_transform(demog17, crs = 102696)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ3JpZCA8LSBzdF90cmFuc2Zvcm0oZ3JpZCwgY3JzID0gMTAyNjk2KVxuXG52b3RlcjE0IDwtIHN0X3RyYW5zZm9ybSh2b3RlcjE0LCBjcnMgPSAxMDI2OTYpXG52b3RlcjE2IDwtIHN0X3RyYW5zZm9ybSh2b3RlcjE2LCBjcnMgPSAxMDI2OTYpXG52b3RlcjE3IDwtIHN0X3RyYW5zZm9ybSh2b3RlcjE3LCBjcnMgPSAxMDI2OTYpXG5cbmNzYjE0IDwtIHN0X3RyYW5zZm9ybShjc2IxNCwgY3JzID0gMTAyNjk2KVxuY3NiMTYgPC0gc3RfdHJhbnNmb3JtKGNzYjE2LCBjcnMgPSAxMDI2OTYpXG5jc2IxNyA8LSBzdF90cmFuc2Zvcm0oY3NiMTcsIGNycyA9IDEwMjY5NilcblxuZGVtb2cxNCA8LSBzdF90cmFuc2Zvcm0oZGVtb2cxNCwgY3JzID0gMTAyNjk2KVxuZGVtb2cxNiA8LSBzdF90cmFuc2Zvcm0oZGVtb2cxNiwgY3JzID0gMTAyNjk2KVxuZGVtb2cxNyA8LSBzdF90cmFuc2Zvcm0oZGVtb2cxNywgY3JzID0gMTAyNjk2KVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r grid &lt;- st_transform(grid, crs = 102696)</p>
+<p>voter14 &lt;- st_transform(voter14, crs = 102696) voter16 &lt;- st_transform(voter16, crs = 102696) voter17 &lt;- st_transform(voter17, crs = 102696)</p>
+<p>csb14 &lt;- st_transform(csb14, crs = 102696) csb16 &lt;- st_transform(csb16, crs = 102696) csb17 &lt;- st_transform(csb17, crs = 102696)</p>
+<p>demog14 &lt;- st_transform(demog14, crs = 102696) demog16 &lt;- st_transform(demog16, crs = 102696) demog17 &lt;- st_transform(demog17, crs = 102696)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1952,89 +1950,69 @@ demog17 &lt;- st_transform(demog17, crs = 102696)</code></pre>
 <p>In order to analyze our data, we need all data to be interpolated to the grid for St. Louis. For point data (voter data and csb data) we can simply merge the points to polygon. We’ll write a quick function to do this, and then do it to all of our point data.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBkZWZpbmUgZnVuY3Rpb25cbnBvaW50c19wb2x5IDwtIGZ1bmN0aW9uKHBvaW50cywgcG9seWdvbil7XG4gIHdpdGhpbiA8LSBzdF9pbnRlcnNlY3RzKHBvaW50cywgcG9seWdvbiwgc3BhcnNlID0gRkFMU0UpXG4gIG91dCA8LSBjYmluZChwb2x5Z29uLCBhcHBseSh3aXRoaW4sIDIsIHN1bSkpXG4gIHJldHVybihvdXQpXG59XG5cbiMgcG9pbnRzIHRvIGdyaWRcbnZvdGVyMTRfZyA8LSBwb2ludHNfcG9seSh2b3RlcjE0LCBncmlkKVxudm90ZXIxNl9nIDwtIHBvaW50c19wb2x5KHZvdGVyMTYsIGdyaWQpXG52b3RlcjE3X2cgPC0gcG9pbnRzX3BvbHkodm90ZXIxNywgZ3JpZClcblxuY3NiMTRfZyA8LSBwb2ludHNfcG9seShjc2IxNCwgZ3JpZClcbmNzYjE2X2cgPC0gcG9pbnRzX3BvbHkoY3NiMTYsIGdyaWQpXG5jc2IxN19nIDwtIHBvaW50c19wb2x5KGNzYjE3LCBncmlkKVxuXG4jIHJlbW92ZSBvcmlnaW5hbCBkYXRhIGZyb20gZ2xvYmFsXG5ybSh2b3RlcjE0LCB2b3RlcjE2LCB2b3RlcjE3LCBjc2IxNCwgY3NiMTYsIGNzYjE3KVxuYGBgIn0= -->
-<pre class="r"><code># define function
-points_poly &lt;- function(points, polygon){
-  within &lt;- st_intersects(points, polygon, sparse = FALSE)
-  out &lt;- cbind(polygon, apply(within, 2, sum))
-  return(out)
-}
-
-# points to grid
-voter14_g &lt;- points_poly(voter14, grid)
-voter16_g &lt;- points_poly(voter16, grid)
-voter17_g &lt;- points_poly(voter17, grid)
-
-csb14_g &lt;- points_poly(csb14, grid)
-csb16_g &lt;- points_poly(csb16, grid)
-csb17_g &lt;- points_poly(csb17, grid)
-
-# remove original data from global
-rm(voter14, voter16, voter17, csb14, csb16, csb17)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBkZWZpbmUgZnVuY3Rpb25cbnBvaW50c19wb2x5IDwtIGZ1bmN0aW9uKHBvaW50cywgcG9seWdvbil7XG4gIHdpdGhpbiA8LSBzdF9pbnRlcnNlY3RzKHBvaW50cywgcG9seWdvbiwgc3BhcnNlID0gRkFMU0UpXG4gIG91dCA8LSBjYmluZChwb2x5Z29uLCBhcHBseSh3aXRoaW4sIDIsIHN1bSkpXG4gIHJldHVybihvdXQpXG59XG5cbiMgcG9pbnRzIHRvIGdyaWRcbnZvdGVyMTRfZyA8LSBwb2ludHNfcG9seSh2b3RlcjE0LCBncmlkKVxudm90ZXIxNl9nIDwtIHBvaW50c19wb2x5KHZvdGVyMTYsIGdyaWQpXG52b3RlcjE3X2cgPC0gcG9pbnRzX3BvbHkodm90ZXIxNywgZ3JpZClcblxuY3NiMTRfZyA8LSBwb2ludHNfcG9seShjc2IxNCwgZ3JpZClcbmNzYjE2X2cgPC0gcG9pbnRzX3BvbHkoY3NiMTYsIGdyaWQpXG5jc2IxN19nIDwtIHBvaW50c19wb2x5KGNzYjE3LCBncmlkKVxuXG4jIHJlbW92ZSBvcmlnaW5hbCBkYXRhIGZyb20gZ2xvYmFsXG5ybSh2b3RlcjE0LCB2b3RlcjE2LCB2b3RlcjE3LCBjc2IxNCwgY3NiMTYsIGNzYjE3KVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r # define function points_poly &lt;- function(points, polygon){ within &lt;- st_intersects(points, polygon, sparse = FALSE) out &lt;- cbind(polygon, apply(within, 2, sum)) return(out) }</p>
+</div>
+</div>
+</div>
+<div id="points-to-grid" class="section level1">
+<h1>points to grid</h1>
+<p>voter14_g &lt;- points_poly(voter14, grid) voter16_g &lt;- points_poly(voter16, grid) voter17_g &lt;- points_poly(voter17, grid)</p>
+<p>csb14_g &lt;- points_poly(csb14, grid) csb16_g &lt;- points_poly(csb16, grid) csb17_g &lt;- points_poly(csb17, grid)</p>
+</div>
+<div id="remove-original-data-from-global" class="section level1">
+<h1>remove original data from global</h1>
+<p>rm(voter14, voter16, voter17, csb14, csb16, csb17)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
 <div id="interpolating-demographic-data-tracts-to-the-grid" class="section level3">
 <h3>Interpolating Demographic Data (Tracts) to the Grid</h3>
 <p>Unlike point data, polygon data needs to be interpolated using areal weighted interpolation. We’ll use the <code>areal</code> package for this.</p>
 <p>First, we need to create a unique ID in the demographic data:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVtb2cxNCA8LSBtdXRhdGUoZGVtb2cxNCwgaWQgPSByb3dfbnVtYmVyKCkpXG5kZW1vZzE2IDwtIG11dGF0ZShkZW1vZzE2LCBpZCA9IHJvd19udW1iZXIoKSlcbmRlbW9nMTcgPC0gbXV0YXRlKGRlbW9nMTcsIGlkID0gcm93X251bWJlcigpKVxuYGBgIn0= -->
-<pre class="r"><code>demog14 &lt;- mutate(demog14, id = row_number())
-demog16 &lt;- mutate(demog16, id = row_number())
-demog17 &lt;- mutate(demog17, id = row_number())</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZGVtb2cxNCA8LSBtdXRhdGUoZGVtb2cxNCwgaWQgPSByb3dfbnVtYmVyKCkpXG5kZW1vZzE2IDwtIG11dGF0ZShkZW1vZzE2LCBpZCA9IHJvd19udW1iZXIoKSlcbmRlbW9nMTcgPC0gbXV0YXRlKGRlbW9nMTcsIGlkID0gcm93X251bWJlcigpKVxuYGBgXG5gYGAifQ== -->
+<p><code>r</code>r demog14 &lt;- mutate(demog14, id = row_number()) demog16 &lt;- mutate(demog16, id = row_number()) demog17 &lt;- mutate(demog17, id = row_number())</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Then, the interpolation process:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpbnRlcnBvbGF0ZVxuZGVtb2cxNF9nIDwtIGF3X2ludGVycG9sYXRlKGdyaWQsIFBhZ2VJRCwgZGVtb2cxNCwgaWQsIHdlaWdodCA9IFwic3VtXCIsIGludGVuc2l2ZSA9IGMoXCJwcnBfbm53XCIsIFwicHJwX3B2clwiLCBcInBycF9oc1wiLCBcInBycF9iYVwiKSwgZXh0ZW5zaXZlID0gYyhcInZhcFwiLCBcInRvdF9wb3BcIiksIG91dHB1dCA9IFwic2ZcIilcbmRlbW9nMTZfZyA8LSBhd19pbnRlcnBvbGF0ZShncmlkLCBQYWdlSUQsIGRlbW9nMTYsIGlkLCB3ZWlnaHQgPSBcInN1bVwiLCBpbnRlbnNpdmUgPSBjKFwicHJwX25ud1wiLCBcInBycF9wdnJcIiwgXCJwcnBfaHNcIiwgXCJwcnBfYmFcIiksIGV4dGVuc2l2ZSA9IGMoXCJ2YXBcIiwgXCJ0b3RfcG9wXCIpLCBvdXRwdXQgPSBcInNmXCIpXG5kZW1vZzE3X2cgPC0gYXdfaW50ZXJwb2xhdGUoZ3JpZCwgUGFnZUlELCBkZW1vZzE3LCBpZCwgd2VpZ2h0ID0gXCJzdW1cIiwgaW50ZW5zaXZlID0gYyhcInBycF9ubndcIiwgXCJwcnBfcHZyXCIsIFwicHJwX2hzXCIsIFwicHJwX2JhXCIpLCBleHRlbnNpdmUgPSBjKFwidmFwXCIsIFwidG90X3BvcFwiKSwgb3V0cHV0ID0gXCJzZlwiKVxuXG4jIHJlbW92ZSBvcmlnaW5hbCBmcm9tIGdsb2JhbFxucm0oZGVtb2cxNCwgZGVtb2cxNiwgZGVtb2cxNylcbmBgYCJ9 -->
-<pre class="r"><code># interpolate
-demog14_g &lt;- aw_interpolate(grid, PageID, demog14, id, weight = &quot;sum&quot;, intensive = c(&quot;prp_nnw&quot;, &quot;prp_pvr&quot;, &quot;prp_hs&quot;, &quot;prp_ba&quot;), extensive = c(&quot;vap&quot;, &quot;tot_pop&quot;), output = &quot;sf&quot;)
-demog16_g &lt;- aw_interpolate(grid, PageID, demog16, id, weight = &quot;sum&quot;, intensive = c(&quot;prp_nnw&quot;, &quot;prp_pvr&quot;, &quot;prp_hs&quot;, &quot;prp_ba&quot;), extensive = c(&quot;vap&quot;, &quot;tot_pop&quot;), output = &quot;sf&quot;)
-demog17_g &lt;- aw_interpolate(grid, PageID, demog17, id, weight = &quot;sum&quot;, intensive = c(&quot;prp_nnw&quot;, &quot;prp_pvr&quot;, &quot;prp_hs&quot;, &quot;prp_ba&quot;), extensive = c(&quot;vap&quot;, &quot;tot_pop&quot;), output = &quot;sf&quot;)
-
-# remove original from global
-rm(demog14, demog16, demog17)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBpbnRlcnBvbGF0ZVxuZGVtb2cxNF9nIDwtIGF3X2ludGVycG9sYXRlKGdyaWQsIFBhZ2VJRCwgZGVtb2cxNCwgaWQsIHdlaWdodCA9IFxcc3VtXFwsIGludGVuc2l2ZSA9IGMoXFxwcnBfbm53XFwsIFxccHJwX3B2clxcLCBcXHBycF9oc1xcLCBcXHBycF9iYVxcKSwgZXh0ZW5zaXZlID0gYyhcXHZhcFxcLCBcXHRvdF9wb3BcXCksIG91dHB1dCA9IFxcc2ZcXClcbmRlbW9nMTZfZyA8LSBhd19pbnRlcnBvbGF0ZShncmlkLCBQYWdlSUQsIGRlbW9nMTYsIGlkLCB3ZWlnaHQgPSBcXHN1bVxcLCBpbnRlbnNpdmUgPSBjKFxccHJwX25ud1xcLCBcXHBycF9wdnJcXCwgXFxwcnBfaHNcXCwgXFxwcnBfYmFcXCksIGV4dGVuc2l2ZSA9IGMoXFx2YXBcXCwgXFx0b3RfcG9wXFwpLCBvdXRwdXQgPSBcXHNmXFwpXG5kZW1vZzE3X2cgPC0gYXdfaW50ZXJwb2xhdGUoZ3JpZCwgUGFnZUlELCBkZW1vZzE3LCBpZCwgd2VpZ2h0ID0gXFxzdW1cXCwgaW50ZW5zaXZlID0gYyhcXHBycF9ubndcXCwgXFxwcnBfcHZyXFwsIFxccHJwX2hzXFwsIFxccHJwX2JhXFwpLCBleHRlbnNpdmUgPSBjKFxcdmFwXFwsIFxcdG90X3BvcFxcKSwgb3V0cHV0ID0gXFxzZlxcKVxuXG4jIHJlbW92ZSBvcmlnaW5hbCBmcm9tIGdsb2JhbFxucm0oZGVtb2cxNCwgZGVtb2cxNiwgZGVtb2cxNylcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r # interpolate demog14_g &lt;- aw_interpolate(grid, PageID, demog14, id, weight = , intensive = c(_nnw, _pvr, _hs, _ba), extensive = c(, _pop), output = ) demog16_g &lt;- aw_interpolate(grid, PageID, demog16, id, weight = , intensive = c(_nnw, _pvr, _hs, _ba), extensive = c(, _pop), output = ) demog17_g &lt;- aw_interpolate(grid, PageID, demog17, id, weight = , intensive = c(_nnw, _pvr, _hs, _ba), extensive = c(, _pop), output = )</p>
+</div>
+</div>
+<div id="remove-original-from-global" class="section level1">
+<h1>remove original from global</h1>
+<p>rm(demog14, demog16, demog17)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-</div>
-</div>
 <div id="creating-complete-grid-shapefiles" class="section level2">
 <h2>Creating Complete Grid Shapefiles</h2>
 <p>Before we can do our analysis, we need all of our data in a concise format. We’ll join the data and create a unique file for each year of the analysis.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBmaXJzdCwgcmVtb3ZlIGdlb21ldHJ5XG5zdF9nZW9tZXRyeSh2b3RlcjE0X2cpIDwtIE5VTExcbnN0X2dlb21ldHJ5KHZvdGVyMTZfZykgPC0gTlVMTFxuc3RfZ2VvbWV0cnkodm90ZXIxN19nKSA8LSBOVUxMXG5cbnN0X2dlb21ldHJ5KGNzYjE0X2cpIDwtIE5VTExcbnN0X2dlb21ldHJ5KGNzYjE2X2cpIDwtIE5VTExcbnN0X2dlb21ldHJ5KGNzYjE3X2cpIDwtIE5VTExcblxuIyBUaGVuLCByZW5hbWUgYW5kIGlzb2xhdGUgdmFyaWFibGUgb2YgaW50ZXJlc3RcbnZvdGVyMTRfZyAlPiUgcmVuYW1lKHZvdGVycyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdCh2b3RlcnMpIC0+IHZvdGVyMTRfZ1xudm90ZXIxNl9nICU+JSByZW5hbWUodm90ZXJzID0gYXBwbHkud2l0aGluLi4yLi5zdW0uKSAlPiUgc2VsZWN0KHZvdGVycykgLT4gdm90ZXIxNl9nXG52b3RlcjE3X2cgJT4lIHJlbmFtZSh2b3RlcnMgPSBhcHBseS53aXRoaW4uLjIuLnN1bS4pICU+JSBzZWxlY3Qodm90ZXJzKSAtPiB2b3RlcjE3X2dcblxuY3NiMTRfZyAlPiUgcmVuYW1lKGNzYl9jYWxscyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdChjc2JfY2FsbHMpIC0+IGNzYjE0X2dcbmNzYjE2X2cgJT4lIHJlbmFtZShjc2JfY2FsbHMgPSBhcHBseS53aXRoaW4uLjIuLnN1bS4pICU+JSBzZWxlY3QoY3NiX2NhbGxzKSAtPiBjc2IxNl9nXG5jc2IxN19nICU+JSByZW5hbWUoY3NiX2NhbGxzID0gYXBwbHkud2l0aGluLi4yLi5zdW0uKSAlPiUgc2VsZWN0KGNzYl9jYWxscykgLT4gY3NiMTdfZ1xuIyBiaW5kIGRhdGEgdG8gc2hhcGUgYWJkIHJlbW92ZSBwYWdlIChncmlkKSB2YXJpYWJsZXNcblxuZ3JpZDE0IDwtIGJpbmRfY29scyhkZW1vZzE0X2csIHZvdGVyMTRfZywgY3NiMTRfZykgJT4lIHNlbGVjdCgtUGFnZUlELCAtIFBhZ2VOYW1lLCAtUGFnZU51bWJlciwgLVBhZ2VQYXJ0KVxuZ3JpZDE2IDwtIGJpbmRfY29scyhkZW1vZzE2X2csIHZvdGVyMTZfZywgY3NiMTZfZykgJT4lIHNlbGVjdCgtUGFnZUlELCAtIFBhZ2VOYW1lLCAtUGFnZU51bWJlciwgLVBhZ2VQYXJ0KVxuZ3JpZDE3IDwtIGJpbmRfY29scyhkZW1vZzE3X2csIHZvdGVyMTdfZywgY3NiMTdfZykgJT4lIHNlbGVjdCgtUGFnZUlELCAtIFBhZ2VOYW1lLCAtUGFnZU51bWJlciwgLVBhZ2VQYXJ0KVxuXG4jIGNsZWFuIGFsbCBnbG9iYWwgdmFyc1xucm0odm90ZXIxNF9nLCB2b3RlcjE2X2csIHZvdGVyMTdfZywgY3NiMTRfZywgY3NiMTZfZywgY3NiMTdfZywgZGVtb2cxNF9nLCBkZW1vZzE2X2csIGRlbW9nMTdfZylcbmBgYCJ9 -->
-<pre class="r"><code># first, remove geometry
-st_geometry(voter14_g) &lt;- NULL
-st_geometry(voter16_g) &lt;- NULL
-st_geometry(voter17_g) &lt;- NULL
-
-st_geometry(csb14_g) &lt;- NULL
-st_geometry(csb16_g) &lt;- NULL
-st_geometry(csb17_g) &lt;- NULL
-
-# Then, rename and isolate variable of interest
-voter14_g %&gt;% rename(voters = apply.within..2..sum.) %&gt;% select(voters) -&gt; voter14_g
-voter16_g %&gt;% rename(voters = apply.within..2..sum.) %&gt;% select(voters) -&gt; voter16_g
-voter17_g %&gt;% rename(voters = apply.within..2..sum.) %&gt;% select(voters) -&gt; voter17_g
-
-csb14_g %&gt;% rename(csb_calls = apply.within..2..sum.) %&gt;% select(csb_calls) -&gt; csb14_g
-csb16_g %&gt;% rename(csb_calls = apply.within..2..sum.) %&gt;% select(csb_calls) -&gt; csb16_g
-csb17_g %&gt;% rename(csb_calls = apply.within..2..sum.) %&gt;% select(csb_calls) -&gt; csb17_g
-# bind data to shape abd remove page (grid) variables
-
-grid14 &lt;- bind_cols(demog14_g, voter14_g, csb14_g) %&gt;% select(-PageID, - PageName, -PageNumber, -PagePart)
-grid16 &lt;- bind_cols(demog16_g, voter16_g, csb16_g) %&gt;% select(-PageID, - PageName, -PageNumber, -PagePart)
-grid17 &lt;- bind_cols(demog17_g, voter17_g, csb17_g) %&gt;% select(-PageID, - PageName, -PageNumber, -PagePart)
-
-# clean all global vars
-rm(voter14_g, voter16_g, voter17_g, csb14_g, csb16_g, csb17_g, demog14_g, demog16_g, demog17_g)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuIyBmaXJzdCwgcmVtb3ZlIGdlb21ldHJ5XG5zdF9nZW9tZXRyeSh2b3RlcjE0X2cpIDwtIE5VTExcbnN0X2dlb21ldHJ5KHZvdGVyMTZfZykgPC0gTlVMTFxuc3RfZ2VvbWV0cnkodm90ZXIxN19nKSA8LSBOVUxMXG5cbnN0X2dlb21ldHJ5KGNzYjE0X2cpIDwtIE5VTExcbnN0X2dlb21ldHJ5KGNzYjE2X2cpIDwtIE5VTExcbnN0X2dlb21ldHJ5KGNzYjE3X2cpIDwtIE5VTExcblxuIyBUaGVuLCByZW5hbWUgYW5kIGlzb2xhdGUgdmFyaWFibGUgb2YgaW50ZXJlc3RcbnZvdGVyMTRfZyAlPiUgcmVuYW1lKHZvdGVycyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdCh2b3RlcnMpIC0+IHZvdGVyMTRfZ1xudm90ZXIxNl9nICU+JSByZW5hbWUodm90ZXJzID0gYXBwbHkud2l0aGluLi4yLi5zdW0uKSAlPiUgc2VsZWN0KHZvdGVycykgLT4gdm90ZXIxNl9nXG52b3RlcjE3X2cgJT4lIHJlbmFtZSh2b3RlcnMgPSBhcHBseS53aXRoaW4uLjIuLnN1bS4pICU+JSBzZWxlY3Qodm90ZXJzKSAtPiB2b3RlcjE3X2dcblxuY3NiMTRfZyAlPiUgcmVuYW1lKGNzYl9jYWxscyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdChjc2JfY2FsbHMpIC0+IGNzYjE0X2dcbmNzYjE2X2cgJT4lIHJlbmFtZShjc2JfY2FsbHMgPSBhcHBseS53aXRoaW4uLjIuLnN1bS4pICU+JSBzZWxlY3QoY3NiX2NhbGxzKSAtPiBjc2IxNl9nXG5jc2IxN19nICU+JSByZW5hbWUoY3NiX2NhbGxzID0gYXBwbHkud2l0aGluLi4yLi5zdW0uKSAlPiUgc2VsZWN0KGNzYl9jYWxscykgLT4gY3NiMTdfZ1xuIyBiaW5kIGRhdGEgdG8gc2hhcGUgYWJkIHJlbW92ZSBwYWdlIChncmlkKSB2YXJpYWJsZXNcblxuZ3JpZDE0IDwtIGJpbmRfY29scyhkZW1vZzE0X2csIHZvdGVyMTRfZywgY3NiMTRfZykgJT4lIHNlbGVjdCgtUGFnZUlELCAtIFBhZ2VOYW1lLCAtUGFnZU51bWJlciwgLVBhZ2VQYXJ0KVxuZ3JpZDE2IDwtIGJpbmRfY29scyhkZW1vZzE2X2csIHZvdGVyMTZfZywgY3NiMTZfZykgJT4lIHNlbGVjdCgtUGFnZUlELCAtIFBhZ2VOYW1lLCAtUGFnZU51bWJlciwgLVBhZ2VQYXJ0KVxuZ3JpZDE3IDwtIGJpbmRfY29scyhkZW1vZzE3X2csIHZvdGVyMTdfZywgY3NiMTdfZykgJT4lIHNlbGVjdCgtUGFnZUlELCAtIFBhZ2VOYW1lLCAtUGFnZU51bWJlciwgLVBhZ2VQYXJ0KVxuXG4jIGNsZWFuIGFsbCBnbG9iYWwgdmFyc1xucm0odm90ZXIxNF9nLCB2b3RlcjE2X2csIHZvdGVyMTdfZywgY3NiMTRfZywgY3NiMTZfZywgY3NiMTdfZywgZGVtb2cxNF9nLCBkZW1vZzE2X2csIGRlbW9nMTdfZylcbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r # first, remove geometry st_geometry(voter14_g) &lt;- NULL st_geometry(voter16_g) &lt;- NULL st_geometry(voter17_g) &lt;- NULL</p>
+<p>st_geometry(csb14_g) &lt;- NULL st_geometry(csb16_g) &lt;- NULL st_geometry(csb17_g) &lt;- NULL</p>
+</div>
+</div>
+<div id="then-rename-and-isolate-variable-of-interest" class="section level1">
+<h1>Then, rename and isolate variable of interest</h1>
+<p>voter14_g %&gt;% rename(voters = apply.within..2..sum.) %&gt;% select(voters) -&gt; voter14_g voter16_g %&gt;% rename(voters = apply.within..2..sum.) %&gt;% select(voters) -&gt; voter16_g voter17_g %&gt;% rename(voters = apply.within..2..sum.) %&gt;% select(voters) -&gt; voter17_g</p>
+<p>csb14_g %&gt;% rename(csb_calls = apply.within..2..sum.) %&gt;% select(csb_calls) -&gt; csb14_g csb16_g %&gt;% rename(csb_calls = apply.within..2..sum.) %&gt;% select(csb_calls) -&gt; csb16_g csb17_g %&gt;% rename(csb_calls = apply.within..2..sum.) %&gt;% select(csb_calls) -&gt; csb17_g # bind data to shape abd remove page (grid) variables</p>
+<p>grid14 &lt;- bind_cols(demog14_g, voter14_g, csb14_g) %&gt;% select(-PageID, - PageName, -PageNumber, -PagePart) grid16 &lt;- bind_cols(demog16_g, voter16_g, csb16_g) %&gt;% select(-PageID, - PageName, -PageNumber, -PagePart) grid17 &lt;- bind_cols(demog17_g, voter17_g, csb17_g) %&gt;% select(-PageID, - PageName, -PageNumber, -PagePart)</p>
+</div>
+<div id="clean-all-global-vars" class="section level1">
+<h1>clean all global vars</h1>
+<p>rm(voter14_g, voter16_g, voter17_g, csb14_g, csb16_g, csb17_g, demog14_g, demog16_g, demog17_g)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2043,38 +2021,11 @@ rm(voter14_g, voter16_g, voter17_g, csb14_g, csb16_g, csb17_g, demog14_g, demog1
 <p>There are some additional final considerations to make, such as calculating a voter rate.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3JpZDE0IDwtIG11dGF0ZShncmlkMTQsIHR1cm5vdXQgPSB2b3RlcnMvdmFwICogMTAwLFxuICAgICAgICAgICAgICAgICAgICAgICAgIG5vbndodCA9IDEwMCAqIHBycF9ubncsXG4gICAgICAgICAgICAgICAgICAgICAgICAgcHZydHkgPSAxMDAgKiBwcnBfcHZyLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGhzID0gMTAwICogcHJwX2hzLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGJhID0gMTAwICogcHJwX2JhLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGlkID0gcm93X251bWJlcigpLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGNzYl9kbnMgPSBjc2JfY2FsbHMvdG90X3BvcCkgJT4lXG4gICAgICAgICAgc2VsZWN0KGlkLCB0b3RfcG9wLCB0dXJub3V0LCBub253aHQsIHB2cnR5LCBocywgYmEsIGNzYl9kbnMpICU+JVxuICAgICAgICAgIG11dGF0ZSh0dXJub3V0ID0gaWZlbHNlKHR1cm5vdXQgPiAxMDAsIDEwMCwgdHVybm91dCkpXG4gIFxuXG5ncmlkMTYgPC0gbXV0YXRlKGdyaWQxNiwgdHVybm91dCA9IHZvdGVycy92YXAgKiAxMDAsXG4gICAgICAgICAgICAgICAgICAgICAgICAgbm9ud2h0ID0gMTAwICogcHJwX25udyxcbiAgICAgICAgICAgICAgICAgICAgICAgICBwdnJ0eSA9IDEwMCAqIHBycF9wdnIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgaHMgPSAxMDAgKiBwcnBfaHMsXG4gICAgICAgICAgICAgICAgICAgICAgICAgYmEgPSAxMDAgKiBwcnBfYmEsXG4gICAgICAgICAgICAgICAgICAgICAgICAgaWQgPSByb3dfbnVtYmVyKCksXG4gICAgICAgICAgICAgICAgICAgICAgICAgY3NiX2RucyA9IGNzYl9jYWxscy90b3RfcG9wKSAlPiVcbiAgICAgICAgICBzZWxlY3QoaWQsIHRvdF9wb3AsIHR1cm5vdXQsIG5vbndodCwgcHZydHksIGhzLCBiYSwgY3NiX2RucykgJT4lXG4gICAgICAgICAgbXV0YXRlKHR1cm5vdXQgPSBpZmVsc2UodHVybm91dCA+IDEwMCwgMTAwLCB0dXJub3V0KSlcblxuZ3JpZDE3IDwtIG11dGF0ZShncmlkMTcsIHR1cm5vdXQgPSB2b3RlcnMvdmFwICogMTAwLFxuICAgICAgICAgICAgICAgICAgICAgICAgIG5vbndodCA9IDEwMCAqIHBycF9ubncsXG4gICAgICAgICAgICAgICAgICAgICAgICAgcHZydHkgPSAxMDAgKiBwcnBfcHZyLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGhzID0gMTAwICogcHJwX2hzLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGJhID0gMTAwICogcHJwX2JhLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGlkID0gcm93X251bWJlcigpLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGNzYl9kbnMgPSBjc2JfY2FsbHMvdG90X3BvcCkgJT4lXG4gICAgICAgICAgc2VsZWN0KGlkLCB0b3RfcG9wLCB0dXJub3V0LCBub253aHQsIHB2cnR5LCBocywgYmEsIGNzYl9kbnMpICU+JVxuICAgICAgICAgIG11dGF0ZSh0dXJub3V0ID0gaWZlbHNlKHR1cm5vdXQgPiAxMDAsIDEwMCwgdHVybm91dCkpXG5cbmBgYCJ9 -->
-<pre class="r"><code>grid14 &lt;- mutate(grid14, turnout = voters/vap * 100,
-                         nonwht = 100 * prp_nnw,
-                         pvrty = 100 * prp_pvr,
-                         hs = 100 * prp_hs,
-                         ba = 100 * prp_ba,
-                         id = row_number(),
-                         csb_dns = csb_calls/tot_pop) %&gt;%
-          select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %&gt;%
-          mutate(turnout = ifelse(turnout &gt; 100, 100, turnout))
-  
-
-grid16 &lt;- mutate(grid16, turnout = voters/vap * 100,
-                         nonwht = 100 * prp_nnw,
-                         pvrty = 100 * prp_pvr,
-                         hs = 100 * prp_hs,
-                         ba = 100 * prp_ba,
-                         id = row_number(),
-                         csb_dns = csb_calls/tot_pop) %&gt;%
-          select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %&gt;%
-          mutate(turnout = ifelse(turnout &gt; 100, 100, turnout))
-
-grid17 &lt;- mutate(grid17, turnout = voters/vap * 100,
-                         nonwht = 100 * prp_nnw,
-                         pvrty = 100 * prp_pvr,
-                         hs = 100 * prp_hs,
-                         ba = 100 * prp_ba,
-                         id = row_number(),
-                         csb_dns = csb_calls/tot_pop) %&gt;%
-          select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %&gt;%
-          mutate(turnout = ifelse(turnout &gt; 100, 100, turnout))
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuZ3JpZDE0IDwtIG11dGF0ZShncmlkMTQsIHR1cm5vdXQgPSB2b3RlcnMvdmFwICogMTAwLFxuICAgICAgICAgICAgICAgICAgICAgICAgIG5vbndodCA9IDEwMCAqIHBycF9ubncsXG4gICAgICAgICAgICAgICAgICAgICAgICAgcHZydHkgPSAxMDAgKiBwcnBfcHZyLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGhzID0gMTAwICogcHJwX2hzLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGJhID0gMTAwICogcHJwX2JhLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGlkID0gcm93X251bWJlcigpLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGNzYl9kbnMgPSBjc2JfY2FsbHMvdG90X3BvcCkgJT4lXG4gICAgICAgICAgc2VsZWN0KGlkLCB0b3RfcG9wLCB0dXJub3V0LCBub253aHQsIHB2cnR5LCBocywgYmEsIGNzYl9kbnMpICU+JVxuICAgICAgICAgIG11dGF0ZSh0dXJub3V0ID0gaWZlbHNlKHR1cm5vdXQgPiAxMDAsIDEwMCwgdHVybm91dCkpXG4gIFxuXG5ncmlkMTYgPC0gbXV0YXRlKGdyaWQxNiwgdHVybm91dCA9IHZvdGVycy92YXAgKiAxMDAsXG4gICAgICAgICAgICAgICAgICAgICAgICAgbm9ud2h0ID0gMTAwICogcHJwX25udyxcbiAgICAgICAgICAgICAgICAgICAgICAgICBwdnJ0eSA9IDEwMCAqIHBycF9wdnIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgaHMgPSAxMDAgKiBwcnBfaHMsXG4gICAgICAgICAgICAgICAgICAgICAgICAgYmEgPSAxMDAgKiBwcnBfYmEsXG4gICAgICAgICAgICAgICAgICAgICAgICAgaWQgPSByb3dfbnVtYmVyKCksXG4gICAgICAgICAgICAgICAgICAgICAgICAgY3NiX2RucyA9IGNzYl9jYWxscy90b3RfcG9wKSAlPiVcbiAgICAgICAgICBzZWxlY3QoaWQsIHRvdF9wb3AsIHR1cm5vdXQsIG5vbndodCwgcHZydHksIGhzLCBiYSwgY3NiX2RucykgJT4lXG4gICAgICAgICAgbXV0YXRlKHR1cm5vdXQgPSBpZmVsc2UodHVybm91dCA+IDEwMCwgMTAwLCB0dXJub3V0KSlcblxuZ3JpZDE3IDwtIG11dGF0ZShncmlkMTcsIHR1cm5vdXQgPSB2b3RlcnMvdmFwICogMTAwLFxuICAgICAgICAgICAgICAgICAgICAgICAgIG5vbndodCA9IDEwMCAqIHBycF9ubncsXG4gICAgICAgICAgICAgICAgICAgICAgICAgcHZydHkgPSAxMDAgKiBwcnBfcHZyLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGhzID0gMTAwICogcHJwX2hzLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGJhID0gMTAwICogcHJwX2JhLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGlkID0gcm93X251bWJlcigpLFxuICAgICAgICAgICAgICAgICAgICAgICAgIGNzYl9kbnMgPSBjc2JfY2FsbHMvdG90X3BvcCkgJT4lXG4gICAgICAgICAgc2VsZWN0KGlkLCB0b3RfcG9wLCB0dXJub3V0LCBub253aHQsIHB2cnR5LCBocywgYmEsIGNzYl9kbnMpICU+JVxuICAgICAgICAgIG11dGF0ZSh0dXJub3V0ID0gaWZlbHNlKHR1cm5vdXQgPiAxMDAsIDEwMCwgdHVybm91dCkpXG5cbmBgYFxuYGBgIn0= -->
+<p><code>r</code>r grid14 &lt;- mutate(grid14, turnout = voters/vap * 100, nonwht = 100 * prp_nnw, pvrty = 100 * prp_pvr, hs = 100 * prp_hs, ba = 100 * prp_ba, id = row_number(), csb_dns = csb_calls/tot_pop) %&gt;% select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %&gt;% mutate(turnout = ifelse(turnout &gt; 100, 100, turnout))</p>
+<p>grid16 &lt;- mutate(grid16, turnout = voters/vap * 100, nonwht = 100 * prp_nnw, pvrty = 100 * prp_pvr, hs = 100 * prp_hs, ba = 100 * prp_ba, id = row_number(), csb_dns = csb_calls/tot_pop) %&gt;% select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %&gt;% mutate(turnout = ifelse(turnout &gt; 100, 100, turnout))</p>
+<p>grid17 &lt;- mutate(grid17, turnout = voters/vap * 100, nonwht = 100 * prp_nnw, pvrty = 100 * prp_pvr, hs = 100 * prp_hs, ba = 100 * prp_ba, id = row_number(), csb_dns = csb_calls/tot_pop) %&gt;% select(id, tot_pop, turnout, nonwht, pvrty, hs, ba, csb_dns) %&gt;% mutate(turnout = ifelse(turnout &gt; 100, 100, turnout))</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2084,8 +2035,9 @@ grid17 &lt;- mutate(grid17, turnout = voters/vap * 100,
 <p>Finally, we can export shapefiles of our data for each period.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3Rfd3JpdGUoZ3JpZDE0LCBkc24gPSBcIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuc2hwXCIpXG5gYGAifQ== -->
-<pre class="r"><code>st_write(grid14, dsn = &quot;../data/Spatial/grid/full_14.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuc3Rfd3JpdGUoZ3JpZDE0LCBkc24gPSBcXC4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuc2hwXFwpXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r st_write(grid14, dsn = ../data/Spatial/grid/full_14.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiV3JpdGluZyBsYXllciBgZnVsbF8xNCcgdG8gZGF0YSBzb3VyY2UgYC4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuZmVhdHVyZXM6ICAgICAgIDIwNlxuZmllbGRzOiAgICAgICAgIDhcbmdlb21ldHJ5IHR5cGU6ICBNdWx0aSBQb2x5Z29uXG4ifQ== -->
 <pre><code>Writing layer `full_14' to data source `../data/Spatial/grid/full_14.shp' using driver `ESRI Shapefile'
@@ -2093,8 +2045,9 @@ features:       206
 fields:         8
 geometry type:  Multi Polygon</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3Rfd3JpdGUoZ3JpZDE2LCBkc24gPSBcIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTYuc2hwXCIpXG5gYGAifQ== -->
-<pre class="r"><code>st_write(grid16, dsn = &quot;../data/Spatial/grid/full_16.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuc3Rfd3JpdGUoZ3JpZDE2LCBkc24gPSBcXC4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTYuc2hwXFwpXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r st_write(grid16, dsn = ../data/Spatial/grid/full_16.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiV3JpdGluZyBsYXllciBgZnVsbF8xNicgdG8gZGF0YSBzb3VyY2UgYC4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTYuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuZmVhdHVyZXM6ICAgICAgIDIwNlxuZmllbGRzOiAgICAgICAgIDhcbmdlb21ldHJ5IHR5cGU6ICBNdWx0aSBQb2x5Z29uXG4ifQ== -->
 <pre><code>Writing layer `full_16' to data source `../data/Spatial/grid/full_16.shp' using driver `ESRI Shapefile'
@@ -2102,8 +2055,9 @@ features:       206
 fields:         8
 geometry type:  Multi Polygon</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3Rfd3JpdGUoZ3JpZDE3LCBkc24gPSBcIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTcuc2hwXCIpXG5gYGAifQ== -->
-<pre class="r"><code>st_write(grid17, dsn = &quot;../data/Spatial/grid/full_17.shp&quot;)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxuc3Rfd3JpdGUoZ3JpZDE3LCBkc24gPSBcXC4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTcuc2hwXFwpXG5gYGBcbmBgYCJ9 -->
+<p><code>r</code>r st_write(grid17, dsn = ../data/Spatial/grid/full_17.shp)</p>
+<pre><code></code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiV3JpdGluZyBsYXllciBgZnVsbF8xNycgdG8gZGF0YSBzb3VyY2UgYC4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTcuc2hwJyB1c2luZyBkcml2ZXIgYEVTUkkgU2hhcGVmaWxlJ1xuZmVhdHVyZXM6ICAgICAgIDIwNlxuZmllbGRzOiAgICAgICAgIDhcbmdlb21ldHJ5IHR5cGU6ICBNdWx0aSBQb2x5Z29uXG4ifQ== -->
 <pre><code>Writing layer `full_17' to data source `../data/Spatial/grid/full_17.shp' using driver `ESRI Shapefile'
@@ -2117,7 +2071,7 @@ geometry type:  Multi Polygon</code></pre>
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiQXJlYWwgSW50ZXJwb2xhdGlvbiIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMgSW50cm9kdWN0aW9uClRoaXMgbm90ZWJvb2sgaXMgcGFydCB0d28gaW4gYSBzZXJpZXMgb2Ygbm90ZWJvb2tzIHRvIHByb2Nlc3MgZGF0YSBmb3IgdGhlIHNwYXRpYWwgYW5hbHlzaXMgb2YgQ1NCIGRhdGEgYW5kIHZvdGVyIHR1cm5vdXQuIFRoaXMgbm90ZWJvb2sgaGFuZGxlcyB0aGUgYXJlYWwgaW50ZXJwb2xhdGlvbiBvZiBkYXRhLgoKIyMgRGVwZW5kZW5jaWVzClRoZXNlIGFyZSB0aGUgcGFja2FnZXMgbmVjY2Vzc2FyeSBmb3IgdGhlIGNvbXBsZXRpb24gb2YgQXJlYWwgd2VpZ2h0ZWQgaW50ZXJwb2xhdGlvbiBvZiBvdXIgZGF0YSB0byBncmlkcy4KYGBge3IgZGVwZW5kZW5jaWVzfQojIENSQU4gUGFja2FnZXMKbGlicmFyeShzZikKbGlicmFyeShkcGx5cikKCiMgTm9uLUNSQU4gUGFja2FnZXMKbGlicmFyeShnYXRld2F5KQpsaWJyYXJ5KGFyZWFsKSAjIG5lZWQgdGhlIGdpdGh1YiB2ZXJzaW9uIHRvIGZpeCBleHRlbnNpdmUvaW50ZW5zaXZlIGJ1ZwpgYGAKCgojIyBMb2FkIERhdGEKV2UnbGwgYmVnaW4gYnkgbG9hZGluZyBhbGwgb2YgdGhlIGRhdGEgdGhhdCBuZWVkcyB0byBnZXQgYWdyZWdhdGVkIHRvIGdyaWQgc3F1YXJlczoKCmBgYHtyIGxvYWQgZGF0YX0KIyB2b3RlciBkYXRhCnZvdGVyMTQgPC0gc3RfcmVhZCgiLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfTm92XzE0LnNocCIpCnZvdGVyMTYgPC0gc3RfcmVhZCgiLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfTm92XzE2LnNocCIpCnZvdGVyMTcgPC0gc3RfcmVhZCgiLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfQXByXzE3LnNocCIpCgojIGNzYiBkYXRhCmNzYjE0IDwtIHN0X3JlYWQoIi4uL2RhdGEvU3BhdGlhbC9yYXcvY3NiL0NTQl9jYWxsc18xNC5zaHAiKQpjc2IxNiA8LSBzdF9yZWFkKCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NzYi9DU0JfY2FsbHNfMTYuc2hwIikKY3NiMTcgPC0gc3RfcmVhZCgiLi4vZGF0YS9TcGF0aWFsL3Jhdy9jc2IvQ1NCX2NhbGxzXzE3LnNocCIpCgojIGRlbW9ncmFwaGljIGRhdGEKZGVtb2cxNCA8LSBzdF9yZWFkKCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTQuc2hwIikKZGVtb2cxNiA8LSBzdF9yZWFkKCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTYuc2hwIikKZGVtb2cxNyA8LSBzdF9yZWFkKCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTcuc2hwIikKYGBgCgoKIyMjIExvYWRpbmcgR3JpZCBTaGFwZQpXZSdsbCBhbHNvIGxvYWQgdGhlIGdyaWQgc2hhcGUgZnJvbSB0aGUgYGdhdGV3YXlgIHBhY2thZ2UuCmBgYHtyIGdldCBncmlkfQpncmlkIDwtIGd3X2dldF9kYXRhKCJHcmlkcywgRXhwbG9kZWQiLCBjbGFzcyA9ICJzZiIpCmBgYAoKIyMjIENoZWNraW5nIENvb3JkaW5hdGUgU3lzdGVtcwpOZXh0LCB3ZSdsbCBzdGFuZGFyZGl6ZSBhbGwgb2Ygb3VyIGRhdGEgdG8gYmUgaW4gdGhlIE1pc3NvdXJpIEVhc3QgU3RhdGVQbGFuZSBGaXBzIDI0MDEgUHJvamVjdGlvbiAoZXBzZzogMTAyNjk2KQoKYGBge3IgdHJhbnNmb3JtfQpncmlkIDwtIHN0X3RyYW5zZm9ybShncmlkLCBjcnMgPSAxMDI2OTYpCgp2b3RlcjE0IDwtIHN0X3RyYW5zZm9ybSh2b3RlcjE0LCBjcnMgPSAxMDI2OTYpCnZvdGVyMTYgPC0gc3RfdHJhbnNmb3JtKHZvdGVyMTYsIGNycyA9IDEwMjY5NikKdm90ZXIxNyA8LSBzdF90cmFuc2Zvcm0odm90ZXIxNywgY3JzID0gMTAyNjk2KQoKY3NiMTQgPC0gc3RfdHJhbnNmb3JtKGNzYjE0LCBjcnMgPSAxMDI2OTYpCmNzYjE2IDwtIHN0X3RyYW5zZm9ybShjc2IxNiwgY3JzID0gMTAyNjk2KQpjc2IxNyA8LSBzdF90cmFuc2Zvcm0oY3NiMTcsIGNycyA9IDEwMjY5NikKCmRlbW9nMTQgPC0gc3RfdHJhbnNmb3JtKGRlbW9nMTQsIGNycyA9IDEwMjY5NikKZGVtb2cxNiA8LSBzdF90cmFuc2Zvcm0oZGVtb2cxNiwgY3JzID0gMTAyNjk2KQpkZW1vZzE3IDwtIHN0X3RyYW5zZm9ybShkZW1vZzE3LCBjcnMgPSAxMDI2OTYpCmBgYAojIyBJbnRlcnBvbGF0aW9uCiMjIyBJbnRlcnBvbGF0aW5nIFBvaW50cyB0byB0aGUgR3JpZApJbiBvcmRlciB0byBhbmFseXplIG91ciBkYXRhLCB3ZSBuZWVkIGFsbCBkYXRhIHRvIGJlIGludGVycG9sYXRlZCB0byB0aGUgZ3JpZCBmb3IgU3QuIExvdWlzLiBGb3IgcG9pbnQgZGF0YSAodm90ZXIgZGF0YSBhbmQgY3NiIGRhdGEpIHdlIGNhbiBzaW1wbHkgbWVyZ2UgdGhlIHBvaW50cyB0byBwb2x5Z29uLiBXZSdsbCB3cml0ZSBhIHF1aWNrIGZ1bmN0aW9uIHRvIGRvIHRoaXMsIGFuZCB0aGVuIGRvIGl0IHRvIGFsbCBvZiBvdXIgcG9pbnQgZGF0YS4KCmBgYHtyIHBvaW50cyB0byBncmlkfQojIGRlZmluZSBmdW5jdGlvbgpwb2ludHNfcG9seSA8LSBmdW5jdGlvbihwb2ludHMsIHBvbHlnb24pewogIHdpdGhpbiA8LSBzdF9pbnRlcnNlY3RzKHBvaW50cywgcG9seWdvbiwgc3BhcnNlID0gRkFMU0UpCiAgb3V0IDwtIGNiaW5kKHBvbHlnb24sIGFwcGx5KHdpdGhpbiwgMiwgc3VtKSkKICByZXR1cm4ob3V0KQp9CgojIHBvaW50cyB0byBncmlkCnZvdGVyMTRfZyA8LSBwb2ludHNfcG9seSh2b3RlcjE0LCBncmlkKQp2b3RlcjE2X2cgPC0gcG9pbnRzX3BvbHkodm90ZXIxNiwgZ3JpZCkKdm90ZXIxN19nIDwtIHBvaW50c19wb2x5KHZvdGVyMTcsIGdyaWQpCgpjc2IxNF9nIDwtIHBvaW50c19wb2x5KGNzYjE0LCBncmlkKQpjc2IxNl9nIDwtIHBvaW50c19wb2x5KGNzYjE2LCBncmlkKQpjc2IxN19nIDwtIHBvaW50c19wb2x5KGNzYjE3LCBncmlkKQoKIyByZW1vdmUgb3JpZ2luYWwgZGF0YSBmcm9tIGdsb2JhbApybSh2b3RlcjE0LCB2b3RlcjE2LCB2b3RlcjE3LCBjc2IxNCwgY3NiMTYsIGNzYjE3KQpgYGAKCiMjIyBJbnRlcnBvbGF0aW5nIERlbW9ncmFwaGljIERhdGEgKFRyYWN0cykgdG8gdGhlIEdyaWQKVW5saWtlIHBvaW50IGRhdGEsIHBvbHlnb24gZGF0YSBuZWVkcyB0byBiZSBpbnRlcnBvbGF0ZWQgdXNpbmcgYXJlYWwgd2VpZ2h0ZWQgaW50ZXJwb2xhdGlvbi4gV2UnbGwgdXNlIHRoZSBgYXJlYWxgIHBhY2thZ2UgZm9yIHRoaXMuCgpGaXJzdCwgd2UgbmVlZCB0byBjcmVhdGUgYSB1bmlxdWUgSUQgaW4gdGhlIGRlbW9ncmFwaGljIGRhdGE6CmBgYHtyIHVuaXF1ZSBpZHN9CmRlbW9nMTQgPC0gbXV0YXRlKGRlbW9nMTQsIGlkID0gcm93X251bWJlcigpKQpkZW1vZzE2IDwtIG11dGF0ZShkZW1vZzE2LCBpZCA9IHJvd19udW1iZXIoKSkKZGVtb2cxNyA8LSBtdXRhdGUoZGVtb2cxNywgaWQgPSByb3dfbnVtYmVyKCkpCmBgYAoKVGhlbiwgdGhlIGludGVycG9sYXRpb24gcHJvY2VzczoKYGBge3IgZGVtb2cgdG8gZ3JpZH0KIyBpbnRlcnBvbGF0ZQpkZW1vZzE0X2cgPC0gYXdfaW50ZXJwb2xhdGUoZ3JpZCwgUGFnZUlELCBkZW1vZzE0LCBpZCwgd2VpZ2h0ID0gInN1bSIsIGludGVuc2l2ZSA9IGMoInBycF9ubnciLCAicHJwX3B2ciIsICJwcnBfaHMiLCAicHJwX2JhIiksIGV4dGVuc2l2ZSA9IGMoInZhcCIsICJ0b3RfcG9wIiksIG91dHB1dCA9ICJzZiIpCmRlbW9nMTZfZyA8LSBhd19pbnRlcnBvbGF0ZShncmlkLCBQYWdlSUQsIGRlbW9nMTYsIGlkLCB3ZWlnaHQgPSAic3VtIiwgaW50ZW5zaXZlID0gYygicHJwX25udyIsICJwcnBfcHZyIiwgInBycF9ocyIsICJwcnBfYmEiKSwgZXh0ZW5zaXZlID0gYygidmFwIiwgInRvdF9wb3AiKSwgb3V0cHV0ID0gInNmIikKZGVtb2cxN19nIDwtIGF3X2ludGVycG9sYXRlKGdyaWQsIFBhZ2VJRCwgZGVtb2cxNywgaWQsIHdlaWdodCA9ICJzdW0iLCBpbnRlbnNpdmUgPSBjKCJwcnBfbm53IiwgInBycF9wdnIiLCAicHJwX2hzIiwgInBycF9iYSIpLCBleHRlbnNpdmUgPSBjKCJ2YXAiLCAidG90X3BvcCIpLCBvdXRwdXQgPSAic2YiKQoKIyByZW1vdmUgb3JpZ2luYWwgZnJvbSBnbG9iYWwKcm0oZGVtb2cxNCwgZGVtb2cxNiwgZGVtb2cxNykKYGBgCgojIyBDcmVhdGluZyBDb21wbGV0ZSBHcmlkIFNoYXBlZmlsZXMKCkJlZm9yZSB3ZSBjYW4gZG8gb3VyIGFuYWx5c2lzLCB3ZSBuZWVkIGFsbCBvZiBvdXIgZGF0YSBpbiBhIGNvbmNpc2UgZm9ybWF0LiBXZSdsbCBqb2luIHRoZSBkYXRhIGFuZCBjcmVhdGUgYSB1bmlxdWUgZmlsZSBmb3IgZWFjaCB5ZWFyIG9mIHRoZSBhbmFseXNpcy4KCmBgYHtyfQojIGZpcnN0LCByZW1vdmUgZ2VvbWV0cnkKc3RfZ2VvbWV0cnkodm90ZXIxNF9nKSA8LSBOVUxMCnN0X2dlb21ldHJ5KHZvdGVyMTZfZykgPC0gTlVMTApzdF9nZW9tZXRyeSh2b3RlcjE3X2cpIDwtIE5VTEwKCnN0X2dlb21ldHJ5KGNzYjE0X2cpIDwtIE5VTEwKc3RfZ2VvbWV0cnkoY3NiMTZfZykgPC0gTlVMTApzdF9nZW9tZXRyeShjc2IxN19nKSA8LSBOVUxMCgojIFRoZW4sIHJlbmFtZSBhbmQgaXNvbGF0ZSB2YXJpYWJsZSBvZiBpbnRlcmVzdAp2b3RlcjE0X2cgJT4lIHJlbmFtZSh2b3RlcnMgPSBhcHBseS53aXRoaW4uLjIuLnN1bS4pICU+JSBzZWxlY3Qodm90ZXJzKSAtPiB2b3RlcjE0X2cKdm90ZXIxNl9nICU+JSByZW5hbWUodm90ZXJzID0gYXBwbHkud2l0aGluLi4yLi5zdW0uKSAlPiUgc2VsZWN0KHZvdGVycykgLT4gdm90ZXIxNl9nCnZvdGVyMTdfZyAlPiUgcmVuYW1lKHZvdGVycyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdCh2b3RlcnMpIC0+IHZvdGVyMTdfZwoKY3NiMTRfZyAlPiUgcmVuYW1lKGNzYl9jYWxscyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdChjc2JfY2FsbHMpIC0+IGNzYjE0X2cKY3NiMTZfZyAlPiUgcmVuYW1lKGNzYl9jYWxscyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdChjc2JfY2FsbHMpIC0+IGNzYjE2X2cKY3NiMTdfZyAlPiUgcmVuYW1lKGNzYl9jYWxscyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdChjc2JfY2FsbHMpIC0+IGNzYjE3X2cKIyBiaW5kIGRhdGEgdG8gc2hhcGUgYWJkIHJlbW92ZSBwYWdlIChncmlkKSB2YXJpYWJsZXMKCmdyaWQxNCA8LSBiaW5kX2NvbHMoZGVtb2cxNF9nLCB2b3RlcjE0X2csIGNzYjE0X2cpICU+JSBzZWxlY3QoLVBhZ2VJRCwgLSBQYWdlTmFtZSwgLVBhZ2VOdW1iZXIsIC1QYWdlUGFydCkKZ3JpZDE2IDwtIGJpbmRfY29scyhkZW1vZzE2X2csIHZvdGVyMTZfZywgY3NiMTZfZykgJT4lIHNlbGVjdCgtUGFnZUlELCAtIFBhZ2VOYW1lLCAtUGFnZU51bWJlciwgLVBhZ2VQYXJ0KQpncmlkMTcgPC0gYmluZF9jb2xzKGRlbW9nMTdfZywgdm90ZXIxN19nLCBjc2IxN19nKSAlPiUgc2VsZWN0KC1QYWdlSUQsIC0gUGFnZU5hbWUsIC1QYWdlTnVtYmVyLCAtUGFnZVBhcnQpCgojIGNsZWFuIGFsbCBnbG9iYWwgdmFycwpybSh2b3RlcjE0X2csIHZvdGVyMTZfZywgdm90ZXIxN19nLCBjc2IxNF9nLCBjc2IxNl9nLCBjc2IxN19nLCBkZW1vZzE0X2csIGRlbW9nMTZfZywgZGVtb2cxN19nKQpgYGAKCiMjIyBGaW5hbCBDYWxjdWxhdGlvbnMKVGhlcmUgYXJlIHNvbWUgYWRkaXRpb25hbCBmaW5hbCBjb25zaWRlcmF0aW9ucyB0byBtYWtlLCBzdWNoIGFzIGNhbGN1bGF0aW5nIGEgdm90ZXIgcmF0ZS4KYGBge3J9CmdyaWQxNCA8LSBtdXRhdGUoZ3JpZDE0LCB0dXJub3V0ID0gdm90ZXJzL3ZhcCAqIDEwMCwKICAgICAgICAgICAgICAgICAgICAgICAgIG5vbndodCA9IDEwMCAqIHBycF9ubncsCiAgICAgICAgICAgICAgICAgICAgICAgICBwdnJ0eSA9IDEwMCAqIHBycF9wdnIsCiAgICAgICAgICAgICAgICAgICAgICAgICBocyA9IDEwMCAqIHBycF9ocywKICAgICAgICAgICAgICAgICAgICAgICAgIGJhID0gMTAwICogcHJwX2JhLAogICAgICAgICAgICAgICAgICAgICAgICAgaWQgPSByb3dfbnVtYmVyKCksCiAgICAgICAgICAgICAgICAgICAgICAgICBjc2JfZG5zID0gY3NiX2NhbGxzL3RvdF9wb3ApICU+JQogICAgICAgICAgc2VsZWN0KGlkLCB0b3RfcG9wLCB0dXJub3V0LCBub253aHQsIHB2cnR5LCBocywgYmEsIGNzYl9kbnMpICU+JQogICAgICAgICAgbXV0YXRlKHR1cm5vdXQgPSBpZmVsc2UodHVybm91dCA+IDEwMCwgMTAwLCB0dXJub3V0KSkKICAKCmdyaWQxNiA8LSBtdXRhdGUoZ3JpZDE2LCB0dXJub3V0ID0gdm90ZXJzL3ZhcCAqIDEwMCwKICAgICAgICAgICAgICAgICAgICAgICAgIG5vbndodCA9IDEwMCAqIHBycF9ubncsCiAgICAgICAgICAgICAgICAgICAgICAgICBwdnJ0eSA9IDEwMCAqIHBycF9wdnIsCiAgICAgICAgICAgICAgICAgICAgICAgICBocyA9IDEwMCAqIHBycF9ocywKICAgICAgICAgICAgICAgICAgICAgICAgIGJhID0gMTAwICogcHJwX2JhLAogICAgICAgICAgICAgICAgICAgICAgICAgaWQgPSByb3dfbnVtYmVyKCksCiAgICAgICAgICAgICAgICAgICAgICAgICBjc2JfZG5zID0gY3NiX2NhbGxzL3RvdF9wb3ApICU+JQogICAgICAgICAgc2VsZWN0KGlkLCB0b3RfcG9wLCB0dXJub3V0LCBub253aHQsIHB2cnR5LCBocywgYmEsIGNzYl9kbnMpICU+JQogICAgICAgICAgbXV0YXRlKHR1cm5vdXQgPSBpZmVsc2UodHVybm91dCA+IDEwMCwgMTAwLCB0dXJub3V0KSkKCmdyaWQxNyA8LSBtdXRhdGUoZ3JpZDE3LCB0dXJub3V0ID0gdm90ZXJzL3ZhcCAqIDEwMCwKICAgICAgICAgICAgICAgICAgICAgICAgIG5vbndodCA9IDEwMCAqIHBycF9ubncsCiAgICAgICAgICAgICAgICAgICAgICAgICBwdnJ0eSA9IDEwMCAqIHBycF9wdnIsCiAgICAgICAgICAgICAgICAgICAgICAgICBocyA9IDEwMCAqIHBycF9ocywKICAgICAgICAgICAgICAgICAgICAgICAgIGJhID0gMTAwICogcHJwX2JhLAogICAgICAgICAgICAgICAgICAgICAgICAgaWQgPSByb3dfbnVtYmVyKCksCiAgICAgICAgICAgICAgICAgICAgICAgICBjc2JfZG5zID0gY3NiX2NhbGxzL3RvdF9wb3ApICU+JQogICAgICAgICAgc2VsZWN0KGlkLCB0b3RfcG9wLCB0dXJub3V0LCBub253aHQsIHB2cnR5LCBocywgYmEsIGNzYl9kbnMpICU+JQogICAgICAgICAgbXV0YXRlKHR1cm5vdXQgPSBpZmVsc2UodHVybm91dCA+IDEwMCwgMTAwLCB0dXJub3V0KSkKCmBgYAoKIyMjIFNhdmluZyBGaWxlcwpGaW5hbGx5LCB3ZSBjYW4gZXhwb3J0IHNoYXBlZmlsZXMgb2Ygb3VyIGRhdGEgZm9yIGVhY2ggcGVyaW9kLgoKYGBge3J9CnN0X3dyaXRlKGdyaWQxNCwgZHNuID0gIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuc2hwIikKc3Rfd3JpdGUoZ3JpZDE2LCBkc24gPSAiLi4vZGF0YS9TcGF0aWFsL2dyaWQvZnVsbF8xNi5zaHAiKQpzdF93cml0ZShncmlkMTcsIGRzbiA9ICIuLi9kYXRhL1NwYXRpYWwvZ3JpZC9mdWxsXzE3LnNocCIpCmBgYAoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQXJlYWwgSW50ZXJwb2xhdGlvbiIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMgSW50cm9kdWN0aW9uClRoaXMgbm90ZWJvb2sgaXMgcGFydCB0d28gaW4gYSBzZXJpZXMgb2Ygbm90ZWJvb2tzIHRvIHByb2Nlc3MgZGF0YSBmb3IgdGhlIHNwYXRpYWwgYW5hbHlzaXMgb2YgQ1NCIGRhdGEgYW5kIHZvdGVyIHR1cm5vdXQuIFRoaXMgbm90ZWJvb2sgaGFuZGxlcyB0aGUgYXJlYWwgaW50ZXJwb2xhdGlvbiBvZiBkYXRhLgoKIyMgRGVwZW5kZW5jaWVzClRoZXNlIGFyZSB0aGUgcGFja2FnZXMgbmVjY2Vzc2FyeSBmb3IgdGhlIGNvbXBsZXRpb24gb2YgQXJlYWwgd2VpZ2h0ZWQgaW50ZXJwb2xhdGlvbiBvZiBvdXIgZGF0YSB0byBncmlkcy4KYGBge3IgZGVwZW5kZW5jaWVzfQojIENSQU4gUGFja2FnZXMKbGlicmFyeShzZikKbGlicmFyeShkcGx5cikKCiMgTm9uLUNSQU4gUGFja2FnZXMKbGlicmFyeShnYXRld2F5KQpsaWJyYXJ5KGFyZWFsKSAjIG5lZWQgdGhlIGdpdGh1YiB2ZXJzaW9uIHRvIGZpeCBleHRlbnNpdmUvaW50ZW5zaXZlIGJ1ZwpgYGAKCgojIyBMb2FkIERhdGEKV2UnbGwgYmVnaW4gYnkgbG9hZGluZyBhbGwgb2YgdGhlIGRhdGEgdGhhdCBuZWVkcyB0byBnZXQgYWdyZWdhdGVkIHRvIGdyaWQgc3F1YXJlczoKCmBgYHtyIGxvYWQgZGF0YX0KIyB2b3RlciBkYXRhCnZvdGVyMTQgPC0gc3RfcmVhZCgiLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfTm92XzE0LnNocCIpCnZvdGVyMTYgPC0gc3RfcmVhZCgiLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfTm92XzE2LnNocCIpCnZvdGVyMTcgPC0gc3RfcmVhZCgiLi4vZGF0YS9TcGF0aWFsL3Jhdy92b3Rlci9Wb3RlcnNfQXByXzE3LnNocCIpCgojIGNzYiBkYXRhCmNzYjE0IDwtIHN0X3JlYWQoIi4uL2RhdGEvU3BhdGlhbC9yYXcvY3NiL0NTQl9jYWxsc18xNC5zaHAiKQpjc2IxNiA8LSBzdF9yZWFkKCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NzYi9DU0JfY2FsbHNfMTYuc2hwIikKY3NiMTcgPC0gc3RfcmVhZCgiLi4vZGF0YS9TcGF0aWFsL3Jhdy9jc2IvQ1NCX2NhbGxzXzE3LnNocCIpCgojIGRlbW9ncmFwaGljIGRhdGEKZGVtb2cxNCA8LSBzdF9yZWFkKCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTQuc2hwIikKZGVtb2cxNiA8LSBzdF9yZWFkKCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTYuc2hwIikKZGVtb2cxNyA8LSBzdF9yZWFkKCIuLi9kYXRhL1NwYXRpYWwvcmF3L2NlbnN1cy9EZW1vZ3JhcGhpY3NfMTcuc2hwIikKYGBgCgoKIyMjIExvYWRpbmcgR3JpZCBTaGFwZQpXZSdsbCBhbHNvIGxvYWQgdGhlIGdyaWQgc2hhcGUgZnJvbSB0aGUgYGdhdGV3YXlgIHBhY2thZ2UuCmBgYHtyIGdldCBncmlkfQpncmlkIDwtIGd3X2dldF9kYXRhKCJHcmlkcywgRXhwbG9kZWQiLCBjbGFzcyA9ICJzZiIpCmBgYAoKIyMjIENoZWNraW5nIENvb3JkaW5hdGUgU3lzdGVtcwpOZXh0LCB3ZSdsbCBzdGFuZGFyZGl6ZSBhbGwgb2Ygb3VyIGRhdGEgdG8gYmUgaW4gdGhlIE1pc3NvdXJpIEVhc3QgU3RhdGVQbGFuZSBGaXBzIDI0MDEgUHJvamVjdGlvbiAoZXBzZzogMTAyNjk2KQoKYGBge3IgdHJhbnNmb3JtfQpncmlkIDwtIHN0X3RyYW5zZm9ybShncmlkLCBjcnMgPSAxMDI2OTYpCgp2b3RlcjE0IDwtIHN0X3RyYW5zZm9ybSh2b3RlcjE0LCBjcnMgPSAxMDI2OTYpCnZvdGVyMTYgPC0gc3RfdHJhbnNmb3JtKHZvdGVyMTYsIGNycyA9IDEwMjY5NikKdm90ZXIxNyA8LSBzdF90cmFuc2Zvcm0odm90ZXIxNywgY3JzID0gMTAyNjk2KQoKY3NiMTQgPC0gc3RfdHJhbnNmb3JtKGNzYjE0LCBjcnMgPSAxMDI2OTYpCmNzYjE2IDwtIHN0X3RyYW5zZm9ybShjc2IxNiwgY3JzID0gMTAyNjk2KQpjc2IxNyA8LSBzdF90cmFuc2Zvcm0oY3NiMTcsIGNycyA9IDEwMjY5NikKCmRlbW9nMTQgPC0gc3RfdHJhbnNmb3JtKGRlbW9nMTQsIGNycyA9IDEwMjY5NikKZGVtb2cxNiA8LSBzdF90cmFuc2Zvcm0oZGVtb2cxNiwgY3JzID0gMTAyNjk2KQpkZW1vZzE3IDwtIHN0X3RyYW5zZm9ybShkZW1vZzE3LCBjcnMgPSAxMDI2OTYpCmBgYAojIyBJbnRlcnBvbGF0aW9uCiMjIyBJbnRlcnBvbGF0aW5nIFBvaW50cyB0byB0aGUgR3JpZApJbiBvcmRlciB0byBhbmFseXplIG91ciBkYXRhLCB3ZSBuZWVkIGFsbCBkYXRhIHRvIGJlIGludGVycG9sYXRlZCB0byB0aGUgZ3JpZCBmb3IgU3QuIExvdWlzLiBGb3IgcG9pbnQgZGF0YSAodm90ZXIgZGF0YSBhbmQgY3NiIGRhdGEpIHdlIGNhbiBzaW1wbHkgbWVyZ2UgdGhlIHBvaW50cyB0byBwb2x5Z29uLiBXZSdsbCB3cml0ZSBhIHF1aWNrIGZ1bmN0aW9uIHRvIGRvIHRoaXMsIGFuZCB0aGVuIGRvIGl0IHRvIGFsbCBvZiBvdXIgcG9pbnQgZGF0YS4KCmBgYHtyIHBvaW50cyB0byBncmlkfQojIGRlZmluZSBmdW5jdGlvbgpwb2ludHNfcG9seSA8LSBmdW5jdGlvbihwb2ludHMsIHBvbHlnb24pewogIHdpdGhpbiA8LSBzdF9pbnRlcnNlY3RzKHBvaW50cywgcG9seWdvbiwgc3BhcnNlID0gRkFMU0UpCiAgb3V0IDwtIGNiaW5kKHBvbHlnb24sIGFwcGx5KHdpdGhpbiwgMiwgc3VtKSkKICByZXR1cm4ob3V0KQp9CgojIHBvaW50cyB0byBncmlkCnZvdGVyMTRfZyA8LSBwb2ludHNfcG9seSh2b3RlcjE0LCBncmlkKQp2b3RlcjE2X2cgPC0gcG9pbnRzX3BvbHkodm90ZXIxNiwgZ3JpZCkKdm90ZXIxN19nIDwtIHBvaW50c19wb2x5KHZvdGVyMTcsIGdyaWQpCgpjc2IxNF9nIDwtIHBvaW50c19wb2x5KGNzYjE0LCBncmlkKQpjc2IxNl9nIDwtIHBvaW50c19wb2x5KGNzYjE2LCBncmlkKQpjc2IxN19nIDwtIHBvaW50c19wb2x5KGNzYjE3LCBncmlkKQoKIyByZW1vdmUgb3JpZ2luYWwgZGF0YSBmcm9tIGdsb2JhbApybSh2b3RlcjE0LCB2b3RlcjE2LCB2b3RlcjE3LCBjc2IxNCwgY3NiMTYsIGNzYjE3KQpgYGAKCiMjIyBJbnRlcnBvbGF0aW5nIERlbW9ncmFwaGljIERhdGEgKFRyYWN0cykgdG8gdGhlIEdyaWQKVW5saWtlIHBvaW50IGRhdGEsIHBvbHlnb24gZGF0YSBuZWVkcyB0byBiZSBpbnRlcnBvbGF0ZWQgdXNpbmcgYXJlYWwgd2VpZ2h0ZWQgaW50ZXJwb2xhdGlvbi4gV2UnbGwgdXNlIHRoZSBgYXJlYWxgIHBhY2thZ2UgZm9yIHRoaXMuCgpGaXJzdCwgd2UgbmVlZCB0byBjcmVhdGUgYSB1bmlxdWUgSUQgaW4gdGhlIGRlbW9ncmFwaGljIGRhdGE6CmBgYHtyIHVuaXF1ZSBpZHN9CmRlbW9nMTQgPC0gbXV0YXRlKGRlbW9nMTQsIGlkID0gcm93X251bWJlcigpKQpkZW1vZzE2IDwtIG11dGF0ZShkZW1vZzE2LCBpZCA9IHJvd19udW1iZXIoKSkKZGVtb2cxNyA8LSBtdXRhdGUoZGVtb2cxNywgaWQgPSByb3dfbnVtYmVyKCkpCmBgYAoKVGhlbiwgdGhlIGludGVycG9sYXRpb24gcHJvY2VzczoKYGBge3IgZGVtb2cgdG8gZ3JpZH0KIyBpbnRlcnBvbGF0ZQpkZW1vZzE0X2cgPC0gYXdfaW50ZXJwb2xhdGUoZ3JpZCwgUGFnZUlELCBkZW1vZzE0LCBpZCwgd2VpZ2h0ID0gInN1bSIsIGludGVuc2l2ZSA9IGMoInBycF9ubnciLCAicHJwX3B2ciIsICJwcnBfaHMiLCAicHJwX2JhIiksIGV4dGVuc2l2ZSA9IGMoInZhcCIsICJ0b3RfcG9wIiksIG91dHB1dCA9ICJzZiIpCmRlbW9nMTZfZyA8LSBhd19pbnRlcnBvbGF0ZShncmlkLCBQYWdlSUQsIGRlbW9nMTYsIGlkLCB3ZWlnaHQgPSAic3VtIiwgaW50ZW5zaXZlID0gYygicHJwX25udyIsICJwcnBfcHZyIiwgInBycF9ocyIsICJwcnBfYmEiKSwgZXh0ZW5zaXZlID0gYygidmFwIiwgInRvdF9wb3AiKSwgb3V0cHV0ID0gInNmIikKZGVtb2cxN19nIDwtIGF3X2ludGVycG9sYXRlKGdyaWQsIFBhZ2VJRCwgZGVtb2cxNywgaWQsIHdlaWdodCA9ICJzdW0iLCBpbnRlbnNpdmUgPSBjKCJwcnBfbm53IiwgInBycF9wdnIiLCAicHJwX2hzIiwgInBycF9iYSIpLCBleHRlbnNpdmUgPSBjKCJ2YXAiLCAidG90X3BvcCIpLCBvdXRwdXQgPSAic2YiKQoKIyByZW1vdmUgb3JpZ2luYWwgZnJvbSBnbG9iYWwKcm0oZGVtb2cxNCwgZGVtb2cxNiwgZGVtb2cxNykKYGBgCgojIyBDcmVhdGluZyBDb21wbGV0ZSBHcmlkIFNoYXBlZmlsZXMKCkJlZm9yZSB3ZSBjYW4gZG8gb3VyIGFuYWx5c2lzLCB3ZSBuZWVkIGFsbCBvZiBvdXIgZGF0YSBpbiBhIGNvbmNpc2UgZm9ybWF0LiBXZSdsbCBqb2luIHRoZSBkYXRhIGFuZCBjcmVhdGUgYSB1bmlxdWUgZmlsZSBmb3IgZWFjaCB5ZWFyIG9mIHRoZSBhbmFseXNpcy4KCmBgYHtyfQojIGZpcnN0LCByZW1vdmUgZ2VvbWV0cnkKc3RfZ2VvbWV0cnkodm90ZXIxNF9nKSA8LSBOVUxMCnN0X2dlb21ldHJ5KHZvdGVyMTZfZykgPC0gTlVMTApzdF9nZW9tZXRyeSh2b3RlcjE3X2cpIDwtIE5VTEwKCnN0X2dlb21ldHJ5KGNzYjE0X2cpIDwtIE5VTEwKc3RfZ2VvbWV0cnkoY3NiMTZfZykgPC0gTlVMTApzdF9nZW9tZXRyeShjc2IxN19nKSA8LSBOVUxMCgojIFRoZW4sIHJlbmFtZSBhbmQgaXNvbGF0ZSB2YXJpYWJsZSBvZiBpbnRlcmVzdAp2b3RlcjE0X2cgJT4lIHJlbmFtZSh2b3RlcnMgPSBhcHBseS53aXRoaW4uLjIuLnN1bS4pICU+JSBzZWxlY3Qodm90ZXJzKSAtPiB2b3RlcjE0X2cKdm90ZXIxNl9nICU+JSByZW5hbWUodm90ZXJzID0gYXBwbHkud2l0aGluLi4yLi5zdW0uKSAlPiUgc2VsZWN0KHZvdGVycykgLT4gdm90ZXIxNl9nCnZvdGVyMTdfZyAlPiUgcmVuYW1lKHZvdGVycyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdCh2b3RlcnMpIC0+IHZvdGVyMTdfZwoKY3NiMTRfZyAlPiUgcmVuYW1lKGNzYl9jYWxscyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdChjc2JfY2FsbHMpIC0+IGNzYjE0X2cKY3NiMTZfZyAlPiUgcmVuYW1lKGNzYl9jYWxscyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdChjc2JfY2FsbHMpIC0+IGNzYjE2X2cKY3NiMTdfZyAlPiUgcmVuYW1lKGNzYl9jYWxscyA9IGFwcGx5LndpdGhpbi4uMi4uc3VtLikgJT4lIHNlbGVjdChjc2JfY2FsbHMpIC0+IGNzYjE3X2cKIyBiaW5kIGRhdGEgdG8gc2hhcGUgYWJkIHJlbW92ZSBwYWdlIChncmlkKSB2YXJpYWJsZXMKCmdyaWQxNCA8LSBiaW5kX2NvbHMoZGVtb2cxNF9nLCB2b3RlcjE0X2csIGNzYjE0X2cpICU+JSBzZWxlY3QoLVBhZ2VJRCwgLSBQYWdlTmFtZSwgLVBhZ2VOdW1iZXIsIC1QYWdlUGFydCkKZ3JpZDE2IDwtIGJpbmRfY29scyhkZW1vZzE2X2csIHZvdGVyMTZfZywgY3NiMTZfZykgJT4lIHNlbGVjdCgtUGFnZUlELCAtIFBhZ2VOYW1lLCAtUGFnZU51bWJlciwgLVBhZ2VQYXJ0KQpncmlkMTcgPC0gYmluZF9jb2xzKGRlbW9nMTdfZywgdm90ZXIxN19nLCBjc2IxN19nKSAlPiUgc2VsZWN0KC1QYWdlSUQsIC0gUGFnZU5hbWUsIC1QYWdlTnVtYmVyLCAtUGFnZVBhcnQpCgojIGNsZWFuIGFsbCBnbG9iYWwgdmFycwpybSh2b3RlcjE0X2csIHZvdGVyMTZfZywgdm90ZXIxN19nLCBjc2IxNF9nLCBjc2IxNl9nLCBjc2IxN19nLCBkZW1vZzE0X2csIGRlbW9nMTZfZywgZGVtb2cxN19nKQpgYGAKCiMjIyBGaW5hbCBDYWxjdWxhdGlvbnMKVGhlcmUgYXJlIHNvbWUgYWRkaXRpb25hbCBmaW5hbCBjb25zaWRlcmF0aW9ucyB0byBtYWtlLCBzdWNoIGFzIGNhbGN1bGF0aW5nIGEgdm90ZXIgcmF0ZS4KYGBge3J9CmdyaWQxNCA8LSBtdXRhdGUoZ3JpZDE0LCB0dXJub3V0ID0gdm90ZXJzL3ZhcCAqIDEwMCwKICAgICAgICAgICAgICAgICAgICAgICAgIG5vbndodCA9IDEwMCAqIHBycF9ubncsCiAgICAgICAgICAgICAgICAgICAgICAgICBwdnJ0eSA9IDEwMCAqIHBycF9wdnIsCiAgICAgICAgICAgICAgICAgICAgICAgICBocyA9IDEwMCAqIHBycF9ocywKICAgICAgICAgICAgICAgICAgICAgICAgIGJhID0gMTAwICogcHJwX2JhLAogICAgICAgICAgICAgICAgICAgICAgICAgaWQgPSByb3dfbnVtYmVyKCksCiAgICAgICAgICAgICAgICAgICAgICAgICBjc2JfZG5zID0gY3NiX2NhbGxzL3RvdF9wb3AgKiAxMDAwKSAlPiUKICAgICAgICAgIHNlbGVjdChpZCwgdG90X3BvcCwgdHVybm91dCwgbm9ud2h0LCBwdnJ0eSwgaHMsIGJhLCBjc2JfZG5zKSAlPiUKICAgICAgICAgIG11dGF0ZSh0dXJub3V0ID0gaWZlbHNlKHR1cm5vdXQgPiAxMDAsIDEwMCwgdHVybm91dCkpCiAgCgpncmlkMTYgPC0gbXV0YXRlKGdyaWQxNiwgdHVybm91dCA9IHZvdGVycy92YXAgKiAxMDAsCiAgICAgICAgICAgICAgICAgICAgICAgICBub253aHQgPSAxMDAgKiBwcnBfbm53LAogICAgICAgICAgICAgICAgICAgICAgICAgcHZydHkgPSAxMDAgKiBwcnBfcHZyLAogICAgICAgICAgICAgICAgICAgICAgICAgaHMgPSAxMDAgKiBwcnBfaHMsCiAgICAgICAgICAgICAgICAgICAgICAgICBiYSA9IDEwMCAqIHBycF9iYSwKICAgICAgICAgICAgICAgICAgICAgICAgIGlkID0gcm93X251bWJlcigpLAogICAgICAgICAgICAgICAgICAgICAgICAgY3NiX2RucyA9IGNzYl9jYWxscy90b3RfcG9wICogMTAwMCkgJT4lCiAgICAgICAgICBzZWxlY3QoaWQsIHRvdF9wb3AsIHR1cm5vdXQsIG5vbndodCwgcHZydHksIGhzLCBiYSwgY3NiX2RucykgJT4lCiAgICAgICAgICBtdXRhdGUodHVybm91dCA9IGlmZWxzZSh0dXJub3V0ID4gMTAwLCAxMDAsIHR1cm5vdXQpKQoKZ3JpZDE3IDwtIG11dGF0ZShncmlkMTcsIHR1cm5vdXQgPSB2b3RlcnMvdmFwICogMTAwLAogICAgICAgICAgICAgICAgICAgICAgICAgbm9ud2h0ID0gMTAwICogcHJwX25udywKICAgICAgICAgICAgICAgICAgICAgICAgIHB2cnR5ID0gMTAwICogcHJwX3B2ciwKICAgICAgICAgICAgICAgICAgICAgICAgIGhzID0gMTAwICogcHJwX2hzLAogICAgICAgICAgICAgICAgICAgICAgICAgYmEgPSAxMDAgKiBwcnBfYmEsCiAgICAgICAgICAgICAgICAgICAgICAgICBpZCA9IHJvd19udW1iZXIoKSwKICAgICAgICAgICAgICAgICAgICAgICAgIGNzYl9kbnMgPSBjc2JfY2FsbHMvdG90X3BvcCAqIDEwMDApICU+JQogICAgICAgICAgc2VsZWN0KGlkLCB0b3RfcG9wLCB0dXJub3V0LCBub253aHQsIHB2cnR5LCBocywgYmEsIGNzYl9kbnMpICU+JQogICAgICAgICAgbXV0YXRlKHR1cm5vdXQgPSBpZmVsc2UodHVybm91dCA+IDEwMCwgMTAwLCB0dXJub3V0KSkKCmBgYAoKIyMjIFNhdmluZyBGaWxlcwpGaW5hbGx5LCB3ZSBjYW4gZXhwb3J0IHNoYXBlZmlsZXMgb2Ygb3VyIGRhdGEgZm9yIGVhY2ggcGVyaW9kLgoKYGBge3J9CnN0X3dyaXRlKGdyaWQxNCwgZHNuID0gIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuc2hwIikKc3Rfd3JpdGUoZ3JpZDE2LCBkc24gPSAiLi4vZGF0YS9TcGF0aWFsL2dyaWQvZnVsbF8xNi5zaHAiKQpzdF93cml0ZShncmlkMTcsIGRzbiA9ICIuLi9kYXRhL1NwYXRpYWwvZ3JpZC9mdWxsXzE3LnNocCIpCmBgYAoK</div>
 
 
 
