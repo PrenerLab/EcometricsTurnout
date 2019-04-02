@@ -1478,7 +1478,7 @@ window.initializeCodeFolding = function(show) {
   var currentIndex = 1;
 
   // select all R code blocks
-  var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan');
+  var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.julia');
   rCodeBlocks.each(function() {
 
     // create a collapsable div to wrap the code in
@@ -1599,9 +1599,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -1656,8 +1654,6 @@ summary {
 }
 </style>
 
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -1741,6 +1737,15 @@ $(document).ready(function () {
 
 
 
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
 
 <div class="fluid-row" id="header">
 
@@ -1775,19 +1780,17 @@ $(document).ready(function () {
 <p>These are the R packages we need:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZXRpY3VsYXRlKSAjIHB5dGhvbiBpbnRlcmZhY2VcbmBgYCJ9 -->
-<pre class="r"><code>library(reticulate) # python interface</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>And these are the Python libraries we need:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgcHl0aG9uXG5pbXBvcnQgb3NcbmltcG9ydCBweXNhbCBhcyBwc1xuaW1wb3J0IG51bXB5IGFzIG5wXG5gYGAifQ== -->
-<pre class="python"><code>import os
-import pysal as ps
-import numpy as np</code></pre>
-<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiSW1wb3J0RXJyb3I6IE5vIG1vZHVsZSBuYW1lZCBweXNhbFxuXG5EZXRhaWxlZCB0cmFjZWJhY2s6IFxuICBGaWxlIFwiPHN0cmluZz5cIiwgbGluZSAxLCBpbiA8bW9kdWxlPlxuIn0= -->
+<pre><code>ImportError: No module named pysal
+
+Detailed traceback: 
+  File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1799,9 +1802,6 @@ import numpy as np</code></pre>
 <p>We’ll use queens weights.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiPHB5c2FsLmxpYi53ZWlnaHRzLmNvbnRpZ3VpdHkuUXVlZW4gb2JqZWN0IGF0IDB4MTM0NzFhYmUwPlxuIn0= -->
-<pre><code>&lt;pysal.lib.weights.contiguity.Queen object at 0x13471abe0&gt;</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1810,35 +1810,10 @@ import numpy as np</code></pre>
 <p>We’re going to create 4 models, all with the number of CSB calls as the dependent variable.</p>
 <ol style="list-style-type: decimal">
 <li>Main Effect (Voter Turnout)</li>
-<li>Population Model (Population)</li>
-<li>Combined Model (Voter Turnout and Population)</li>
 <li>Full Model (Voter Turnout, Population, Non-White Population, Poverty, Highschool Diploma, Bachelors Degree)</li>
 </ol>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgcHl0aG9uXG4jIGxvYWQgZGF0YVxuZGF0YSA9IHBzLmxpYi5pby5vcGVuKFwiLi4vZGF0YS9TcGF0aWFsL2dyaWQvZnVsbF8xNC5kYmZcIiwgJ3InKVxuXG4jIHNldCBZIHZhclxueV9uYW1lID0gXCJjc2JcIlxuXG4jIGNyZWF0ZSBZIGFycmF5LCB0cmFuc3Bvc2VcbnkgPSBucC5hcnJheShbZGF0YS5ieV9jb2woeV9uYW1lKV0pLlQgXG5cbiMgZGVmaW5lIGluZGVwZW5kZW50IHZhcnMgZm9yIGVhY2ggbW9kZWxcbm1lX2luZCA9IFtcInR1cm5vdXRcIl1cbnBtX2luZCA9IFtcInRvdF9wb3BcIl1cbmNtX2luZCA9IFtcInR1cm5vdXRcIiwgXCJ0b3RfcG9wXCJdXG5mbV9pbmQgPSBbXCJ0dXJub3V0XCIsIFwidG90X3BvcFwiLCBcIm5vbndodFwiLCBcInB2cnR5XCIsIFwiaHNcIiwgXCJiYVwiXVxuXG4jIGNyZWF0ZSBhcnJheXMgZm9yIGVhY2ggbW9kZWxcbm1lID0gbnAuYXJyYXkoW2RhdGEuYnlfY29sKHZhcikgZm9yIHZhciBpbiBtZV9pbmRdKS5UXG5wbSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh2YXIpIGZvciB2YXIgaW4gcG1faW5kXSkuVFxuY20gPSBucC5hcnJheShbZGF0YS5ieV9jb2wodmFyKSBmb3IgdmFyIGluIGNtX2luZF0pLlRcbmZtID0gbnAuYXJyYXkoW2RhdGEuYnlfY29sKHZhcikgZm9yIHZhciBpbiBmbV9pbmRdKS5UXG5cbmBgYCJ9 -->
-<pre class="python"><code># load data
-data = ps.lib.io.open(&quot;../data/Spatial/grid/full_14.dbf&quot;, 'r')
-
-# set Y var
-y_name = &quot;csb&quot;
-
-# create Y array, transpose
-y = np.array([data.by_col(y_name)]).T 
-
-# define independent vars for each model
-me_ind = [&quot;turnout&quot;]
-pm_ind = [&quot;tot_pop&quot;]
-cm_ind = [&quot;turnout&quot;, &quot;tot_pop&quot;]
-fm_ind = [&quot;turnout&quot;, &quot;tot_pop&quot;, &quot;nonwht&quot;, &quot;pvrty&quot;, &quot;hs&quot;, &quot;ba&quot;]
-
-# create arrays for each model
-me = np.array([data.by_col(var) for var in me_ind]).T
-pm = np.array([data.by_col(var) for var in pm_ind]).T
-cm = np.array([data.by_col(var) for var in cm_ind]).T
-fm = np.array([data.by_col(var) for var in fm_ind]).T
-</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1849,168 +1824,6 @@ fm = np.array([data.by_col(var) for var in fm_ind]).T
 <h3>Main Effect</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiUkVHUkVTU0lPTlxuLS0tLS0tLS0tLVxuU1VNTUFSWSBPRiBPVVRQVVQ6IE9SRElOQVJZIExFQVNUIFNRVUFSRVNcbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5EYXRhIHNldCAgICAgICAgICAgIDogZnVsbF8xNC5zaHBcbldlaWdodHMgbWF0cml4ICAgICAgOiAgICAgIHF1ZWVuc1xuRGVwZW5kZW50IFZhcmlhYmxlICA6ICAgICAgICAgY3NiICAgICAgICAgICAgICAgIE51bWJlciBvZiBPYnNlcnZhdGlvbnM6ICAgICAgICAgMjA2XG5NZWFuIGRlcGVuZGVudCB2YXIgIDogICAgMjAzLjE0NTYgICAgICAgICAgICAgICAgTnVtYmVyIG9mIFZhcmlhYmxlcyAgIDogICAgICAgICAgIDJcblMuRC4gZGVwZW5kZW50IHZhciAgOiAgICAxODAuODEwNCAgICAgICAgICAgICAgICBEZWdyZWVzIG9mIEZyZWVkb20gICAgOiAgICAgICAgIDIwNFxuUi1zcXVhcmVkICAgICAgICAgICA6ICAgICAgMC4wOTkzXG5BZGp1c3RlZCBSLXNxdWFyZWQgIDogICAgICAwLjA5NDhcblN1bSBzcXVhcmVkIHJlc2lkdWFsOiA2MDM2NzQxLjc0NiAgICAgICAgICAgICAgICBGLXN0YXRpc3RpYyAgICAgICAgICAgOiAgICAgMjIuNDc5MVxuU2lnbWEtc3F1YXJlICAgICAgICA6ICAgMjk1OTEuODcxICAgICAgICAgICAgICAgIFByb2IoRi1zdGF0aXN0aWMpICAgICA6ICAgMy45ODNlLTA2XG5TLkUuIG9mIHJlZ3Jlc3Npb24gIDogICAgIDE3Mi4wMjMgICAgICAgICAgICAgICAgTG9nIGxpa2VsaWhvb2QgICAgICAgIDogICAtMTM1MS43MDhcblNpZ21hLXNxdWFyZSBNTCAgICAgOiAgIDI5MzA0LjU3MiAgICAgICAgICAgICAgICBBa2Fpa2UgaW5mbyBjcml0ZXJpb24gOiAgICAyNzA3LjQxNVxuUy5FIG9mIHJlZ3Jlc3Npb24gTUw6ICAgIDE3MS4xODU4ICAgICAgICAgICAgICAgIFNjaHdhcnogY3JpdGVyaW9uICAgICA6ICAgIDI3MTQuMDcxXG5cbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuICAgICAgICAgICAgVmFyaWFibGUgICAgIENvZWZmaWNpZW50ICAgICAgIFN0ZC5FcnJvciAgICAgdC1TdGF0aXN0aWMgICAgIFByb2JhYmlsaXR5XG4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbiAgICAgICAgICAgIENPTlNUQU5UICAgICAxMzQuMzg5MDMwNiAgICAgIDE4LjgxMzY4MTEgICAgICAgNy4xNDMxNTQ1ICAgICAgIDAuMDAwMDAwMFxuICAgICAgICAgICAgIHR1cm5vdXQgICAgICAgMy40OTA4Nzk3ICAgICAgIDAuNzM2MjgzNCAgICAgICA0Ljc0MTIxNzQgICAgICAgMC4wMDAwMDQwXG4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cblxuUkVHUkVTU0lPTiBESUFHTk9TVElDU1xuTVVMVElDT0xMSU5FQVJJVFkgQ09ORElUSU9OIE5VTUJFUiAgICAgICAgICAgIDIuNzgwXG5cblRFU1QgT04gTk9STUFMSVRZIE9GIEVSUk9SU1xuVEVTVCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgREYgICAgICAgIFZBTFVFICAgICAgICAgICBQUk9CXG5KYXJxdWUtQmVyYSAgICAgICAgICAgICAgICAgICAgICAgMiAgICAgICAgIDEyNS4zMjQgICAgICAgICAgIDAuMDAwMFxuXG5ESUFHTk9TVElDUyBGT1IgSEVURVJPU0tFREFTVElDSVRZXG5SQU5ET00gQ09FRkZJQ0lFTlRTXG5URVNUICAgICAgICAgICAgICAgICAgICAgICAgICAgICBERiAgICAgICAgVkFMVUUgICAgICAgICAgIFBST0JcbkJyZXVzY2gtUGFnYW4gdGVzdCAgICAgICAgICAgICAgICAxICAgICAgICAgIDQzLjQxNCAgICAgICAgICAgMC4wMDAwXG5Lb2Vua2VyLUJhc3NldHQgdGVzdCAgICAgICAgICAgICAgMSAgICAgICAgICAxNi41MDkgICAgICAgICAgIDAuMDAwMFxuXG5ESUFHTk9TVElDUyBGT1IgU1BBVElBTCBERVBFTkRFTkNFXG5URVNUICAgICAgICAgICAgICAgICAgICAgICAgICAgTUkvREYgICAgICAgVkFMVUUgICAgICAgICAgIFBST0Jcbk1vcmFuJ3MgSSAoZXJyb3IpICAgICAgICAgICAgICAwLjM3ODMgICAgICAgIDEwLjA0MiAgICAgICAgICAgMC4wMDAwXG5MYWdyYW5nZSBNdWx0aXBsaWVyIChsYWcpICAgICAgICAgMSAgICAgICAgIDE3Ny4yMDEgICAgICAgICAgIDAuMDAwMFxuUm9idXN0IExNIChsYWcpICAgICAgICAgICAgICAgICAgIDEgICAgICAgICAgODUuNDk5ICAgICAgICAgICAwLjAwMDBcbkxhZ3JhbmdlIE11bHRpcGxpZXIgKGVycm9yKSAgICAgICAxICAgICAgICAgIDkzLjg2NiAgICAgICAgICAgMC4wMDAwXG5Sb2J1c3QgTE0gKGVycm9yKSAgICAgICAgICAgICAgICAgMSAgICAgICAgICAgMi4xNjQgICAgICAgICAgIDAuMTQxM1xuTGFncmFuZ2UgTXVsdGlwbGllciAoU0FSTUEpICAgICAgIDIgICAgICAgICAxNzkuMzY1ICAgICAgICAgICAwLjAwMDBcblxuPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0gRU5EIE9GIFJFUE9SVCA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG4ifQ== -->
-<pre><code>REGRESSION
-----------
-SUMMARY OF OUTPUT: ORDINARY LEAST SQUARES
------------------------------------------
-Data set            : full_14.shp
-Weights matrix      :      queens
-Dependent Variable  :         csb                Number of Observations:         206
-Mean dependent var  :    203.1456                Number of Variables   :           2
-S.D. dependent var  :    180.8104                Degrees of Freedom    :         204
-R-squared           :      0.0993
-Adjusted R-squared  :      0.0948
-Sum squared residual: 6036741.746                F-statistic           :     22.4791
-Sigma-square        :   29591.871                Prob(F-statistic)     :   3.983e-06
-S.E. of regression  :     172.023                Log likelihood        :   -1351.708
-Sigma-square ML     :   29304.572                Akaike info criterion :    2707.415
-S.E of regression ML:    171.1858                Schwarz criterion     :    2714.071
-
-------------------------------------------------------------------------------------
-            Variable     Coefficient       Std.Error     t-Statistic     Probability
-------------------------------------------------------------------------------------
-            CONSTANT     134.3890306      18.8136811       7.1431545       0.0000000
-             turnout       3.4908797       0.7362834       4.7412174       0.0000040
-------------------------------------------------------------------------------------
-
-REGRESSION DIAGNOSTICS
-MULTICOLLINEARITY CONDITION NUMBER            2.780
-
-TEST ON NORMALITY OF ERRORS
-TEST                             DF        VALUE           PROB
-Jarque-Bera                       2         125.324           0.0000
-
-DIAGNOSTICS FOR HETEROSKEDASTICITY
-RANDOM COEFFICIENTS
-TEST                             DF        VALUE           PROB
-Breusch-Pagan test                1          43.414           0.0000
-Koenker-Bassett test              1          16.509           0.0000
-
-DIAGNOSTICS FOR SPATIAL DEPENDENCE
-TEST                           MI/DF       VALUE           PROB
-Moran's I (error)              0.3783        10.042           0.0000
-Lagrange Multiplier (lag)         1         177.201           0.0000
-Robust LM (lag)                   1          85.499           0.0000
-Lagrange Multiplier (error)       1          93.866           0.0000
-Robust LM (error)                 1           2.164           0.1413
-Lagrange Multiplier (SARMA)       2         179.365           0.0000
-
-================================ END OF REPORT =====================================</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="population-model" class="section level3">
-<h3>Population Model</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiUkVHUkVTU0lPTlxuLS0tLS0tLS0tLVxuU1VNTUFSWSBPRiBPVVRQVVQ6IE9SRElOQVJZIExFQVNUIFNRVUFSRVNcbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5EYXRhIHNldCAgICAgICAgICAgIDogZnVsbF8xNC5zaHBcbldlaWdodHMgbWF0cml4ICAgICAgOiAgICAgIHF1ZWVuc1xuRGVwZW5kZW50IFZhcmlhYmxlICA6ICAgICAgICAgY3NiICAgICAgICAgICAgICAgIE51bWJlciBvZiBPYnNlcnZhdGlvbnM6ICAgICAgICAgMjA2XG5NZWFuIGRlcGVuZGVudCB2YXIgIDogICAgMjAzLjE0NTYgICAgICAgICAgICAgICAgTnVtYmVyIG9mIFZhcmlhYmxlcyAgIDogICAgICAgICAgIDJcblMuRC4gZGVwZW5kZW50IHZhciAgOiAgICAxODAuODEwNCAgICAgICAgICAgICAgICBEZWdyZWVzIG9mIEZyZWVkb20gICAgOiAgICAgICAgIDIwNFxuUi1zcXVhcmVkICAgICAgICAgICA6ICAgICAgMC43MjQ0XG5BZGp1c3RlZCBSLXNxdWFyZWQgIDogICAgICAwLjcyMzFcblN1bSBzcXVhcmVkIHJlc2lkdWFsOiAxODQ2ODg3LjA1MiAgICAgICAgICAgICAgICBGLXN0YXRpc3RpYyAgICAgICAgICAgOiAgICA1MzYuMjcwNVxuU2lnbWEtc3F1YXJlICAgICAgICA6ICAgIDkwNTMuMzY4ICAgICAgICAgICAgICAgIFByb2IoRi1zdGF0aXN0aWMpICAgICA6ICAgNS4yNTFlLTU5XG5TLkUuIG9mIHJlZ3Jlc3Npb24gIDogICAgICA5NS4xNDkgICAgICAgICAgICAgICAgTG9nIGxpa2VsaWhvb2QgICAgICAgIDogICAtMTIyOS43MThcblNpZ21hLXNxdWFyZSBNTCAgICAgOiAgICA4OTY1LjQ3MSAgICAgICAgICAgICAgICBBa2Fpa2UgaW5mbyBjcml0ZXJpb24gOiAgICAyNDYzLjQzN1xuUy5FIG9mIHJlZ3Jlc3Npb24gTUw6ICAgICA5NC42ODYyICAgICAgICAgICAgICAgIFNjaHdhcnogY3JpdGVyaW9uICAgICA6ICAgIDI0NzAuMDkyXG5cbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuICAgICAgICAgICAgVmFyaWFibGUgICAgIENvZWZmaWNpZW50ICAgICAgIFN0ZC5FcnJvciAgICAgdC1TdGF0aXN0aWMgICAgIFByb2JhYmlsaXR5XG4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbiAgICAgICAgICAgIENPTlNUQU5UICAgICAgIDMuOTc2ODc4NCAgICAgIDEwLjg1OTA0NTYgICAgICAgMC4zNjYyMjczICAgICAgIDAuNzE0NTc1MFxuICAgICAgICAgICAgIHRvdF9wb3AgICAgICAgMC4xMjg3MjcwICAgICAgIDAuMDA1NTU4OCAgICAgIDIzLjE1NzUxNjAgICAgICAgMC4wMDAwMDAwXG4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cblxuUkVHUkVTU0lPTiBESUFHTk9TVElDU1xuTVVMVElDT0xMSU5FQVJJVFkgQ09ORElUSU9OIE5VTUJFUiAgICAgICAgICAgIDIuOTM1XG5cblRFU1QgT04gTk9STUFMSVRZIE9GIEVSUk9SU1xuVEVTVCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgREYgICAgICAgIFZBTFVFICAgICAgICAgICBQUk9CXG5KYXJxdWUtQmVyYSAgICAgICAgICAgICAgICAgICAgICAgMiAgICAgICAgICA2OC44NzUgICAgICAgICAgIDAuMDAwMFxuXG5ESUFHTk9TVElDUyBGT1IgSEVURVJPU0tFREFTVElDSVRZXG5SQU5ET00gQ09FRkZJQ0lFTlRTXG5URVNUICAgICAgICAgICAgICAgICAgICAgICAgICAgICBERiAgICAgICAgVkFMVUUgICAgICAgICAgIFBST0JcbkJyZXVzY2gtUGFnYW4gdGVzdCAgICAgICAgICAgICAgICAxICAgICAgICAgIDQ4LjU3OSAgICAgICAgICAgMC4wMDAwXG5Lb2Vua2VyLUJhc3NldHQgdGVzdCAgICAgICAgICAgICAgMSAgICAgICAgICAyMy45NDkgICAgICAgICAgIDAuMDAwMFxuXG5ESUFHTk9TVElDUyBGT1IgU1BBVElBTCBERVBFTkRFTkNFXG5URVNUICAgICAgICAgICAgICAgICAgICAgICAgICAgTUkvREYgICAgICAgVkFMVUUgICAgICAgICAgIFBST0Jcbk1vcmFuJ3MgSSAoZXJyb3IpICAgICAgICAgICAgICAwLjI1MzYgICAgICAgICA2Ljg4NSAgICAgICAgICAgMC4wMDAwXG5MYWdyYW5nZSBNdWx0aXBsaWVyIChsYWcpICAgICAgICAgMSAgICAgICAgICAxMC4wNzcgICAgICAgICAgIDAuMDAxNVxuUm9idXN0IExNIChsYWcpICAgICAgICAgICAgICAgICAgIDEgICAgICAgICAgIDEuMDQ1ICAgICAgICAgICAwLjMwNjZcbkxhZ3JhbmdlIE11bHRpcGxpZXIgKGVycm9yKSAgICAgICAxICAgICAgICAgIDQyLjE5NCAgICAgICAgICAgMC4wMDAwXG5Sb2J1c3QgTE0gKGVycm9yKSAgICAgICAgICAgICAgICAgMSAgICAgICAgICAzMy4xNjIgICAgICAgICAgIDAuMDAwMFxuTGFncmFuZ2UgTXVsdGlwbGllciAoU0FSTUEpICAgICAgIDIgICAgICAgICAgNDMuMjM5ICAgICAgICAgICAwLjAwMDBcblxuPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0gRU5EIE9GIFJFUE9SVCA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG4ifQ== -->
-<pre><code>REGRESSION
-----------
-SUMMARY OF OUTPUT: ORDINARY LEAST SQUARES
------------------------------------------
-Data set            : full_14.shp
-Weights matrix      :      queens
-Dependent Variable  :         csb                Number of Observations:         206
-Mean dependent var  :    203.1456                Number of Variables   :           2
-S.D. dependent var  :    180.8104                Degrees of Freedom    :         204
-R-squared           :      0.7244
-Adjusted R-squared  :      0.7231
-Sum squared residual: 1846887.052                F-statistic           :    536.2705
-Sigma-square        :    9053.368                Prob(F-statistic)     :   5.251e-59
-S.E. of regression  :      95.149                Log likelihood        :   -1229.718
-Sigma-square ML     :    8965.471                Akaike info criterion :    2463.437
-S.E of regression ML:     94.6862                Schwarz criterion     :    2470.092
-
-------------------------------------------------------------------------------------
-            Variable     Coefficient       Std.Error     t-Statistic     Probability
-------------------------------------------------------------------------------------
-            CONSTANT       3.9768784      10.8590456       0.3662273       0.7145750
-             tot_pop       0.1287270       0.0055588      23.1575160       0.0000000
-------------------------------------------------------------------------------------
-
-REGRESSION DIAGNOSTICS
-MULTICOLLINEARITY CONDITION NUMBER            2.935
-
-TEST ON NORMALITY OF ERRORS
-TEST                             DF        VALUE           PROB
-Jarque-Bera                       2          68.875           0.0000
-
-DIAGNOSTICS FOR HETEROSKEDASTICITY
-RANDOM COEFFICIENTS
-TEST                             DF        VALUE           PROB
-Breusch-Pagan test                1          48.579           0.0000
-Koenker-Bassett test              1          23.949           0.0000
-
-DIAGNOSTICS FOR SPATIAL DEPENDENCE
-TEST                           MI/DF       VALUE           PROB
-Moran's I (error)              0.2536         6.885           0.0000
-Lagrange Multiplier (lag)         1          10.077           0.0015
-Robust LM (lag)                   1           1.045           0.3066
-Lagrange Multiplier (error)       1          42.194           0.0000
-Robust LM (error)                 1          33.162           0.0000
-Lagrange Multiplier (SARMA)       2          43.239           0.0000
-
-================================ END OF REPORT =====================================</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="combined-model" class="section level3">
-<h3>Combined Model</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiUkVHUkVTU0lPTlxuLS0tLS0tLS0tLVxuU1VNTUFSWSBPRiBPVVRQVVQ6IE9SRElOQVJZIExFQVNUIFNRVUFSRVNcbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5EYXRhIHNldCAgICAgICAgICAgIDogZnVsbF8xNC5zaHBcbldlaWdodHMgbWF0cml4ICAgICAgOiAgICAgIHF1ZWVuc1xuRGVwZW5kZW50IFZhcmlhYmxlICA6ICAgICAgICAgY3NiICAgICAgICAgICAgICAgIE51bWJlciBvZiBPYnNlcnZhdGlvbnM6ICAgICAgICAgMjA2XG5NZWFuIGRlcGVuZGVudCB2YXIgIDogICAgMjAzLjE0NTYgICAgICAgICAgICAgICAgTnVtYmVyIG9mIFZhcmlhYmxlcyAgIDogICAgICAgICAgIDNcblMuRC4gZGVwZW5kZW50IHZhciAgOiAgICAxODAuODEwNCAgICAgICAgICAgICAgICBEZWdyZWVzIG9mIEZyZWVkb20gICAgOiAgICAgICAgIDIwM1xuUi1zcXVhcmVkICAgICAgICAgICA6ICAgICAgMC43NDM0XG5BZGp1c3RlZCBSLXNxdWFyZWQgIDogICAgICAwLjc0MDlcblN1bSBzcXVhcmVkIHJlc2lkdWFsOiAxNzE5ODUzLjc3NiAgICAgICAgICAgICAgICBGLXN0YXRpc3RpYyAgICAgICAgICAgOiAgICAyOTQuMDI2MVxuU2lnbWEtc3F1YXJlICAgICAgICA6ICAgIDg0NzIuMTg2ICAgICAgICAgICAgICAgIFByb2IoRi1zdGF0aXN0aWMpICAgICA6ICAgMS4xMDRlLTYwXG5TLkUuIG9mIHJlZ3Jlc3Npb24gIDogICAgICA5Mi4wNDQgICAgICAgICAgICAgICAgTG9nIGxpa2VsaWhvb2QgICAgICAgIDogICAtMTIyMi4zNzhcblNpZ21hLXNxdWFyZSBNTCAgICAgOiAgICA4MzQ4LjgwNSAgICAgICAgICAgICAgICBBa2Fpa2UgaW5mbyBjcml0ZXJpb24gOiAgICAyNDUwLjc1N1xuUy5FIG9mIHJlZ3Jlc3Npb24gTUw6ICAgICA5MS4zNzE4ICAgICAgICAgICAgICAgIFNjaHdhcnogY3JpdGVyaW9uICAgICA6ICAgIDI0NjAuNzQwXG5cbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuICAgICAgICAgICAgVmFyaWFibGUgICAgIENvZWZmaWNpZW50ICAgICAgIFN0ZC5FcnJvciAgICAgdC1TdGF0aXN0aWMgICAgIFByb2JhYmlsaXR5XG4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbiAgICAgICAgICAgIENPTlNUQU5UICAgICAtMTkuNzc3ODIxOSAgICAgIDEyLjE2NDgxNzEgICAgICAtMS42MjU4MjE2ICAgICAgIDAuMTA1NTM5MFxuICAgICAgICAgICAgIHR1cm5vdXQgICAgICAgMS41NjEwMjY1ICAgICAgIDAuNDAzMTMzOCAgICAgICAzLjg3MjIyODggICAgICAgMC4wMDAxNDU0XG4gICAgICAgICAgICAgdG90X3BvcCAgICAgICAwLjEyNDIwODMgICAgICAgMC4wMDU1MDI1ICAgICAgMjIuNTcyOTE1MCAgICAgICAwLjAwMDAwMDBcbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuXG5SRUdSRVNTSU9OIERJQUdOT1NUSUNTXG5NVUxUSUNPTExJTkVBUklUWSBDT05ESVRJT04gTlVNQkVSICAgICAgICAgICAgMy42NThcblxuVEVTVCBPTiBOT1JNQUxJVFkgT0YgRVJST1JTXG5URVNUICAgICAgICAgICAgICAgICAgICAgICAgICAgICBERiAgICAgICAgVkFMVUUgICAgICAgICAgIFBST0JcbkphcnF1ZS1CZXJhICAgICAgICAgICAgICAgICAgICAgICAyICAgICAgICAgIDgxLjgyOSAgICAgICAgICAgMC4wMDAwXG5cbkRJQUdOT1NUSUNTIEZPUiBIRVRFUk9TS0VEQVNUSUNJVFlcblJBTkRPTSBDT0VGRklDSUVOVFNcblRFU1QgICAgICAgICAgICAgICAgICAgICAgICAgICAgIERGICAgICAgICBWQUxVRSAgICAgICAgICAgUFJPQlxuQnJldXNjaC1QYWdhbiB0ZXN0ICAgICAgICAgICAgICAgIDIgICAgICAgICAgNzcuNTM0ICAgICAgICAgICAwLjAwMDBcbktvZW5rZXItQmFzc2V0dCB0ZXN0ICAgICAgICAgICAgICAyICAgICAgICAgIDM0LjcyMyAgICAgICAgICAgMC4wMDAwXG5cbkRJQUdOT1NUSUNTIEZPUiBTUEFUSUFMIERFUEVOREVOQ0VcblRFU1QgICAgICAgICAgICAgICAgICAgICAgICAgICBNSS9ERiAgICAgICBWQUxVRSAgICAgICAgICAgUFJPQlxuTW9yYW4ncyBJIChlcnJvcikgICAgICAgICAgICAgIDAuMjQ3MyAgICAgICAgIDYuNzUwICAgICAgICAgICAwLjAwMDBcbkxhZ3JhbmdlIE11bHRpcGxpZXIgKGxhZykgICAgICAgICAxICAgICAgICAgICA3Ljc0NSAgICAgICAgICAgMC4wMDU0XG5Sb2J1c3QgTE0gKGxhZykgICAgICAgICAgICAgICAgICAgMSAgICAgICAgICAgMS43NDkgICAgICAgICAgIDAuMTg2MFxuTGFncmFuZ2UgTXVsdGlwbGllciAoZXJyb3IpICAgICAgIDEgICAgICAgICAgNDAuMTMwICAgICAgICAgICAwLjAwMDBcblJvYnVzdCBMTSAoZXJyb3IpICAgICAgICAgICAgICAgICAxICAgICAgICAgIDM0LjEzNCAgICAgICAgICAgMC4wMDAwXG5MYWdyYW5nZSBNdWx0aXBsaWVyIChTQVJNQSkgICAgICAgMiAgICAgICAgICA0MS44NzkgICAgICAgICAgIDAuMDAwMFxuXG49PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSBFTkQgT0YgUkVQT1JUID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT1cbiJ9 -->
-<pre><code>REGRESSION
-----------
-SUMMARY OF OUTPUT: ORDINARY LEAST SQUARES
------------------------------------------
-Data set            : full_14.shp
-Weights matrix      :      queens
-Dependent Variable  :         csb                Number of Observations:         206
-Mean dependent var  :    203.1456                Number of Variables   :           3
-S.D. dependent var  :    180.8104                Degrees of Freedom    :         203
-R-squared           :      0.7434
-Adjusted R-squared  :      0.7409
-Sum squared residual: 1719853.776                F-statistic           :    294.0261
-Sigma-square        :    8472.186                Prob(F-statistic)     :   1.104e-60
-S.E. of regression  :      92.044                Log likelihood        :   -1222.378
-Sigma-square ML     :    8348.805                Akaike info criterion :    2450.757
-S.E of regression ML:     91.3718                Schwarz criterion     :    2460.740
-
-------------------------------------------------------------------------------------
-            Variable     Coefficient       Std.Error     t-Statistic     Probability
-------------------------------------------------------------------------------------
-            CONSTANT     -19.7778219      12.1648171      -1.6258216       0.1055390
-             turnout       1.5610265       0.4031338       3.8722288       0.0001454
-             tot_pop       0.1242083       0.0055025      22.5729150       0.0000000
-------------------------------------------------------------------------------------
-
-REGRESSION DIAGNOSTICS
-MULTICOLLINEARITY CONDITION NUMBER            3.658
-
-TEST ON NORMALITY OF ERRORS
-TEST                             DF        VALUE           PROB
-Jarque-Bera                       2          81.829           0.0000
-
-DIAGNOSTICS FOR HETEROSKEDASTICITY
-RANDOM COEFFICIENTS
-TEST                             DF        VALUE           PROB
-Breusch-Pagan test                2          77.534           0.0000
-Koenker-Bassett test              2          34.723           0.0000
-
-DIAGNOSTICS FOR SPATIAL DEPENDENCE
-TEST                           MI/DF       VALUE           PROB
-Moran's I (error)              0.2473         6.750           0.0000
-Lagrange Multiplier (lag)         1           7.745           0.0054
-Robust LM (lag)                   1           1.749           0.1860
-Lagrange Multiplier (error)       1          40.130           0.0000
-Robust LM (error)                 1          34.134           0.0000
-Lagrange Multiplier (SARMA)       2          41.879           0.0000
-
-================================ END OF REPORT =====================================</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -2018,65 +1831,28 @@ Lagrange Multiplier (SARMA)       2          41.879           0.0000
 <h3>Full Model</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiUkVHUkVTU0lPTlxuLS0tLS0tLS0tLVxuU1VNTUFSWSBPRiBPVVRQVVQ6IE9SRElOQVJZIExFQVNUIFNRVUFSRVNcbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5EYXRhIHNldCAgICAgICAgICAgIDogZnVsbF8xNC5zaHBcbldlaWdodHMgbWF0cml4ICAgICAgOiAgICAgIHF1ZWVuc1xuRGVwZW5kZW50IFZhcmlhYmxlICA6ICAgICAgICAgY3NiICAgICAgICAgICAgICAgIE51bWJlciBvZiBPYnNlcnZhdGlvbnM6ICAgICAgICAgMjA2XG5NZWFuIGRlcGVuZGVudCB2YXIgIDogICAgMjY5Ljc1MjQgICAgICAgICAgICAgICAgTnVtYmVyIG9mIFZhcmlhYmxlcyAgIDogICAgICAgICAgIDdcblMuRC4gZGVwZW5kZW50IHZhciAgOiAgICAyMzQuOTA0MyAgICAgICAgICAgICAgICBEZWdyZWVzIG9mIEZyZWVkb20gICAgOiAgICAgICAgIDE5OVxuUi1zcXVhcmVkICAgICAgICAgICA6ICAgICAgMC44MDE3XG5BZGp1c3RlZCBSLXNxdWFyZWQgIDogICAgICAwLjc5NTdcblN1bSBzcXVhcmVkIHJlc2lkdWFsOiAyMjQzNjQ3LjQwNyAgICAgICAgICAgICAgICBGLXN0YXRpc3RpYyAgICAgICAgICAgOiAgICAxMzQuMDUxM1xuU2lnbWEtc3F1YXJlICAgICAgICA6ICAgMTEyNzQuNjEwICAgICAgICAgICAgICAgIFByb2IoRi1zdGF0aXN0aWMpICAgICA6ICAgNC4wODJlLTY3XG5TLkUuIG9mIHJlZ3Jlc3Npb24gIDogICAgIDEwNi4xODIgICAgICAgICAgICAgICAgTG9nIGxpa2VsaWhvb2QgICAgICAgIDogICAtMTI0OS43NjJcblNpZ21hLXNxdWFyZSBNTCAgICAgOiAgIDEwODkxLjQ5MiAgICAgICAgICAgICAgICBBa2Fpa2UgaW5mbyBjcml0ZXJpb24gOiAgICAyNTEzLjUyNVxuUy5FIG9mIHJlZ3Jlc3Npb24gTUw6ICAgIDEwNC4zNjIzICAgICAgICAgICAgICAgIFNjaHdhcnogY3JpdGVyaW9uICAgICA6ICAgIDI1MzYuODIwXG5cbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuICAgICAgICAgICAgVmFyaWFibGUgICAgIENvZWZmaWNpZW50ICAgICAgIFN0ZC5FcnJvciAgICAgdC1TdGF0aXN0aWMgICAgIFByb2JhYmlsaXR5XG4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbiAgICAgICAgICAgIENPTlNUQU5UICAgICAtOTUuNzM3MjMwNCAgICAgMTAwLjM3NTkxMzggICAgICAtMC45NTM3ODY5ICAgICAgIDAuMzQxMzQ4NlxuICAgICAgICAgICAgIHR1cm5vdXQgICAgICAgMS45OTA1ODE4ICAgICAgIDAuMjk2MzIzNyAgICAgICA2LjcxNzU5MjggICAgICAgMC4wMDAwMDAwXG4gICAgICAgICAgICAgdG90X3BvcCAgICAgICAwLjE2MDg3OTggICAgICAgMC4wMDY3OTg5ICAgICAgMjMuNjYyNTI2MyAgICAgICAwLjAwMDAwMDBcbiAgICAgICAgICAgICAgbm9ud2h0ICAgICAgIDEuMjEyMzI2MCAgICAgICAwLjQyNDk1NzMgICAgICAgMi44NTI4MTg2ICAgICAgIDAuMDA0NzkxMlxuICAgICAgICAgICAgICAgcHZydHkgICAgICAtMC44OTE4OTY0ICAgICAgIDEuMDQ5Njk3MSAgICAgIC0wLjg0OTY3MDIgICAgICAgMC4zOTY1Mjk1XG4gICAgICAgICAgICAgICAgICBocyAgICAgICAwLjQyNjk0MzAgICAgICAgMS43NzA1NjQ4ICAgICAgIDAuMjQxMTMzOCAgICAgICAwLjgwOTY5OTdcbiAgICAgICAgICAgICAgICAgIGJhICAgICAgLTEuNzIzMjEzOCAgICAgICAyLjE4MDc0MTYgICAgICAtMC43OTAxOTYyICAgICAgIDAuNDMwMzUzOFxuLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG5cblJFR1JFU1NJT04gRElBR05PU1RJQ1Ncbk1VTFRJQ09MTElORUFSSVRZIENPTkRJVElPTiBOVU1CRVIgICAgICAgICAgIDM3LjczN1xuXG5URVNUIE9OIE5PUk1BTElUWSBPRiBFUlJPUlNcblRFU1QgICAgICAgICAgICAgICAgICAgICAgICAgICAgIERGICAgICAgICBWQUxVRSAgICAgICAgICAgUFJPQlxuSmFycXVlLUJlcmEgICAgICAgICAgICAgICAgICAgICAgIDIgICAgICAgICAgMzEuNjYyICAgICAgICAgICAwLjAwMDBcblxuRElBR05PU1RJQ1MgRk9SIEhFVEVST1NLRURBU1RJQ0lUWVxuUkFORE9NIENPRUZGSUNJRU5UU1xuVEVTVCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgREYgICAgICAgIFZBTFVFICAgICAgICAgICBQUk9CXG5CcmV1c2NoLVBhZ2FuIHRlc3QgICAgICAgICAgICAgICAgNiAgICAgICAgICA2MS4xODYgICAgICAgICAgIDAuMDAwMFxuS29lbmtlci1CYXNzZXR0IHRlc3QgICAgICAgICAgICAgIDYgICAgICAgICAgMzUuMTYzICAgICAgICAgICAwLjAwMDBcblxuRElBR05PU1RJQ1MgRk9SIFNQQVRJQUwgREVQRU5ERU5DRVxuVEVTVCAgICAgICAgICAgICAgICAgICAgICAgICAgIE1JL0RGICAgICAgIFZBTFVFICAgICAgICAgICBQUk9CXG5Nb3JhbidzIEkgKGVycm9yKSAgICAgICAgICAgICAgMC4yMTI5ICAgICAgICAgNi40MTMgICAgICAgICAgIDAuMDAwMFxuTGFncmFuZ2UgTXVsdGlwbGllciAobGFnKSAgICAgICAgIDEgICAgICAgICAgMTEuMzM4ICAgICAgICAgICAwLjAwMDhcblJvYnVzdCBMTSAobGFnKSAgICAgICAgICAgICAgICAgICAxICAgICAgICAgICAwLjEzOSAgICAgICAgICAgMC43MDkzXG5MYWdyYW5nZSBNdWx0aXBsaWVyIChlcnJvcikgICAgICAgMSAgICAgICAgICAyOS43MjMgICAgICAgICAgIDAuMDAwMFxuUm9idXN0IExNIChlcnJvcikgICAgICAgICAgICAgICAgIDEgICAgICAgICAgMTguNTI0ICAgICAgICAgICAwLjAwMDBcbkxhZ3JhbmdlIE11bHRpcGxpZXIgKFNBUk1BKSAgICAgICAyICAgICAgICAgIDI5Ljg2MiAgICAgICAgICAgMC4wMDAwXG5cbj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09IEVORCBPRiBSRVBPUlQgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuIn0= -->
-<pre><code>REGRESSION
-----------
-SUMMARY OF OUTPUT: ORDINARY LEAST SQUARES
------------------------------------------
-Data set            : full_14.shp
-Weights matrix      :      queens
-Dependent Variable  :         csb                Number of Observations:         206
-Mean dependent var  :    269.7524                Number of Variables   :           7
-S.D. dependent var  :    234.9043                Degrees of Freedom    :         199
-R-squared           :      0.8017
-Adjusted R-squared  :      0.7957
-Sum squared residual: 2243647.407                F-statistic           :    134.0513
-Sigma-square        :   11274.610                Prob(F-statistic)     :   4.082e-67
-S.E. of regression  :     106.182                Log likelihood        :   -1249.762
-Sigma-square ML     :   10891.492                Akaike info criterion :    2513.525
-S.E of regression ML:    104.3623                Schwarz criterion     :    2536.820
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgcHl0aG9uXG5vbHNfZm0gPSBwcy5tb2RlbC5zcHJlZy5PTFMoeSwgZm0sIHc9dywgbmFtZV95PXlfbmFtZSwgbmFtZV94PWZtX2luZCwgc3BhdF9kaWFnPVRydWUsIG1vcmFuPVRydWUsXG5uYW1lX3c9J3F1ZWVucycsIG5hbWVfZHM9J2Z1bGxfMTQuc2hwJylcblxucHJpbnQob2xzX2ZtLnN1bW1hcnkpXG5gYGAifQ== -->
+<pre class="python"><code>ols_fm = ps.model.spreg.OLS(y, fm, w=w, name_y=y_name, name_x=fm_ind, spat_diag=True, moran=True,
+name_w='queens', name_ds='full_14.shp')
 
-------------------------------------------------------------------------------------
-            Variable     Coefficient       Std.Error     t-Statistic     Probability
-------------------------------------------------------------------------------------
-            CONSTANT     -95.7372304     100.3759138      -0.9537869       0.3413486
-             turnout       1.9905818       0.2963237       6.7175928       0.0000000
-             tot_pop       0.1608798       0.0067989      23.6625263       0.0000000
-              nonwht       1.2123260       0.4249573       2.8528186       0.0047912
-               pvrty      -0.8918964       1.0496971      -0.8496702       0.3965295
-                  hs       0.4269430       1.7705648       0.2411338       0.8096997
-                  ba      -1.7232138       2.1807416      -0.7901962       0.4303538
-------------------------------------------------------------------------------------
-
-REGRESSION DIAGNOSTICS
-MULTICOLLINEARITY CONDITION NUMBER           37.737
-
-TEST ON NORMALITY OF ERRORS
-TEST                             DF        VALUE           PROB
-Jarque-Bera                       2          31.662           0.0000
-
-DIAGNOSTICS FOR HETEROSKEDASTICITY
-RANDOM COEFFICIENTS
-TEST                             DF        VALUE           PROB
-Breusch-Pagan test                6          61.186           0.0000
-Koenker-Bassett test              6          35.163           0.0000
-
-DIAGNOSTICS FOR SPATIAL DEPENDENCE
-TEST                           MI/DF       VALUE           PROB
-Moran's I (error)              0.2129         6.413           0.0000
-Lagrange Multiplier (lag)         1          11.338           0.0008
-Robust LM (lag)                   1           0.139           0.7093
-Lagrange Multiplier (error)       1          29.723           0.0000
-Robust LM (error)                 1          18.524           0.0000
-Lagrange Multiplier (SARMA)       2          29.862           0.0000
-
-================================ END OF REPORT =====================================</code></pre>
-<!-- rnb-output-end -->
+print(ols_fm.summary)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="create-spatial-models" class="section level2">
+<h2>Create Spatial Models</h2>
+<div id="main-effect-1" class="section level3">
+<h3>Main Effect</h3>
+</div>
+<div id="full-model-1" class="section level3">
+<h3>Full Model</h3>
+<!-- rnb-text-end -->
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiT0xTIE1vZGVsIDIwMTQiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMjIEludHJvZHVjdGlvbgpUaGlzIG5vdGVib29rIGlzIG9uZSBvZiBhIG11bHRpcGxlIHBhcnQgc2VyaWVzIGZvciBhbmFseXppbmcgY3NiIGFuZCB2b3RlciBkYXRhLiBUaGlzIG5vdGVib29rIGFjY29tcGxpc2hlcyB0aGUgYnVpbGRpbmcgb2YgdGhlIE9MUyBtb2RlbCB1c2luZyB0aGUgcHl0aG9uIGxpYnJhcnkgYHB5c2FsYCBhbmQgdGhlIFIgcGFja2FnZSBgcmV0aWN1bGF0ZWAgdG8gYmUgYWJsZSB0byBleGVjdXRlIHB5dGhvbiBjb2RlIGluIGFuIFIgbm90ZWJvb2suCgpUaGlzIG5vdGVib29rIGZpdHMgbW9kZWxzIHVzaW5nIDIwMTQgZWxlY3Rpb24gZGF0YS4KCiMjIERlcGVuZGVuY2llcwoKIyMjIFNvZnR3YXJlIFZlcnNpb25zClIgVmVyc2lvbiAzLjUuMgpSU3R1ZGlvIFZlcnNpb24gMS4yLjEzMzAKUHl0aG9uIFZlcnNpb24gMy43LjMKUHlzYWwgVmVyc2lvbiAyLjAuMApOdW1weSBWZXJzaW9uIDEuMTUuMwoKVGhlc2UgYXJlIHRoZSBSIHBhY2thZ2VzIHdlIG5lZWQ6CmBgYHtyIGRlcGVuZGVuY2llc30KbGlicmFyeShyZXRpY3VsYXRlKSAjIHB5dGhvbiBpbnRlcmZhY2UKYGBgCgpBbmQgdGhlc2UgYXJlIHRoZSBQeXRob24gbGlicmFyaWVzIHdlIG5lZWQ6CgpgYGB7cHl0aG9uIGltcG9ydHN9CmltcG9ydCBvcwppbXBvcnQgcHlzYWwgYXMgcHMKaW1wb3J0IG51bXB5IGFzIG5wCmBgYAoKIyMgQnVpbGRpbmcgdGhlIE9MUyBNb2RlbHMKIyMjIENyZWF0ZSBTcGF0aWFsIFdlaWdodHMKV2UnbGwgdXNlIHF1ZWVucyB3ZWlnaHRzLgpgYGB7cHl0aG9ufQpmaWxlID0gcHMubGliLmlvLm9wZW4oIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuc2hwIikKdyA9IHBzLmxpYi53ZWlnaHRzLlF1ZWVuKGZpbGUpCgpgYGAKCiMjIyBTZXQgVmFyaWFibGVzIGZvciBNb2RlbHMKV2UncmUgZ29pbmcgdG8gY3JlYXRlIDQgbW9kZWxzLCBhbGwgd2l0aCB0aGUgbnVtYmVyIG9mIENTQiBjYWxscyBhcyB0aGUgZGVwZW5kZW50IHZhcmlhYmxlLgoKMS4gTWFpbiBFZmZlY3QgKFZvdGVyIFR1cm5vdXQpCjIuIFBvcHVsYXRpb24gTW9kZWwgKFBvcHVsYXRpb24pIAozLiBDb21iaW5lZCBNb2RlbCAoVm90ZXIgVHVybm91dCBhbmQgUG9wdWxhdGlvbikKNC4gRnVsbCBNb2RlbCAoVm90ZXIgVHVybm91dCwgUG9wdWxhdGlvbiwgTm9uLVdoaXRlIFBvcHVsYXRpb24sIFBvdmVydHksIEhpZ2hzY2hvb2wgRGlwbG9tYSwgQmFjaGVsb3JzIERlZ3JlZSkKCmBgYHtweXRob259CiMgbG9hZCBkYXRhCmRhdGEgPSBwcy5saWIuaW8ub3BlbigiLi4vZGF0YS9TcGF0aWFsL2dyaWQvZnVsbF8xNC5kYmYiLCAncicpCgojIHNldCBZIHZhcgp5X25hbWUgPSAiY3NiIgoKIyBjcmVhdGUgWSBhcnJheSwgdHJhbnNwb3NlCnkgPSBucC5hcnJheShbZGF0YS5ieV9jb2woeV9uYW1lKV0pLlQgCgojIGRlZmluZSBpbmRlcGVuZGVudCB2YXJzIGZvciBlYWNoIG1vZGVsCm1lX2luZCA9IFsidHVybm91dCJdCnBtX2luZCA9IFsidG90X3BvcCJdCmNtX2luZCA9IFsidHVybm91dCIsICJ0b3RfcG9wIl0KZm1faW5kID0gWyJ0dXJub3V0IiwgInRvdF9wb3AiLCAibm9ud2h0IiwgInB2cnR5IiwgImhzIiwgImJhIl0KCiMgY3JlYXRlIGFycmF5cyBmb3IgZWFjaCBtb2RlbAptZSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh2YXIpIGZvciB2YXIgaW4gbWVfaW5kXSkuVApwbSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh2YXIpIGZvciB2YXIgaW4gcG1faW5kXSkuVApjbSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh2YXIpIGZvciB2YXIgaW4gY21faW5kXSkuVApmbSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh2YXIpIGZvciB2YXIgaW4gZm1faW5kXSkuVAoKYGBgCgojIyBDcmVhdGUgT0xTIE1vZGVscwojIyMgTWFpbiBFZmZlY3QKYGBge3B5dGhvbn0Kb2xzX21lID0gcHMubW9kZWwuc3ByZWcuT0xTKHksIG1lLCB3PXcsIG5hbWVfeT15X25hbWUsIG5hbWVfeD1tZV9pbmQsIHNwYXRfZGlhZz1UcnVlLCBtb3Jhbj1UcnVlLApuYW1lX3c9J3F1ZWVucycsIG5hbWVfZHM9J2Z1bGxfMTQuc2hwJykKCnByaW50KG9sc19tZS5zdW1tYXJ5KQpgYGAKCiMjIyBQb3B1bGF0aW9uIE1vZGVsCmBgYHtweXRob259Cm9sc19wbSA9IHBzLm1vZGVsLnNwcmVnLk9MUyh5LCBwbSwgdz13LCBuYW1lX3k9eV9uYW1lLCBuYW1lX3g9cG1faW5kLCBzcGF0X2RpYWc9VHJ1ZSwgbW9yYW49VHJ1ZSwKbmFtZV93PSdxdWVlbnMnLCBuYW1lX2RzPSdmdWxsXzE0LnNocCcpCgpwcmludChvbHNfcG0uc3VtbWFyeSkKYGBgCgojIyMgQ29tYmluZWQgTW9kZWwKYGBge3B5dGhvbn0Kb2xzX2NtID0gcHMubW9kZWwuc3ByZWcuT0xTKHksIGNtLCB3PXcsIG5hbWVfeT15X25hbWUsIG5hbWVfeD1jbV9pbmQsIHNwYXRfZGlhZz1UcnVlLCBtb3Jhbj1UcnVlLApuYW1lX3c9J3F1ZWVucycsIG5hbWVfZHM9J2Z1bGxfMTQuc2hwJykKCnByaW50KG9sc19jbS5zdW1tYXJ5KQpgYGAKCiMjIyBGdWxsIE1vZGVsCmBgYHtweXRob259Cm9sc19mbSA9IHBzLm1vZGVsLnNwcmVnLk9MUyh5LCBmbSwgdz13LCBuYW1lX3k9eV9uYW1lLCBuYW1lX3g9Zm1faW5kLCBzcGF0X2RpYWc9VHJ1ZSwgbW9yYW49VHJ1ZSwKbmFtZV93PSdxdWVlbnMnLCBuYW1lX2RzPSdmdWxsXzE0LnNocCcpCgpwcmludChvbHNfZm0uc3VtbWFyeSkKYGBg</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiT0xTIE1vZGVsIDIwMTQiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMjIEludHJvZHVjdGlvbgpUaGlzIG5vdGVib29rIGlzIG9uZSBvZiBhIG11bHRpcGxlIHBhcnQgc2VyaWVzIGZvciBhbmFseXppbmcgY3NiIGFuZCB2b3RlciBkYXRhLiBUaGlzIG5vdGVib29rIGFjY29tcGxpc2hlcyB0aGUgYnVpbGRpbmcgb2YgdGhlIE9MUyBtb2RlbCB1c2luZyB0aGUgcHl0aG9uIGxpYnJhcnkgYHB5c2FsYCBhbmQgdGhlIFIgcGFja2FnZSBgcmV0aWN1bGF0ZWAgdG8gYmUgYWJsZSB0byBleGVjdXRlIHB5dGhvbiBjb2RlIGluIGFuIFIgbm90ZWJvb2suCgpUaGlzIG5vdGVib29rIGZpdHMgbW9kZWxzIHVzaW5nIDIwMTQgZWxlY3Rpb24gZGF0YS4KCiMjIERlcGVuZGVuY2llcwoKIyMjIFNvZnR3YXJlIFZlcnNpb25zClIgVmVyc2lvbiAzLjUuMgpSU3R1ZGlvIFZlcnNpb24gMS4yLjEzMzAKUHl0aG9uIFZlcnNpb24gMy43LjMKUHlzYWwgVmVyc2lvbiAyLjAuMApOdW1weSBWZXJzaW9uIDEuMTUuMwoKVGhlc2UgYXJlIHRoZSBSIHBhY2thZ2VzIHdlIG5lZWQ6CmBgYHtyIGRlcGVuZGVuY2llc30KbGlicmFyeShyZXRpY3VsYXRlKSAjIHB5dGhvbiBpbnRlcmZhY2UKYGBgCgpBbmQgdGhlc2UgYXJlIHRoZSBQeXRob24gbGlicmFyaWVzIHdlIG5lZWQ6CgpgYGB7cHl0aG9uIGltcG9ydHN9CmltcG9ydCBvcwppbXBvcnQgcHlzYWwgYXMgcHMKaW1wb3J0IG51bXB5IGFzIG5wCmBgYAoKIyMgQnVpbGRpbmcgdGhlIE9MUyBNb2RlbHMKIyMjIENyZWF0ZSBTcGF0aWFsIFdlaWdodHMKV2UnbGwgdXNlIHF1ZWVucyB3ZWlnaHRzLgpgYGB7cHl0aG9ufQpmaWxlID0gcHMubGliLmlvLm9wZW4oIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuc2hwIikKdyA9IHBzLmxpYi53ZWlnaHRzLlF1ZWVuKGZpbGUpCgpgYGAKCiMjIyBTZXQgVmFyaWFibGVzIGZvciBNb2RlbHMKV2UncmUgZ29pbmcgdG8gY3JlYXRlIDQgbW9kZWxzLCBhbGwgd2l0aCB0aGUgbnVtYmVyIG9mIENTQiBjYWxscyBhcyB0aGUgZGVwZW5kZW50IHZhcmlhYmxlLgoKMS4gTWFpbiBFZmZlY3QgKFZvdGVyIFR1cm5vdXQpCjIuIEZ1bGwgTW9kZWwgKFZvdGVyIFR1cm5vdXQsIFBvcHVsYXRpb24sIE5vbi1XaGl0ZSBQb3B1bGF0aW9uLCBQb3ZlcnR5LCBIaWdoc2Nob29sIERpcGxvbWEsIEJhY2hlbG9ycyBEZWdyZWUpCgpgYGB7cHl0aG9ufQojIGxvYWQgZGF0YQpkYXRhID0gcHMubGliLmlvLm9wZW4oIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuZGJmIiwgJ3InKQoKIyBzZXQgWSB2YXIKeV9uYW1lID0gImNzYl9kbnMiCgojIGNyZWF0ZSBZIGFycmF5LCB0cmFuc3Bvc2UKeSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh5X25hbWUpXSkuVCAKCiMgZGVmaW5lIGluZGVwZW5kZW50IHZhcnMgZm9yIGVhY2ggbW9kZWwKbWVfaW5kID0gWyJ0dXJub3V0Il0KZm1faW5kID0gWyJ0dXJub3V0IiwgInRvdF9wb3AiLCAibm9ud2h0IiwgInB2cnR5IiwgImhzIl0KCiMgY3JlYXRlIGFycmF5cyBmb3IgZWFjaCBtb2RlbAptZSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh2YXIpIGZvciB2YXIgaW4gbWVfaW5kXSkuVApmbSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh2YXIpIGZvciB2YXIgaW4gZm1faW5kXSkuVAoKYGBgCgojIyBDcmVhdGUgT0xTIE1vZGVscwojIyMgTWFpbiBFZmZlY3QKYGBge3B5dGhvbn0Kb2xzX21lID0gcHMubW9kZWwuc3ByZWcuT0xTKHksIG1lLCB3PXcsIG5hbWVfeT15X25hbWUsIG5hbWVfeD1tZV9pbmQsIHNwYXRfZGlhZz1UcnVlLCBtb3Jhbj1UcnVlLApuYW1lX3c9J3F1ZWVucycsIG5hbWVfZHM9J2Z1bGxfMTQuc2hwJykKCnByaW50KG9sc19tZS5zdW1tYXJ5KQpgYGAKCiMjIyBGdWxsIE1vZGVsCmBgYHtweXRob259Cm9sc19mbSA9IHBzLm1vZGVsLnNwcmVnLk9MUyh5LCBmbSwgdz13LCBuYW1lX3k9eV9uYW1lLCBuYW1lX3g9Zm1faW5kLCBzcGF0X2RpYWc9VHJ1ZSwgbW9yYW49VHJ1ZSwKbmFtZV93PSdxdWVlbnMnLCBuYW1lX2RzPSdmdWxsXzE0LnNocCcpCgpwcmludChvbHNfZm0uc3VtbWFyeSkKYGBgCgojIyBDcmVhdGUgU3BhdGlhbCBNb2RlbHMKIyMjIE1haW4gRWZmZWN0CgojIyMgRnVsbCBNb2RlbA==</div>
 
 
 
