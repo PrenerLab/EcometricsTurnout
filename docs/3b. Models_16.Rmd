@@ -1,12 +1,12 @@
 ---
-title: "OLS Model 2014"
+title: "Models 2016 Election"
 output: html_notebook
 ---
 
 ## Introduction
 This notebook is one of a multiple part series for analyzing csb and voter data. This notebook accomplishes the building of the OLS model using the python library `pysal` and the R package `reticulate` to be able to execute python code in an R notebook.
 
-This notebook fits models using 2014 election data.
+This notebook fits models using 2016 election data.
 
 ## Dependencies
 
@@ -34,20 +34,20 @@ import numpy as np
 ### Create Spatial Weights
 We'll use queens weights.
 ```{python}
-file = ps.lib.io.open("../data/Spatial/grid/full_14.shp")
+file = ps.lib.io.open("../data/Spatial/grid/full_16.shp")
 w = ps.lib.weights.Queen(file)
 
 ```
 
 ### Set Variables for Models
-We're going to create 4 models, all with the number of CSB calls as the dependent variable.
+We're going to create 4 models, all with the Density of CSB calls (Calls per 1000 people) as the dependent variable.
 
 1. Main Effect (Voter Turnout)
-2. Full Model (Voter Turnout, Population, Non-White Population, Poverty, Highschool Diploma, Bachelors Degree)
+2. Full Model (Voter Turnout, Population, Non-White Population, Poverty, Highschool Diploma)
 
 ```{python}
 # load data
-data = ps.lib.io.open("../data/Spatial/grid/full_14.dbf", 'r')
+data = ps.lib.io.open("../data/Spatial/grid/full_16.dbf", 'r')
 
 # set Y var
 y_name = "csb_dns"
@@ -69,20 +69,34 @@ fm = np.array([data.by_col(var) for var in fm_ind]).T
 ### Main Effect
 ```{python}
 ols_me = ps.model.spreg.OLS(y, me, w=w, name_y=y_name, name_x=me_ind, spat_diag=True, moran=True,
-name_w='queens', name_ds='full_14.shp')
+name_w='queens', name_ds='full_16.shp')
 
 print(ols_me.summary)
 ```
 
+We'll fit a spatial error model based on the significant Robust LM (error).
+
 ### Full Model
 ```{python}
 ols_fm = ps.model.spreg.OLS(y, fm, w=w, name_y=y_name, name_x=fm_ind, spat_diag=True, moran=True,
-name_w='queens', name_ds='full_14.shp')
+name_w='queens', name_ds='full_16.shp')
 
 print(ols_fm.summary)
 ```
 
+We'll fit a lag model based on the significant Robust LM (lag) value.
+
 ## Create Spatial Models
 ### Main Effect
+```{python}
+sp_me = ps.model.spreg.GM_Error(y, me, w=w, name_y=y_name, name_x=me_ind, name_w='queens', name_ds='full_16.shp')
+
+print(sp_me.summary)
+```
 
 ### Full Model
+```{python}
+sp_fm = ps.model.spreg.GM_Lag(y, fm, w=w, name_y=y_name, name_x=fm_ind, name_w='queens', name_ds='full_16.shp')
+
+print(sp_fm.summary)
+```

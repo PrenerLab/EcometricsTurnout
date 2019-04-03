@@ -1,12 +1,12 @@
 ---
-title: "OLS Model 2017"
+title: "Models 2014 Election"
 output: html_notebook
 ---
 
 ## Introduction
 This notebook is one of a multiple part series for analyzing csb and voter data. This notebook accomplishes the building of the OLS model using the python library `pysal` and the R package `reticulate` to be able to execute python code in an R notebook.
 
-This notebook fits models using 2017 election data.
+This notebook fits models using 2014 election data.
 
 ## Dependencies
 
@@ -34,39 +34,33 @@ import numpy as np
 ### Create Spatial Weights
 We'll use queens weights.
 ```{python}
-file = ps.lib.io.open("../data/Spatial/grid/full_17.shp")
+file = ps.lib.io.open("../data/Spatial/grid/full_14.shp")
 w = ps.lib.weights.Queen(file)
 
 ```
 
 ### Set Variables for Models
-We're going to create 4 models, all with the number of CSB calls as the dependent variable.
+We're going to create 4 models, all with the Density of CSB calls (Calls per 1000 people) as the dependent variable.
 
 1. Main Effect (Voter Turnout)
-2. Population Model (Population) 
-3. Combined Model (Voter Turnout and Population)
-4. Full Model (Voter Turnout, Population, Non-White Population, Poverty, Highschool Diploma, Bachelors Degree)
+2. Full Model (Voter Turnout, Population, Non-White Population, Poverty, Highschool Diploma)
 
 ```{python}
 # load data
-data = ps.lib.io.open("../data/Spatial/grid/full_17.dbf", 'r')
+data = ps.lib.io.open("../data/Spatial/grid/full_14.dbf", 'r')
 
 # set Y var
-y_name = "csb"
+y_name = "csb_dns"
 
 # create Y array, transpose
 y = np.array([data.by_col(y_name)]).T 
 
 # define independent vars for each model
 me_ind = ["turnout"]
-pm_ind = ["tot_pop"]
-cm_ind = ["turnout", "tot_pop"]
-fm_ind = ["turnout", "tot_pop", "nonwht", "pvrty", "hs", "ba"]
+fm_ind = ["turnout", "tot_pop", "nonwht", "pvrty", "hs"]
 
 # create arrays for each model
 me = np.array([data.by_col(var) for var in me_ind]).T
-pm = np.array([data.by_col(var) for var in pm_ind]).T
-cm = np.array([data.by_col(var) for var in cm_ind]).T
 fm = np.array([data.by_col(var) for var in fm_ind]).T
 
 ```
@@ -75,31 +69,34 @@ fm = np.array([data.by_col(var) for var in fm_ind]).T
 ### Main Effect
 ```{python}
 ols_me = ps.model.spreg.OLS(y, me, w=w, name_y=y_name, name_x=me_ind, spat_diag=True, moran=True,
-name_w='queens', name_ds='full_17.shp')
+name_w='queens', name_ds='full_14.shp')
 
 print(ols_me.summary)
 ```
 
-### Population Model
-```{python}
-ols_pm = ps.model.spreg.OLS(y, pm, w=w, name_y=y_name, name_x=pm_ind, spat_diag=True, moran=True,
-name_w='queens', name_ds='full_17.shp')
-
-print(ols_pm.summary)
-```
-
-### Combined Model
-```{python}
-ols_cm = ps.model.spreg.OLS(y, cm, w=w, name_y=y_name, name_x=cm_ind, spat_diag=True, moran=True,
-name_w='queens', name_ds='full_17.shp')
-
-print(ols_cm.summary)
-```
+We'll fit a spatial error model based on the significant LM (error).
 
 ### Full Model
 ```{python}
 ols_fm = ps.model.spreg.OLS(y, fm, w=w, name_y=y_name, name_x=fm_ind, spat_diag=True, moran=True,
-name_w='queens', name_ds='full_17.shp')
+name_w='queens', name_ds='full_14.shp')
 
 print(ols_fm.summary)
+```
+
+We'll fit  a lag model based on the significant lag value.
+
+## Create Spatial Models
+### Main Effect
+```{python}
+sp_me = ps.model.spreg.GM_Error(y, me, w=w, name_y=y_name, name_x=me_ind, name_w='queens', name_ds='full_14.shp')
+
+print(sp_me.summary)
+```
+
+### Full Model
+```{python}
+sp_fm = ps.model.spreg.GM_Lag(y, fm, w=w, name_y=y_name, name_x=fm_ind, name_w='queens', name_ds='full_14.shp')
+
+print(sp_fm.summary)
 ```
