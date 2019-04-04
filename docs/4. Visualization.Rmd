@@ -35,7 +35,7 @@ These maps dont have labels because they are used on the poster for this work. T
 # csb map
 ggplot() +
   geom_sf(data = bg) +
-  geom_sf(data = m_all, mapping = aes(fill = csb)) +
+  geom_sf(data = m_all, mapping = aes(fill = csb_dns)) +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
         panel.grid.major = element_line(color = NA),
@@ -43,7 +43,7 @@ ggplot() +
         plot.background = element_rect(fill = "transparent", color = NA),
         legend.background = element_rect(fill = "transparent", color = NA)
         ) +
-  scale_fill_viridis(name = "CSB Calls", guide = guide_colorbar(ticks = F), direction = -1) +
+  scale_fill_viridis(name = "CSB Calls\nPer 1000 Residents", guide = guide_colorbar(ticks = F), direction = -1) +
   facet_grid(. ~ year)
 
 ggsave("../results/csb_year.pdf", dpi = 500, bg = "transparent")
