@@ -1,20 +1,3 @@
-<div class="container-fluid main-container">
-
-<div id="header" class="fluid-row">
-
-<div class="btn-group pull-right">
-
-<span>Code</span> <span class="caret"></span>
-
-  - [Show All Code](#)
-
-  - [Hide All Code](#)
-
-  - 
-  - [Download Rmd](#)
-
-</div>
-
 # Models 2017 Election
 
 </div>
@@ -24,9 +7,9 @@
 ## Introduction
 
 This notebook is one of a multiple part series for analyzing csb and
-voter data. This notebook accomplishes the building of the OLS model
-using the python library `pysal` and the R package `reticulate` to be
-able to execute python code in an R notebook.
+voter data. This notebook accomplishes the building of the OLS and
+spatial models using the python library `pysal` and the R package
+`reticulate` to be able to execute python code in an R notebook.
 
 This notebook fits models using 2017 election data.
 
@@ -49,15 +32,10 @@ These are the R packages we need:
 library(reticulate) # python interface
 ```
 
-    There were 14 warnings (use warnings() to see them)
-
 And these are the Python libraries we need:
 
-``` python
-import os
-import pysal as ps
-import numpy as np
-```
+    /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/pysal/model/spvcm/abstracts.py:10: UserWarning: The `dill` module is required to use the sqlite backend fully.
+      from .sqlite import head_to_sql, start_sql
 
 </div>
 
@@ -172,8 +150,6 @@ fm = np.array([data.by_col(var) for var in fm_ind]).T
     
     ================================ END OF REPORT =====================================
 
-We’ll fit a spatial error model based on the significant LM (error).
-
 </div>
 
 <div id="full-model" class="section level3">
@@ -238,35 +214,9 @@ We’ll fit a lag model based on the significant lag value.
 
 </div>
 
-<div id="create-spatial-models" class="section level2">
+<div id="create-spatial-model" class="section level2">
 
-## Create Spatial Models
-
-<div id="main-effect-1" class="section level3">
-
-### Main Effect
-
-    REGRESSION
-    ----------
-    SUMMARY OF OUTPUT: SPATIALLY WEIGHTED LEAST SQUARES
-    ---------------------------------------------------
-    Data set            : full_17.shp
-    Weights matrix      :      queens
-    Dependent Variable  :     csb_dns                Number of Observations:         206
-    Mean dependent var  :    184.9663                Number of Variables   :           2
-    S.D. dependent var  :    139.1725                Degrees of Freedom    :         204
-    Pseudo R-squared    :      0.1430
-    
-    ------------------------------------------------------------------------------------
-                Variable     Coefficient       Std.Error     z-Statistic     Probability
-    ------------------------------------------------------------------------------------
-                CONSTANT      43.6001126      28.7830599       1.5147838       0.1298272
-                 turnout       5.9832510       0.8301162       7.2077273       0.0000000
-                  lambda       0.1460622    
-    ------------------------------------------------------------------------------------
-    ================================ END OF REPORT =====================================
-
-</div>
+## Create Spatial Model
 
 <div id="full-model-1" class="section level3">
 

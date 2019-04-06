@@ -7,9 +7,9 @@
 ## Introduction
 
 This notebook is one of a multiple part series for analyzing csb and
-voter data. This notebook accomplishes the building of the OLS model
-using the python library `pysal` and the R package `reticulate` to be
-able to execute python code in an R notebook.
+voter data. This notebook accomplishes the building of the OLS and
+spatial models using the python library `pysal` and the R package
+`reticulate` to be able to execute python code in an R notebook.
 
 This notebook fits models using 2014 election data.
 
@@ -32,29 +32,10 @@ These are the R packages we need:
 library(reticulate) # python interface
 ```
 
-    Warning messages:
-    1: In res[i] <- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-      number of items to replace is not a multiple of replacement length
-    2: In res[i] <- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-      number of items to replace is not a multiple of replacement length
-    3: In res[i] <- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-      number of items to replace is not a multiple of replacement length
-    4: In res[i] <- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-      number of items to replace is not a multiple of replacement length
-    5: In res[i] <- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-      number of items to replace is not a multiple of replacement length
-    6: In res[i] <- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-      number of items to replace is not a multiple of replacement length
-    7: In res[i] <- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-      number of items to replace is not a multiple of replacement length
-
 And these are the Python libraries we need:
 
-``` python
-import os
-import pysal as ps
-import numpy as np
-```
+    /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/pysal/model/spvcm/abstracts.py:10: UserWarning: The `dill` module is required to use the sqlite backend fully.
+      from .sqlite import head_to_sql, start_sql
 
 </div>
 
@@ -169,8 +150,6 @@ fm = np.array([data.by_col(var) for var in fm_ind]).T
     
     ================================ END OF REPORT =====================================
 
-We’ll fit a spatial error model based on the significant LM (error).
-
 </div>
 
 <div id="full-model" class="section level3">
@@ -235,35 +214,9 @@ We’ll fit a lag model based on the significant lag value.
 
 </div>
 
-<div id="create-spatial-models" class="section level2">
+<div id="create-spatial-model" class="section level2">
 
-## Create Spatial Models
-
-<div id="main-effect-1" class="section level3">
-
-### Main Effect
-
-    REGRESSION
-    ----------
-    SUMMARY OF OUTPUT: SPATIALLY WEIGHTED LEAST SQUARES
-    ---------------------------------------------------
-    Data set            : full_14.shp
-    Weights matrix      :      queens
-    Dependent Variable  :     csb_dns                Number of Observations:         206
-    Mean dependent var  :    131.7398                Number of Variables   :           2
-    S.D. dependent var  :    123.5542                Degrees of Freedom    :         204
-    Pseudo R-squared    :      0.2891
-    
-    ------------------------------------------------------------------------------------
-                Variable     Coefficient       Std.Error     z-Statistic     Probability
-    ------------------------------------------------------------------------------------
-                CONSTANT      24.2989477      24.4404692       0.9942095       0.3201209
-                 turnout       4.3998662       0.4562267       9.6440354       0.0000000
-                  lambda       0.1425313    
-    ------------------------------------------------------------------------------------
-    ================================ END OF REPORT =====================================
-
-</div>
+## Create Spatial Model
 
 <div id="full-model-1" class="section level3">
 

@@ -4,7 +4,7 @@ output: html_notebook
 ---
 
 ## Introduction
-This notebook is one of a multiple part series for analyzing csb and voter data. This notebook accomplishes the building of the OLS model using the python library `pysal` and the R package `reticulate` to be able to execute python code in an R notebook.
+This notebook is one of a multiple part series for analyzing csb and voter data. This notebook accomplishes the building of the OLS and spatial models using the python library `pysal` and the R package `reticulate` to be able to execute python code in an R notebook.
 
 This notebook fits models using 2014 election data.
 
@@ -36,7 +36,6 @@ We'll use queens weights.
 ```{python}
 file = ps.lib.io.open("../data/Spatial/grid/full_14.shp")
 w = ps.lib.weights.Queen(file)
-
 ```
 
 ### Set Variables for Models
@@ -74,8 +73,6 @@ name_w='queens', name_ds='full_14.shp')
 print(ols_me.summary)
 ```
 
-We'll fit a spatial error model based on the significant LM (error).
-
 ### Full Model
 ```{python}
 ols_fm = ps.model.spreg.OLS(y, fm, w=w, name_y=y_name, name_x=fm_ind, spat_diag=True, moran=True,
@@ -86,14 +83,7 @@ print(ols_fm.summary)
 
 We'll fit  a lag model based on the significant lag value.
 
-## Create Spatial Models
-### Main Effect
-```{python}
-sp_me = ps.model.spreg.GM_Error(y, me, w=w, name_y=y_name, name_x=me_ind, name_w='queens', name_ds='full_14.shp')
-
-print(sp_me.summary)
-```
-
+## Create Spatial Model
 ### Full Model
 ```{python}
 sp_fm = ps.model.spreg.GM_Lag(y, fm, w=w, name_y=y_name, name_x=fm_ind, name_w='queens', name_ds='full_14.shp')

@@ -1478,7 +1478,7 @@ window.initializeCodeFolding = function(show) {
   var currentIndex = 1;
 
   // select all R code blocks
-  var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan');
+  var rCodeBlocks = $('pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan, pre.julia');
   rCodeBlocks.each(function() {
 
     // create a collapsable div to wrap the code in
@@ -1599,9 +1599,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -1656,8 +1654,6 @@ summary {
 }
 </style>
 
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
 
@@ -1741,6 +1737,15 @@ $(document).ready(function () {
 
 
 
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
 
 <div class="fluid-row" id="header">
 
@@ -1764,7 +1769,7 @@ $(document).ready(function () {
 <!-- rnb-text-begin -->
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This notebook is one of a multiple part series for analyzing csb and voter data. This notebook accomplishes the building of the OLS model using the python library <code>pysal</code> and the R package <code>reticulate</code> to be able to execute python code in an R notebook.</p>
+<p>This notebook is one of a multiple part series for analyzing csb and voter data. This notebook accomplishes the building of the OLS and spatial models using the python library <code>pysal</code> and the R package <code>reticulate</code> to be able to execute python code in an R notebook.</p>
 <p>This notebook fits models using 2014 election data.</p>
 </div>
 <div id="dependencies" class="section level2">
@@ -1778,33 +1783,15 @@ $(document).ready(function () {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZXRpY3VsYXRlKSAjIHB5dGhvbiBpbnRlcmZhY2VcbmBgYCJ9 -->
 <pre class="r"><code>library(reticulate) # python interface</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBtZXNzYWdlczpcbjE6IEluIHJlc1tpXSA8LSB3aXRoQ2FsbGluZ0hhbmRsZXJzKGlmICh0YW5nbGUpIHByb2Nlc3NfdGFuZ2xlKGdyb3VwKSBlbHNlIHByb2Nlc3NfZ3JvdXAoZ3JvdXApLCAgOlxuICBudW1iZXIgb2YgaXRlbXMgdG8gcmVwbGFjZSBpcyBub3QgYSBtdWx0aXBsZSBvZiByZXBsYWNlbWVudCBsZW5ndGhcbjI6IEluIHJlc1tpXSA8LSB3aXRoQ2FsbGluZ0hhbmRsZXJzKGlmICh0YW5nbGUpIHByb2Nlc3NfdGFuZ2xlKGdyb3VwKSBlbHNlIHByb2Nlc3NfZ3JvdXAoZ3JvdXApLCAgOlxuICBudW1iZXIgb2YgaXRlbXMgdG8gcmVwbGFjZSBpcyBub3QgYSBtdWx0aXBsZSBvZiByZXBsYWNlbWVudCBsZW5ndGhcbjM6IEluIHJlc1tpXSA8LSB3aXRoQ2FsbGluZ0hhbmRsZXJzKGlmICh0YW5nbGUpIHByb2Nlc3NfdGFuZ2xlKGdyb3VwKSBlbHNlIHByb2Nlc3NfZ3JvdXAoZ3JvdXApLCAgOlxuICBudW1iZXIgb2YgaXRlbXMgdG8gcmVwbGFjZSBpcyBub3QgYSBtdWx0aXBsZSBvZiByZXBsYWNlbWVudCBsZW5ndGhcbjQ6IEluIHJlc1tpXSA8LSB3aXRoQ2FsbGluZ0hhbmRsZXJzKGlmICh0YW5nbGUpIHByb2Nlc3NfdGFuZ2xlKGdyb3VwKSBlbHNlIHByb2Nlc3NfZ3JvdXAoZ3JvdXApLCAgOlxuICBudW1iZXIgb2YgaXRlbXMgdG8gcmVwbGFjZSBpcyBub3QgYSBtdWx0aXBsZSBvZiByZXBsYWNlbWVudCBsZW5ndGhcbjU6IEluIHJlc1tpXSA8LSB3aXRoQ2FsbGluZ0hhbmRsZXJzKGlmICh0YW5nbGUpIHByb2Nlc3NfdGFuZ2xlKGdyb3VwKSBlbHNlIHByb2Nlc3NfZ3JvdXAoZ3JvdXApLCAgOlxuICBudW1iZXIgb2YgaXRlbXMgdG8gcmVwbGFjZSBpcyBub3QgYSBtdWx0aXBsZSBvZiByZXBsYWNlbWVudCBsZW5ndGhcbjY6IEluIHJlc1tpXSA8LSB3aXRoQ2FsbGluZ0hhbmRsZXJzKGlmICh0YW5nbGUpIHByb2Nlc3NfdGFuZ2xlKGdyb3VwKSBlbHNlIHByb2Nlc3NfZ3JvdXAoZ3JvdXApLCAgOlxuICBudW1iZXIgb2YgaXRlbXMgdG8gcmVwbGFjZSBpcyBub3QgYSBtdWx0aXBsZSBvZiByZXBsYWNlbWVudCBsZW5ndGhcbjc6IEluIHJlc1tpXSA8LSB3aXRoQ2FsbGluZ0hhbmRsZXJzKGlmICh0YW5nbGUpIHByb2Nlc3NfdGFuZ2xlKGdyb3VwKSBlbHNlIHByb2Nlc3NfZ3JvdXAoZ3JvdXApLCAgOlxuICBudW1iZXIgb2YgaXRlbXMgdG8gcmVwbGFjZSBpcyBub3QgYSBtdWx0aXBsZSBvZiByZXBsYWNlbWVudCBsZW5ndGhcbiJ9 -->
-<pre><code>Warning messages:
-1: In res[i] &lt;- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-  number of items to replace is not a multiple of replacement length
-2: In res[i] &lt;- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-  number of items to replace is not a multiple of replacement length
-3: In res[i] &lt;- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-  number of items to replace is not a multiple of replacement length
-4: In res[i] &lt;- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-  number of items to replace is not a multiple of replacement length
-5: In res[i] &lt;- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-  number of items to replace is not a multiple of replacement length
-6: In res[i] &lt;- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-  number of items to replace is not a multiple of replacement length
-7: In res[i] &lt;- withCallingHandlers(if (tangle) process_tangle(group) else process_group(group),  :
-  number of items to replace is not a multiple of replacement length</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>And these are the Python libraries we need:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgcHl0aG9uXG5pbXBvcnQgb3NcbmltcG9ydCBweXNhbCBhcyBwc1xuaW1wb3J0IG51bXB5IGFzIG5wXG5gYGAifQ== -->
-<pre class="python"><code>import os
-import pysal as ps
-import numpy as np</code></pre>
-<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiL0xpYnJhcnkvRnJhbWV3b3Jrcy9QeXRob24uZnJhbWV3b3JrL1ZlcnNpb25zLzMuNy9saWIvcHl0aG9uMy43L3NpdGUtcGFja2FnZXMvcHlzYWwvbW9kZWwvc3B2Y20vYWJzdHJhY3RzLnB5OjEwOiBVc2VyV2FybmluZzogVGhlIGBkaWxsYCBtb2R1bGUgaXMgcmVxdWlyZWQgdG8gdXNlIHRoZSBzcWxpdGUgYmFja2VuZCBmdWxseS5cbiAgZnJvbSAuc3FsaXRlIGltcG9ydCBoZWFkX3RvX3NxbCwgc3RhcnRfc3FsXG4ifQ== -->
+<pre><code>/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/pysal/model/spvcm/abstracts.py:10: UserWarning: The `dill` module is required to use the sqlite backend fully.
+  from .sqlite import head_to_sql, start_sql</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1816,10 +1803,9 @@ import numpy as np</code></pre>
 <p>We’ll use queens weights.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgcHl0aG9uXG5maWxlID0gcHMubGliLmlvLm9wZW4oXCIuLi9kYXRhL1NwYXRpYWwvZ3JpZC9mdWxsXzE0LnNocFwiKVxudyA9IHBzLmxpYi53ZWlnaHRzLlF1ZWVuKGZpbGUpXG5cbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgcHl0aG9uXG5maWxlID0gcHMubGliLmlvLm9wZW4oXCIuLi9kYXRhL1NwYXRpYWwvZ3JpZC9mdWxsXzE0LnNocFwiKVxudyA9IHBzLmxpYi53ZWlnaHRzLlF1ZWVuKGZpbGUpXG5gYGAifQ== -->
 <pre class="python"><code>file = ps.lib.io.open(&quot;../data/Spatial/grid/full_14.shp&quot;)
-w = ps.lib.weights.Queen(file)
-</code></pre>
+w = ps.lib.weights.Queen(file)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1835,7 +1821,7 @@ w = ps.lib.weights.Queen(file)
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgcHl0aG9uXG4jIGxvYWQgZGF0YVxuZGF0YSA9IHBzLmxpYi5pby5vcGVuKFwiLi4vZGF0YS9TcGF0aWFsL2dyaWQvZnVsbF8xNC5kYmZcIiwgJ3InKVxuXG4jIHNldCBZIHZhclxueV9uYW1lID0gXCJjc2JfZG5zXCJcblxuIyBjcmVhdGUgWSBhcnJheSwgdHJhbnNwb3NlXG55ID0gbnAuYXJyYXkoW2RhdGEuYnlfY29sKHlfbmFtZSldKS5UIFxuXG4jIGRlZmluZSBpbmRlcGVuZGVudCB2YXJzIGZvciBlYWNoIG1vZGVsXG5tZV9pbmQgPSBbXCJ0dXJub3V0XCJdXG5mbV9pbmQgPSBbXCJ0dXJub3V0XCIsIFwidG90X3BvcFwiLCBcIm5vbndodFwiLCBcInB2cnR5XCIsIFwiaHNcIl1cblxuIyBjcmVhdGUgYXJyYXlzIGZvciBlYWNoIG1vZGVsXG5tZSA9IG5wLmFycmF5KFtkYXRhLmJ5X2NvbCh2YXIpIGZvciB2YXIgaW4gbWVfaW5kXSkuVFxuZm0gPSBucC5hcnJheShbZGF0YS5ieV9jb2wodmFyKSBmb3IgdmFyIGluIGZtX2luZF0pLlRcblxuYGBgIn0= -->
 <pre class="python"><code># load data
-data = ps.lib.io.open(&quot;../data/Spatial/grid/full_14.dbf&quot;, &#39;r&#39;)
+data = ps.lib.io.open(&quot;../data/Spatial/grid/full_14.dbf&quot;, 'r')
 
 # set Y var
 y_name = &quot;csb_dns&quot;
@@ -1902,7 +1888,7 @@ Koenker-Bassett test              1          10.811           0.0010
 
 DIAGNOSTICS FOR SPATIAL DEPENDENCE
 TEST                           MI/DF       VALUE           PROB
-Moran&#39;s I (error)              0.1409         3.836           0.0001
+Moran's I (error)              0.1409         3.836           0.0001
 Lagrange Multiplier (lag)         1           6.876           0.0087
 Robust LM (lag)                   1           0.000           0.9872
 Lagrange Multiplier (error)       1          13.029           0.0003
@@ -1913,7 +1899,6 @@ Lagrange Multiplier (SARMA)       2          13.029           0.0015
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>We’ll fit a spatial error model based on the significant LM (error).</p>
 </div>
 <div id="full-model" class="section level3">
 <h3>Full Model</h3>
@@ -1963,7 +1948,7 @@ Koenker-Bassett test              5          15.866           0.0072
 
 DIAGNOSTICS FOR SPATIAL DEPENDENCE
 TEST                           MI/DF       VALUE           PROB
-Moran&#39;s I (error)              0.0557         2.031           0.0423
+Moran's I (error)              0.0557         2.031           0.0423
 Lagrange Multiplier (lag)         1           4.786           0.0287
 Robust LM (lag)                   1           2.906           0.0883
 Lagrange Multiplier (error)       1           2.035           0.1537
@@ -1977,36 +1962,8 @@ Lagrange Multiplier (SARMA)       2           4.940           0.0846
 <p>We’ll fit a lag model based on the significant lag value.</p>
 </div>
 </div>
-<div id="create-spatial-models" class="section level2">
-<h2>Create Spatial Models</h2>
-<div id="main-effect-1" class="section level3">
-<h3>Main Effect</h3>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiUkVHUkVTU0lPTlxuLS0tLS0tLS0tLVxuU1VNTUFSWSBPRiBPVVRQVVQ6IFNQQVRJQUxMWSBXRUlHSFRFRCBMRUFTVCBTUVVBUkVTXG4tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS1cbkRhdGEgc2V0ICAgICAgICAgICAgOiBmdWxsXzE0LnNocFxuV2VpZ2h0cyBtYXRyaXggICAgICA6ICAgICAgcXVlZW5zXG5EZXBlbmRlbnQgVmFyaWFibGUgIDogICAgIGNzYl9kbnMgICAgICAgICAgICAgICAgTnVtYmVyIG9mIE9ic2VydmF0aW9uczogICAgICAgICAyMDZcbk1lYW4gZGVwZW5kZW50IHZhciAgOiAgICAxMzEuNzM5OCAgICAgICAgICAgICAgICBOdW1iZXIgb2YgVmFyaWFibGVzICAgOiAgICAgICAgICAgMlxuUy5ELiBkZXBlbmRlbnQgdmFyICA6ICAgIDEyMy41NTQyICAgICAgICAgICAgICAgIERlZ3JlZXMgb2YgRnJlZWRvbSAgICA6ICAgICAgICAgMjA0XG5Qc2V1ZG8gUi1zcXVhcmVkICAgIDogICAgICAwLjI4OTFcblxuLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tXG4gICAgICAgICAgICBWYXJpYWJsZSAgICAgQ29lZmZpY2llbnQgICAgICAgU3RkLkVycm9yICAgICB6LVN0YXRpc3RpYyAgICAgUHJvYmFiaWxpdHlcbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuICAgICAgICAgICAgQ09OU1RBTlQgICAgICAyNC4yOTg5NDc3ICAgICAgMjQuNDQwNDY5MiAgICAgICAwLjk5NDIwOTUgICAgICAgMC4zMjAxMjA5XG4gICAgICAgICAgICAgdHVybm91dCAgICAgICA0LjM5OTg2NjIgICAgICAgMC40NTYyMjY3ICAgICAgIDkuNjQ0MDM1NCAgICAgICAwLjAwMDAwMDBcbiAgICAgICAgICAgICAgbGFtYmRhICAgICAgIDAuMTQyNTMxMyAgICBcbi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLVxuPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0gRU5EIE9GIFJFUE9SVCA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG4ifQ== -->
-<pre><code>REGRESSION
-----------
-SUMMARY OF OUTPUT: SPATIALLY WEIGHTED LEAST SQUARES
----------------------------------------------------
-Data set            : full_14.shp
-Weights matrix      :      queens
-Dependent Variable  :     csb_dns                Number of Observations:         206
-Mean dependent var  :    131.7398                Number of Variables   :           2
-S.D. dependent var  :    123.5542                Degrees of Freedom    :         204
-Pseudo R-squared    :      0.2891
-
-------------------------------------------------------------------------------------
-            Variable     Coefficient       Std.Error     z-Statistic     Probability
-------------------------------------------------------------------------------------
-            CONSTANT      24.2989477      24.4404692       0.9942095       0.3201209
-             turnout       4.3998662       0.4562267       9.6440354       0.0000000
-              lambda       0.1425313    
-------------------------------------------------------------------------------------
-================================ END OF REPORT =====================================</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
+<div id="create-spatial-model" class="section level2">
+<h2>Create Spatial Model</h2>
 <div id="full-model-1" class="section level3">
 <h3>Full Model</h3>
 <!-- rnb-text-end -->
@@ -2043,7 +2000,7 @@ Instruments: W_hs, W_nonwht, W_pvrty, W_tot_pop, W_turnout
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiTW9kZWxzIDIwMTQgRWxlY3Rpb24iCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMjIEludHJvZHVjdGlvbgpUaGlzIG5vdGVib29rIGlzIG9uZSBvZiBhIG11bHRpcGxlIHBhcnQgc2VyaWVzIGZvciBhbmFseXppbmcgY3NiIGFuZCB2b3RlciBkYXRhLiBUaGlzIG5vdGVib29rIGFjY29tcGxpc2hlcyB0aGUgYnVpbGRpbmcgb2YgdGhlIE9MUyBtb2RlbCB1c2luZyB0aGUgcHl0aG9uIGxpYnJhcnkgYHB5c2FsYCBhbmQgdGhlIFIgcGFja2FnZSBgcmV0aWN1bGF0ZWAgdG8gYmUgYWJsZSB0byBleGVjdXRlIHB5dGhvbiBjb2RlIGluIGFuIFIgbm90ZWJvb2suCgpUaGlzIG5vdGVib29rIGZpdHMgbW9kZWxzIHVzaW5nIDIwMTQgZWxlY3Rpb24gZGF0YS4KCiMjIERlcGVuZGVuY2llcwoKIyMjIFNvZnR3YXJlIFZlcnNpb25zClIgVmVyc2lvbiAzLjUuMgpSU3R1ZGlvIFZlcnNpb24gMS4yLjEzMzAKUHl0aG9uIFZlcnNpb24gMy43LjMKUHlzYWwgVmVyc2lvbiAyLjAuMApOdW1weSBWZXJzaW9uIDEuMTUuMwoKVGhlc2UgYXJlIHRoZSBSIHBhY2thZ2VzIHdlIG5lZWQ6CmBgYHtyIGRlcGVuZGVuY2llc30KbGlicmFyeShyZXRpY3VsYXRlKSAjIHB5dGhvbiBpbnRlcmZhY2UKYGBgCgpBbmQgdGhlc2UgYXJlIHRoZSBQeXRob24gbGlicmFyaWVzIHdlIG5lZWQ6CgpgYGB7cHl0aG9uIGltcG9ydHN9CmltcG9ydCBvcwppbXBvcnQgcHlzYWwgYXMgcHMKaW1wb3J0IG51bXB5IGFzIG5wCmBgYAoKIyMgQnVpbGRpbmcgdGhlIE9MUyBNb2RlbHMKIyMjIENyZWF0ZSBTcGF0aWFsIFdlaWdodHMKV2UnbGwgdXNlIHF1ZWVucyB3ZWlnaHRzLgpgYGB7cHl0aG9ufQpmaWxlID0gcHMubGliLmlvLm9wZW4oIi4uL2RhdGEvU3BhdGlhbC9ncmlkL2Z1bGxfMTQuc2hwIikKdyA9IHBzLmxpYi53ZWlnaHRzLlF1ZWVuKGZpbGUpCgpgYGAKCiMjIyBTZXQgVmFyaWFibGVzIGZvciBNb2RlbHMKV2UncmUgZ29pbmcgdG8gY3JlYXRlIDQgbW9kZWxzLCBhbGwgd2l0aCB0aGUgRGVuc2l0eSBvZiBDU0IgY2FsbHMgKENhbGxzIHBlciAxMDAwIHBlb3BsZSkgYXMgdGhlIGRlcGVuZGVudCB2YXJpYWJsZS4KCjEuIE1haW4gRWZmZWN0IChWb3RlciBUdXJub3V0KQoyLiBGdWxsIE1vZGVsIChWb3RlciBUdXJub3V0LCBQb3B1bGF0aW9uLCBOb24tV2hpdGUgUG9wdWxhdGlvbiwgUG92ZXJ0eSwgSGlnaHNjaG9vbCBEaXBsb21hKQoKYGBge3B5dGhvbn0KIyBsb2FkIGRhdGEKZGF0YSA9IHBzLmxpYi5pby5vcGVuKCIuLi9kYXRhL1NwYXRpYWwvZ3JpZC9mdWxsXzE0LmRiZiIsICdyJykKCiMgc2V0IFkgdmFyCnlfbmFtZSA9ICJjc2JfZG5zIgoKIyBjcmVhdGUgWSBhcnJheSwgdHJhbnNwb3NlCnkgPSBucC5hcnJheShbZGF0YS5ieV9jb2woeV9uYW1lKV0pLlQgCgojIGRlZmluZSBpbmRlcGVuZGVudCB2YXJzIGZvciBlYWNoIG1vZGVsCm1lX2luZCA9IFsidHVybm91dCJdCmZtX2luZCA9IFsidHVybm91dCIsICJ0b3RfcG9wIiwgIm5vbndodCIsICJwdnJ0eSIsICJocyJdCgojIGNyZWF0ZSBhcnJheXMgZm9yIGVhY2ggbW9kZWwKbWUgPSBucC5hcnJheShbZGF0YS5ieV9jb2wodmFyKSBmb3IgdmFyIGluIG1lX2luZF0pLlQKZm0gPSBucC5hcnJheShbZGF0YS5ieV9jb2wodmFyKSBmb3IgdmFyIGluIGZtX2luZF0pLlQKCmBgYAoKIyMgQ3JlYXRlIE9MUyBNb2RlbHMKIyMjIE1haW4gRWZmZWN0CmBgYHtweXRob259Cm9sc19tZSA9IHBzLm1vZGVsLnNwcmVnLk9MUyh5LCBtZSwgdz13LCBuYW1lX3k9eV9uYW1lLCBuYW1lX3g9bWVfaW5kLCBzcGF0X2RpYWc9VHJ1ZSwgbW9yYW49VHJ1ZSwKbmFtZV93PSdxdWVlbnMnLCBuYW1lX2RzPSdmdWxsXzE0LnNocCcpCgpwcmludChvbHNfbWUuc3VtbWFyeSkKYGBgCgpXZSdsbCBmaXQgYSBzcGF0aWFsIGVycm9yIG1vZGVsIGJhc2VkIG9uIHRoZSBzaWduaWZpY2FudCBMTSAoZXJyb3IpLgoKIyMjIEZ1bGwgTW9kZWwKYGBge3B5dGhvbn0Kb2xzX2ZtID0gcHMubW9kZWwuc3ByZWcuT0xTKHksIGZtLCB3PXcsIG5hbWVfeT15X25hbWUsIG5hbWVfeD1mbV9pbmQsIHNwYXRfZGlhZz1UcnVlLCBtb3Jhbj1UcnVlLApuYW1lX3c9J3F1ZWVucycsIG5hbWVfZHM9J2Z1bGxfMTQuc2hwJykKCnByaW50KG9sc19mbS5zdW1tYXJ5KQpgYGAKCldlJ2xsIGZpdCAgYSBsYWcgbW9kZWwgYmFzZWQgb24gdGhlIHNpZ25pZmljYW50IGxhZyB2YWx1ZS4KCiMjIENyZWF0ZSBTcGF0aWFsIE1vZGVscwojIyMgTWFpbiBFZmZlY3QKYGBge3B5dGhvbn0Kc3BfbWUgPSBwcy5tb2RlbC5zcHJlZy5HTV9FcnJvcih5LCBtZSwgdz13LCBuYW1lX3k9eV9uYW1lLCBuYW1lX3g9bWVfaW5kLCBuYW1lX3c9J3F1ZWVucycsIG5hbWVfZHM9J2Z1bGxfMTQuc2hwJykKCnByaW50KHNwX21lLnN1bW1hcnkpCmBgYAoKIyMjIEZ1bGwgTW9kZWwKYGBge3B5dGhvbn0Kc3BfZm0gPSBwcy5tb2RlbC5zcHJlZy5HTV9MYWcoeSwgZm0sIHc9dywgbmFtZV95PXlfbmFtZSwgbmFtZV94PWZtX2luZCwgbmFtZV93PSdxdWVlbnMnLCBuYW1lX2RzPSdmdWxsXzE0LnNocCcpCgpwcmludChzcF9mbS5zdW1tYXJ5KQpgYGA=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiTW9kZWxzIDIwMTQgRWxlY3Rpb24iCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KCiMjIEludHJvZHVjdGlvbgpUaGlzIG5vdGVib29rIGlzIG9uZSBvZiBhIG11bHRpcGxlIHBhcnQgc2VyaWVzIGZvciBhbmFseXppbmcgY3NiIGFuZCB2b3RlciBkYXRhLiBUaGlzIG5vdGVib29rIGFjY29tcGxpc2hlcyB0aGUgYnVpbGRpbmcgb2YgdGhlIE9MUyBhbmQgc3BhdGlhbCBtb2RlbHMgdXNpbmcgdGhlIHB5dGhvbiBsaWJyYXJ5IGBweXNhbGAgYW5kIHRoZSBSIHBhY2thZ2UgYHJldGljdWxhdGVgIHRvIGJlIGFibGUgdG8gZXhlY3V0ZSBweXRob24gY29kZSBpbiBhbiBSIG5vdGVib29rLgoKVGhpcyBub3RlYm9vayBmaXRzIG1vZGVscyB1c2luZyAyMDE0IGVsZWN0aW9uIGRhdGEuCgojIyBEZXBlbmRlbmNpZXMKCiMjIyBTb2Z0d2FyZSBWZXJzaW9ucwpSIFZlcnNpb24gMy41LjIKUlN0dWRpbyBWZXJzaW9uIDEuMi4xMzMwClB5dGhvbiBWZXJzaW9uIDMuNy4zClB5c2FsIFZlcnNpb24gMi4wLjAKTnVtcHkgVmVyc2lvbiAxLjE1LjMKClRoZXNlIGFyZSB0aGUgUiBwYWNrYWdlcyB3ZSBuZWVkOgpgYGB7ciBkZXBlbmRlbmNpZXN9CmxpYnJhcnkocmV0aWN1bGF0ZSkgIyBweXRob24gaW50ZXJmYWNlCmBgYAoKQW5kIHRoZXNlIGFyZSB0aGUgUHl0aG9uIGxpYnJhcmllcyB3ZSBuZWVkOgoKYGBge3B5dGhvbiBpbXBvcnRzfQppbXBvcnQgb3MKaW1wb3J0IHB5c2FsIGFzIHBzCmltcG9ydCBudW1weSBhcyBucApgYGAKCiMjIEJ1aWxkaW5nIHRoZSBPTFMgTW9kZWxzCiMjIyBDcmVhdGUgU3BhdGlhbCBXZWlnaHRzCldlJ2xsIHVzZSBxdWVlbnMgd2VpZ2h0cy4KYGBge3B5dGhvbn0KZmlsZSA9IHBzLmxpYi5pby5vcGVuKCIuLi9kYXRhL1NwYXRpYWwvZ3JpZC9mdWxsXzE0LnNocCIpCncgPSBwcy5saWIud2VpZ2h0cy5RdWVlbihmaWxlKQpgYGAKCiMjIyBTZXQgVmFyaWFibGVzIGZvciBNb2RlbHMKV2UncmUgZ29pbmcgdG8gY3JlYXRlIDQgbW9kZWxzLCBhbGwgd2l0aCB0aGUgRGVuc2l0eSBvZiBDU0IgY2FsbHMgKENhbGxzIHBlciAxMDAwIHBlb3BsZSkgYXMgdGhlIGRlcGVuZGVudCB2YXJpYWJsZS4KCjEuIE1haW4gRWZmZWN0IChWb3RlciBUdXJub3V0KQoyLiBGdWxsIE1vZGVsIChWb3RlciBUdXJub3V0LCBQb3B1bGF0aW9uLCBOb24tV2hpdGUgUG9wdWxhdGlvbiwgUG92ZXJ0eSwgSGlnaHNjaG9vbCBEaXBsb21hKQoKYGBge3B5dGhvbn0KIyBsb2FkIGRhdGEKZGF0YSA9IHBzLmxpYi5pby5vcGVuKCIuLi9kYXRhL1NwYXRpYWwvZ3JpZC9mdWxsXzE0LmRiZiIsICdyJykKCiMgc2V0IFkgdmFyCnlfbmFtZSA9ICJjc2JfZG5zIgoKIyBjcmVhdGUgWSBhcnJheSwgdHJhbnNwb3NlCnkgPSBucC5hcnJheShbZGF0YS5ieV9jb2woeV9uYW1lKV0pLlQgCgojIGRlZmluZSBpbmRlcGVuZGVudCB2YXJzIGZvciBlYWNoIG1vZGVsCm1lX2luZCA9IFsidHVybm91dCJdCmZtX2luZCA9IFsidHVybm91dCIsICJ0b3RfcG9wIiwgIm5vbndodCIsICJwdnJ0eSIsICJocyJdCgojIGNyZWF0ZSBhcnJheXMgZm9yIGVhY2ggbW9kZWwKbWUgPSBucC5hcnJheShbZGF0YS5ieV9jb2wodmFyKSBmb3IgdmFyIGluIG1lX2luZF0pLlQKZm0gPSBucC5hcnJheShbZGF0YS5ieV9jb2wodmFyKSBmb3IgdmFyIGluIGZtX2luZF0pLlQKCmBgYAoKIyMgQ3JlYXRlIE9MUyBNb2RlbHMKIyMjIE1haW4gRWZmZWN0CmBgYHtweXRob259Cm9sc19tZSA9IHBzLm1vZGVsLnNwcmVnLk9MUyh5LCBtZSwgdz13LCBuYW1lX3k9eV9uYW1lLCBuYW1lX3g9bWVfaW5kLCBzcGF0X2RpYWc9VHJ1ZSwgbW9yYW49VHJ1ZSwKbmFtZV93PSdxdWVlbnMnLCBuYW1lX2RzPSdmdWxsXzE0LnNocCcpCgpwcmludChvbHNfbWUuc3VtbWFyeSkKYGBgCgojIyMgRnVsbCBNb2RlbApgYGB7cHl0aG9ufQpvbHNfZm0gPSBwcy5tb2RlbC5zcHJlZy5PTFMoeSwgZm0sIHc9dywgbmFtZV95PXlfbmFtZSwgbmFtZV94PWZtX2luZCwgc3BhdF9kaWFnPVRydWUsIG1vcmFuPVRydWUsCm5hbWVfdz0ncXVlZW5zJywgbmFtZV9kcz0nZnVsbF8xNC5zaHAnKQoKcHJpbnQob2xzX2ZtLnN1bW1hcnkpCmBgYAoKV2UnbGwgZml0ICBhIGxhZyBtb2RlbCBiYXNlZCBvbiB0aGUgc2lnbmlmaWNhbnQgbGFnIHZhbHVlLgoKIyMgQ3JlYXRlIFNwYXRpYWwgTW9kZWwKIyMjIEZ1bGwgTW9kZWwKYGBge3B5dGhvbn0Kc3BfZm0gPSBwcy5tb2RlbC5zcHJlZy5HTV9MYWcoeSwgZm0sIHc9dywgbmFtZV95PXlfbmFtZSwgbmFtZV94PWZtX2luZCwgbmFtZV93PSdxdWVlbnMnLCBuYW1lX2RzPSdmdWxsXzE0LnNocCcpCgpwcmludChzcF9mbS5zdW1tYXJ5KQpgYGA=</div>
 
 
 
