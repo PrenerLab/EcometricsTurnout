@@ -43,7 +43,7 @@ ggplot() +
         plot.background = element_rect(fill = "transparent", color = NA),
         legend.background = element_rect(fill = "transparent", color = NA)
         ) +
-  scale_fill_viridis(name = "CSB Calls\nPer 1000\nResidents", guide = guide_colorbar(ticks = F), direction = -1) +
+  scale_fill_viridis(name = "CSB Calls\nper 1000\nResidents", guide = guide_colorbar(ticks = F), direction = -1) +
   facet_grid(. ~ year)
 
 ggsave("../results/csb_year.pdf", dpi = 500, bg = "transparent")
@@ -60,7 +60,7 @@ ggplot() +
         panel.background = element_blank(),
         plot.background = element_rect(fill = "transparent", color = NA),
         legend.background = element_rect(fill = "transparent", color = NA)) +
-  scale_fill_viridis(option = "plasma", name = "Voter\nTurnout", guide = guide_colorbar(ticks = F), direction = -1) +
+  scale_fill_viridis(option = "plasma", name = "% Voter\nTurnout", guide = guide_colorbar(ticks = F), direction = -1) +
   facet_grid(. ~ year)
 
 
